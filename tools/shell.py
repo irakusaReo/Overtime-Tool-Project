@@ -35,13 +35,13 @@ def head(title, root=".."):
 """
 
 
-def header(root="..", user=USER):
+def header(root="..", user=USER, home_href="home.html"):
     return f"""<header class="app-header">
-  <div class="app-header__brand">
+  <a class="app-header__brand" href="{home_href}" aria-label="CX Intranet home">
     <img class="app-header__logo" src="{root}/assets/logo-placeholder-white.svg" alt="Safaricom" width="144" height="36">
     <span class="app-header__divider"></span>
     <span class="app-header__product">CX INTRANET</span>
-  </div>
+  </a>
   <div class="app-header__user">
     <span class="avatar">{user["initials"]}</span>
     <div class="app-header__user-text">
@@ -70,6 +70,7 @@ def sidebar(active, notif_count=3, href_prefix=""):
 
 
 def app_page(title, active, main_html, root="..", overlay_html="", notif_count=3):
+    """overlay_html (toasts, modals) is placed inside .app so it is positioned against the full canvas."""
     return (head(title, root) + '<body>\n<div class="app">\n' + header(root) +
             '<div class="app__body">\n' + sidebar(active, notif_count) +
-            f'<main class="app__main">\n{main_html}\n</main>\n</div>\n</div>\n{overlay_html}</body>\n</html>\n')
+            f'<main class="app__main">\n{main_html}\n</main>\n</div>\n{overlay_html}</div>\n</body>\n</html>\n')

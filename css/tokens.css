@@ -14,6 +14,8 @@
   --color-brand-500: #35A839;   /* primary: header, primary buttons, active nav, links */
   --color-brand-600: #2D8F30;   /* required asterisk; primary hover */
   --color-brand-700: #24732A;   /* [ADDITION] primary pressed */
+  --color-brand-800: #07743D;   /* [ADDITION] sampled from Landing sketch image: top bar */
+  --color-brand-900: #025C29;   /* [ADDITION] sampled from Landing sketch image: hero text, icon discs, footer */
   --color-brand-alt-1: #1BA93A; /* landing-page shapes */
   --color-brand-alt-2: #2CB34A; /* landing-page shapes */
 

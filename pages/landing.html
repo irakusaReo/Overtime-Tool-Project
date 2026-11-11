@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Landing · CX Intranet Overtime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/layout.css">
+</head>
+<body>
+<div class="landing">
+<svg class="landing__art" viewBox="0 0 1440 960" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="office" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1FAF4"/><stop offset="1" stop-color="#BFE3CB"/></linearGradient>
+    <linearGradient id="deep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07743D"/><stop offset="1" stop-color="#025C29"/></linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#FFFFFF" stop-opacity=".85"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+  </defs>
+  <!-- office panel (stands in for the photo in the sketch) -->
+  <rect x="760" y="94" width="680" height="520" fill="url(#office)"/>
+  <rect x="1230" y="130" width="150" height="230" rx="4" fill="#E6F4EA"/>
+  <circle cx="1400" cy="300" r="46" fill="#5DB37A" opacity=".55"/><circle cx="1360" cy="330" r="34" fill="#3E9A5E" opacity=".5"/>
+  <rect x="760" y="94" width="520" height="520" fill="url(#fade)"/>
+  <!-- translucent brand blocks over the bar -->
+  <rect x="636" y="0" width="175" height="183" rx="72" fill="#1BA93A" opacity=".85"/>
+  <rect x="835" y="12" width="176" height="160" rx="10" fill="#1BA93A" opacity=".85"/>
+  <!-- bottom waves -->
+  <path d="M0 470 C 260 560, 520 560, 760 470 S 1220 360, 1440 420 L1440 960 L0 960 Z" fill="#E9F6EE"/>
+  <path d="M0 640 C 300 560, 640 600, 900 520 S 1300 430, 1440 450 L1440 960 L0 960 Z" fill="#C7E8D2" opacity=".7"/>
+  <path d="M0 800 C 320 740, 700 760, 1000 700 S 1320 640, 1440 650 L1440 960 L0 960 Z" fill="url(#deep)"/>
+  <path d="M0 790 C 320 730, 700 750, 1000 690 S 1320 630, 1440 640" stroke="#7DD66E" stroke-width="3" fill="none"/>
+  <rect x="1365" y="600" width="75" height="360" fill="#1BA93A" opacity=".8"/>
+</svg>
+  <header class="landing__bar">
+    <div class="landing__brand"><img src="../assets/logo-placeholder-white.svg" alt="Safaricom" width="160" height="40"><span class="landing__brand-divider"></span><span class="landing__brand-name">Intranet</span></div>
+    <div class="landing__tagline"><span>For you. For a brighter tomorrow.</span><svg class="icon" style="width:32px;height:32px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></div>
+  </header>
+  <section class="landing__hero">
+    <div class="landing__copy">
+      <span class="landing__eyebrow">Customer Experience</span>
+      <span class="landing__cx">CX</span>
+      <h1 class="landing__title">CALL CENTRE</h1>
+      <span class="landing__pillars">People &nbsp;|&nbsp; Service &nbsp;|&nbsp; Better Together</span>
+      <span class="landing__rule"></span>
+      <p class="landing__lead">Enabling great conversations<br>for a greater tomorrow.</p>
+    </div>
+    <div class="landing__mark">
+      <svg width="300" height="300" viewBox="0 0 300 300" aria-hidden="true">
+  <path d="M40 170 A110 110 0 0 1 260 170" stroke="#07743D" stroke-width="22" fill="none" stroke-linecap="round"/>
+  <rect x="18" y="150" width="54" height="96" rx="24" fill="#07743D"/>
+  <rect x="228" y="150" width="54" height="96" rx="24" fill="#07743D"/>
+  <path d="M255 244 C 250 276, 210 288, 170 288" stroke="#07743D" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <rect x="112" y="272" width="62" height="28" rx="14" fill="#025C29"/>
+  <path d="M150 238 C 60 180, 70 100, 120 100 C 140 100, 150 116, 150 126 C 150 116, 160 100, 180 100 C 230 100, 240 180, 150 238 Z" fill="#1BEA4F" stroke="#07743D" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M150 210 C 95 170, 100 122, 124 122 C 138 122, 146 134, 150 142 C 154 134, 162 122, 176 122 C 200 122, 205 170, 150 210 Z" fill="#FFFFFF"/>
+</svg>
+      <p class="landing__claim"><span>Customers</span><br><span>at the heart</span><br><span>of everything</span><br>we do</p>
+    </div>
+    <div style="width:120px"></div>
+  </section>
+  <nav class="landing__cards" aria-label="Intranet sections"><a class="landing-card" href="cee-dashboard.html"><span class="landing-card__icon"><svg class="icon" style="width:40px;height:40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.2 12 3l9 7.2V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.8Z"/></svg></span><span class="landing-card__title">Home<svg class="icon icon--lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span><span class="landing-card__desc">Your CX hub</span></a><a class="landing-card" href="#"><span class="landing-card__icon"><svg class="icon" style="width:40px;height:40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg></span><span class="landing-card__title">Section<svg class="icon icon--lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span><span class="landing-card__desc">Find your team &amp; resources</span></a><a class="landing-card" href="#"><span class="landing-card__icon"><svg class="icon" style="width:40px;height:40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span><span class="landing-card__title">Information<svg class="icon icon--lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span><span class="landing-card__desc">Policies, updates and announcements</span></a><a class="landing-card" href="#"><span class="landing-card__icon"><svg class="icon" style="width:40px;height:40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg></span><span class="landing-card__title">Feedback<svg class="icon icon--lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span><span class="landing-card__desc">Share. Improve. Make a difference.</span></a><a class="landing-card" href="#"><span class="landing-card__icon"><svg class="icon" style="width:40px;height:40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span><span class="landing-card__title">Look Up<svg class="icon icon--lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span><span class="landing-card__desc">Find what you need quickly</span></a><a class="landing-card" href="cee-dashboard.html"><span class="landing-card__icon"><svg class="icon" style="width:40px;height:40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></span><span class="landing-card__title">Systems<svg class="icon icon--lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span><span class="landing-card__desc">Access your tools and applications</span></a></nav>
+  <footer class="landing__footer">
+    <div class="stack stack--2"><span class="landing__footer-title">Customer Experience</span><span class="landing__footer-sub">Bigger possibilities together</span></div>
+    <div class="landing__footer-right"><span class="landing__footer-divider"></span><span>Safaricom<br>For a brighter tomorrow</span></div>
+  </footer>
+</div>
+</body>
+</html>

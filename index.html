@@ -3,24 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=1440">
-<title>Gallery · CX Intranet Overtime (CEE)</title>
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/layout.css">
+<title>Gallery · CX Intranet Overtime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/tokens.css">
+<link rel="stylesheet" href="./css/components.css">
+<link rel="stylesheet" href="./css/layout.css">
 </head>
 <body>
+<style>
+  .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .gallery__item { display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; background: #fff; border: 1px solid var(--color-border-subtle); border-radius: 8px; color: var(--color-text-body); font-weight: 400; }
+  .gallery__item:hover { border-color: var(--color-brand-200); text-decoration: none; }
+  .gallery__label { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--color-text-heading); }
+  .gallery__note { font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }
+  .gallery__file { font-size: 12px; color: var(--color-text-muted); margin-top: 4px; }
+</style>
 <div class="canvas" style="padding:48px 64px">
-  <div class="stack stack--6">
-    <div class="page-header__titles">
-      <h1 class="page-title">CEE Overtime: screen gallery</h1>
-      <p class="page-subtitle">Step 1 of 4: design system. Screens are added here as they are built.</p>
-    </div>
-    <div class="card" style="padding:24px">
-      <div class="stack stack--3">
-        <span class="section-title">Foundations</span>
-        <a href="design-system.html">Design system →</a>
+  <div class="stack stack--8">
+    <div class="page-header">
+      <div class="page-header__titles">
+        <img src="assets/logo-placeholder-color.svg" alt="Safaricom" width="144" height="36" style="width:144px;height:36px;margin-bottom:8px">
+        <h1 class="page-title">CEE Overtime: screen gallery</h1>
+        <p class="page-subtitle">One static page per screen and state, at 1440px. Import each one with html.to.design.</p>
       </div>
+      <a class="btn btn--secondary" href="design-system.html">Design system</a>
     </div>
+    <section class="stack stack--4"><h2 class="section-title">Shared <span class="text-muted text-sm">(3)</span></h2><div class="gallery"><a class="gallery__item" href="pages/login.html"><span class="gallery__label">Login</span><span class="gallery__note">Email + Azure (Entra ID) sign-in</span><code class="gallery__file">login.html</code></a><a class="gallery__item" href="pages/landing.html"><span class="gallery__label">Landing</span><span class="gallery__note">Intranet landing, rebuilt from the raster sketch</span><code class="gallery__file">landing.html</code></a><a class="gallery__item" href="pages/home.html"><span class="gallery__label">Intranet Home</span><span class="gallery__note">Tool tiles; logo in the header links here</span><code class="gallery__file">home.html</code></a></div></section><section class="stack stack--4"><h2 class="section-title">Available Slots <span class="text-muted text-sm">(8)</span></h2><div class="gallery"><a class="gallery__item" href="pages/available-slots.html"><span class="gallery__label">Default</span><span class="gallery__note">Eligible slots for the next 7 days</span><code class="gallery__file">available-slots.html</code></a><a class="gallery__item" href="pages/available-slots--filtered.html"><span class="gallery__label">Filtered</span><span class="gallery__note">Queue = Social Media, filter chips</span><code class="gallery__file">available-slots--filtered.html</code></a><a class="gallery__item" href="pages/available-slots--no-results.html"><span class="gallery__label">No results</span><span class="gallery__note">Filters exclude every slot</span><code class="gallery__file">available-slots--no-results.html</code></a><a class="gallery__item" href="pages/available-slots--empty.html"><span class="gallery__label">Empty</span><span class="gallery__note">No eligible slots published</span><code class="gallery__file">available-slots--empty.html</code></a><a class="gallery__item" href="pages/available-slots--loading.html"><span class="gallery__label">Loading</span><span class="gallery__note">Skeleton rows</span><code class="gallery__file">available-slots--loading.html</code></a><a class="gallery__item" href="pages/available-slots--error.html"><span class="gallery__label">Error</span><span class="gallery__note">Load failure with retry</span><code class="gallery__file">available-slots--error.html</code></a><a class="gallery__item" href="pages/available-slots--slot-filled.html"><span class="gallery__label">Slot just filled</span><span class="gallery__note">Capacity reached while applying; row shows Full</span><code class="gallery__file">available-slots--slot-filled.html</code></a><a class="gallery__item" href="pages/available-slots--apply-success.html"><span class="gallery__label">Apply success</span><span class="gallery__note">Toast + row marked Applied · Pending</span><code class="gallery__file">available-slots--apply-success.html</code></a></div></section>
   </div>
 </div>
 </body>

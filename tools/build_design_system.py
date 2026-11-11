@@ -101,7 +101,7 @@ def build():
 
     # ---- App shell
     out.append(section("App shell: header + CEE sidebar",
-                       f'<div class="ds-shell">{header(".")}<div class="ds-shell__body">{sidebar("slots", href_prefix="pages/")}'
+                       f'<div class="ds-shell">{header(".", home_href="pages/home.html")}<div class="ds-shell__body">{sidebar("slots", href_prefix="pages/")}'
                        f'<div class="ds-shell__content"><div class="page-header__titles"><h1 class="page-title">Page title</h1>'
                        f'<p class="page-subtitle">Content area · #FAFAFA · padding 32px 40px</p></div></div></div></div>',
                        "Header 64px, #35A839. Sidebar 296px, white; items 40px with 6px radius; active item text and icon #35A839. Log out pinned to the bottom."))

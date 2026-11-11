@@ -43,7 +43,8 @@ button, input, select, textarea { font-family: inherit; }
   background: var(--color-brand-500);
   color: var(--color-text-on-brand);
 }
-.app-header__brand { display: flex; align-items: center; gap: var(--space-3); }
+.app-header__brand { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; }
+.app-header__brand:hover { text-decoration: none; }
 .app-header__logo { height: 36px; width: auto; display: block; }
 .app-header__divider { width: 1.5px; height: 28px; background: var(--color-text-on-brand); opacity: .9; }
 .app-header__product { font-size: 18px; line-height: 24px; font-weight: var(--font-weight-bold); letter-spacing: .2px; color: var(--color-text-on-brand); }
@@ -172,8 +173,8 @@ button, input, select, textarea { font-family: inherit; }
   font-size: inherit; line-height: inherit; color: inherit; font-weight: var(--font-weight-medium);
 }
 .input__control::placeholder { color: var(--color-text-muted); font-weight: var(--font-weight-regular); }
-.input__placeholder { flex: 1; color: var(--color-text-muted); }
-.input__value { flex: 1; font-weight: var(--font-weight-semibold); color: var(--color-text-heading); }
+.input__placeholder { flex: 1; min-width: 0; color: var(--color-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.input__value { flex: 1; min-width: 0; font-weight: var(--font-weight-semibold); color: var(--color-text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .input--focus { border-color: var(--color-brand-500); box-shadow: var(--shadow-xs), var(--focus-ring); }
 .input--error { border-color: var(--color-error-icon); }
 .input--error.input--focus { box-shadow: var(--shadow-xs), var(--focus-ring-error); }
@@ -186,7 +187,7 @@ button, input, select, textarea { font-family: inherit; }
 .select__chevron { color: var(--color-text-muted); margin-left: auto; }
 
 /* date picker field: compact, auto width */
-.datefield { width: auto; display: inline-flex; font-weight: var(--font-weight-semibold); }
+.datefield { width: auto; display: inline-flex; font-weight: var(--font-weight-semibold); white-space: nowrap; }
 .datefield .icon { color: var(--color-text-body); }
 
 /* search field */
@@ -258,7 +259,7 @@ button, input, select, textarea { font-family: inherit; }
   display: flex; flex-direction: column; gap: var(--space-4);
   padding: 32px; min-height: 206px;
   background: var(--color-bg-page); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md);
-  color: var(--color-text-body); text-decoration: none;
+  color: var(--color-text-body); text-decoration: none; font-weight: var(--font-weight-regular);
 }
 .tool-card:hover { text-decoration: none; border-color: var(--color-brand-200); }
 .tool-card__head { display: flex; align-items: center; gap: var(--space-4); }
@@ -390,7 +391,7 @@ button, input, select, textarea { font-family: inherit; }
    MODAL (overlay is the one place absolute/fixed positioning is used)
    ========================================================================== */
 .modal-overlay {
-  position: fixed; inset: 0; z-index: 50;
+  position: absolute; inset: 0; z-index: 50;   /* covers the whole .app canvas, not just the viewport */
   display: flex; align-items: center; justify-content: center;
   background: var(--color-overlay);
 }
@@ -427,7 +428,7 @@ button, input, select, textarea { font-family: inherit; }
 /* ==========================================================================
    TOAST
    ========================================================================== */
-.toast-region { position: fixed; top: 80px; right: 32px; z-index: 60; display: flex; flex-direction: column; gap: var(--space-3); }
+.toast-region { position: absolute; top: 88px; right: 40px; z-index: 60; display: flex; flex-direction: column; gap: var(--space-3); }
 .toast-region--static { position: static; align-items: flex-start; }
 .toast {
   display: flex; align-items: flex-start; gap: var(--space-3); width: 400px; padding: 16px;
@@ -466,6 +467,7 @@ button, input, select, textarea { font-family: inherit; }
   width: 56px; height: 56px; border-radius: var(--radius-full);
   background: var(--color-brand-50); color: var(--color-brand-500); border: 8px solid #F5FBF5;
 }
+.empty-state__icon .icon { width: 24px; height: 24px; }
 .empty-state__icon--error { background: #FEE4E2; color: var(--color-error-solid); border-color: var(--color-error-bg); }
 .empty-state__text { display: flex; flex-direction: column; gap: var(--space-1); max-width: 400px; }
 .empty-state__title { font-size: var(--text-md-size); line-height: var(--text-md-lh); font-weight: var(--font-weight-semibold); color: var(--color-text-heading); }
@@ -499,3 +501,38 @@ button, input, select, textarea { font-family: inherit; }
 .chart-legend { display: flex; gap: var(--space-4); font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-secondary); }
 .chart-legend__item { display: inline-flex; align-items: center; gap: var(--space-2); }
 .chart-legend__swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ==========================================================================
+   CAPACITY METER (Available Slots)
+   ========================================================================== */
+.capacity { display: flex; flex-direction: column; gap: 6px; width: 140px; }
+.capacity__text { font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-body); }
+.capacity__text strong { font-weight: var(--font-weight-semibold); color: var(--color-text-heading); }
+.capacity__text--low strong { color: var(--color-warning-text); }
+.capacity__text--none strong { color: var(--color-text-muted); }
+.capacity__bar { display: flex; width: 100%; height: 6px; border-radius: var(--radius-full); background: var(--color-bg-muted); }
+.capacity__fill { height: 6px; border-radius: var(--radius-full); background: var(--color-brand-500); }
+.capacity__fill--low { background: var(--color-warning-icon); }
+
+/* ==========================================================================
+   FILTER BAR + CHIPS
+   ========================================================================== */
+.filter-bar { display: flex; align-items: flex-end; gap: var(--space-4); padding: 20px 24px; border-bottom: 1px solid var(--color-border-subtle); }
+.filter-bar > .field { width: 220px; }
+.filter-bar > .field:first-child { width: auto; }
+.filter-bar > .field--grow { flex: 1; width: auto; }
+.filter-bar__spacer { flex: 1; }
+.chip-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); padding: 12px 24px; border-bottom: 1px solid var(--color-border-subtle); background: var(--color-bg-page); }
+.chip-row__label { font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-muted); margin-right: var(--space-1); }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 4px 8px 4px 12px;
+  border: 1px solid var(--color-border); border-radius: var(--radius-full); background: var(--color-bg-card);
+  font-size: var(--text-sm-size); line-height: var(--text-sm-lh); font-weight: var(--font-weight-semibold); color: var(--color-text-body);
+}
+.chip .icon { color: var(--color-text-muted); }
+.result-count { font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-secondary); white-space: nowrap; padding-bottom: 12px; }
+.result-count strong { color: var(--color-text-heading); font-weight: var(--font-weight-semibold); }
+.slot-time { display: flex; flex-direction: column; }
+.slot-time__range { font-size: var(--text-sm-size); line-height: var(--text-sm-lh); font-weight: var(--font-weight-semibold); color: var(--color-text-heading); font-variant-numeric: tabular-nums; }
+.table__row--highlight .table__td { background: var(--color-brand-50); }
+.table__row--muted .table__td { color: var(--color-text-muted); }
