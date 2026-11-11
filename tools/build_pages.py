@@ -29,7 +29,7 @@ def login():
 {bg}
   <div class="auth__card">
     <div class="auth__body">
-      <img src="../assets/logo-placeholder-color.svg" alt="Safaricom" width="166" height="42" style="width:166px;height:42px">
+      <img src="../assets/safaricom-logo.png" alt="Safaricom" width="185" height="42" style="width:185px;height:42px">
       <div class="stack stack--2">
         <h1 class="page-title">Welcome back!</h1>
         <p style="font-size:16px;line-height:24px;color:var(--color-text-heading)">Sign In to continue</p>
@@ -95,7 +95,7 @@ def landing():
 <div class="landing">
 {art}
   <header class="landing__bar">
-    <div class="landing__brand"><img src="../assets/logo-placeholder-white.svg" alt="Safaricom" width="160" height="40"><span class="landing__brand-divider"></span><span class="landing__brand-name">Intranet</span></div>
+    <div class="landing__brand"><img src="../assets/safaricom-logo-white.png" alt="Safaricom" width="176" height="40"><span class="landing__brand-divider"></span><span class="landing__brand-name">Intranet</span></div>
     <div class="landing__tagline"><span>For you. For a brighter tomorrow.</span>{icon("search", "icon").replace('class="icon"', 'class="icon" style="width:32px;height:32px"')}</div>
   </header>
   <section class="landing__hero">
@@ -246,7 +246,7 @@ def slots_card(inner_top, table_body=None, footer="", empty_html=""):
         tbl = f'<table class="table">{TABLE_HEAD}<tbody>{table_body}</tbody></table>'
     else:
         tbl = empty_html
-    return f'<div class="card" style="overflow:hidden">{inner_top}{tbl}{footer}</div>'
+    return f'<div class="card card--table">{inner_top}{tbl}{footer}</div>'
 
 
 def count_text(slots):
@@ -359,19 +359,21 @@ def index():
     html = head("Gallery", ".") + f"""<body>
 <style>
   .gallery {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }}
+  @media (max-width: 1024px) {{ .gallery {{ grid-template-columns: repeat(2, 1fr); }} }}
+  @media (max-width: 560px) {{ .gallery {{ grid-template-columns: minmax(0, 1fr); }} }}
   .gallery__item {{ display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; background: #fff; border: 1px solid var(--color-border-subtle); border-radius: 8px; color: var(--color-text-body); font-weight: 400; }}
   .gallery__item:hover {{ border-color: var(--color-brand-200); text-decoration: none; }}
   .gallery__label {{ font-size: 16px; line-height: 24px; font-weight: 600; color: var(--color-text-heading); }}
   .gallery__note {{ font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }}
   .gallery__file {{ font-size: 12px; color: var(--color-text-muted); margin-top: 4px; }}
 </style>
-<div class="canvas" style="padding:48px 64px">
+<div class="canvas canvas--padded">
   <div class="stack stack--8">
     <div class="page-header">
       <div class="page-header__titles">
-        <img src="assets/logo-placeholder-color.svg" alt="Safaricom" width="144" height="36" style="width:144px;height:36px;margin-bottom:8px">
+        <img src="assets/safaricom-logo.png" alt="Safaricom" width="159" height="36" style="width:159px;height:36px;margin-bottom:8px">
         <h1 class="page-title">CEE Overtime: screen gallery</h1>
-        <p class="page-subtitle">One static page per screen and state, at 1440px. Import each one with html.to.design.</p>
+        <p class="page-subtitle">One static page per screen and state. Responsive from 360px to 1440px; import into Figma at 1440px with html.to.design.</p>
       </div>
       <a class="btn btn--secondary" href="design-system.html">Design system</a>
     </div>

@@ -4,6 +4,7 @@ html.to.design captures them as vectors (no sprites, no <use>, no icon fonts).
 Each icon is also written to /assets/icons/<name>.svg by build_pages.py."""
 
 ICONS = {
+    "menu": '<path d="M4 7h16M4 12h16M4 17h16"/>',
     "home": '<path d="M3 10.2 12 3l9 7.2V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.8Z"/>',
     "grid": '<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',
     "slots": '<rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M12 12.5v5M9.5 15h5"/>',

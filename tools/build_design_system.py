@@ -101,7 +101,7 @@ def build():
 
     # ---- App shell
     out.append(section("App shell: header + CEE sidebar",
-                       f'<div class="ds-shell">{header(".", home_href="pages/home.html")}<div class="ds-shell__body">{sidebar("slots", href_prefix="pages/")}'
+                       f'<div class="ds-shell">{header(".", home_href="pages/home.html")}<div class="ds-shell__body">{sidebar("slots", href_prefix="pages/", logo_root=".")}'
                        f'<div class="ds-shell__content"><div class="page-header__titles"><h1 class="page-title">Page title</h1>'
                        f'<p class="page-subtitle">Content area · #FAFAFA · padding 32px 40px</p></div></div></div></div>',
                        "Header 64px, #35A839. Sidebar 296px, white; items 40px with 6px radius; active item text and icon #35A839. Log out pinned to the bottom."))
@@ -271,7 +271,7 @@ def build():
     tool = (f'<a class="tool-card" href="#"><div class="tool-card__head"><span class="tool-card__icon">{icon("gift", "icon icon--lg")}</span><span class="tool-card__title">Overtime Management</span></div>'
             f'<div class="tool-card__row"><span class="tool-card__desc">Manage overtime opportunities, application, approvals and attendance.</span><span class="tool-card__arrow">{icon("arrow-up-right", "icon icon--lg")}</span></div></a>')
     avs = '<div class="row row--4"><span class="avatar avatar--sm">BK</span><span class="avatar">BK</span><span class="avatar avatar--lg">WN</span><span class="avatar avatar--xl">BK</span></div>'
-    out.append(section("Profile card, tool card & avatar", f'<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 440px">{prof}{tool}</div>{avs}'))
+    out.append(section("Profile card, tool card & avatar", f'<div class="grid-main-aside grid-main-aside--440">{prof}{tool}</div>{avs}'))
 
     # ---- Components added with the CEE screens
     import screens_a, screens_b
@@ -289,17 +289,17 @@ def build():
                        f'<div class="card">{screens_a.caps_card()}</div></div>',
                        "The dropdown is rendered open and absolutely positioned under its field. A failed rule uses the error tone. The usage bar turns amber when a cap is reached."))
     out.append(section("Notification item",
-                       '<div class="card" style="overflow:hidden"><div class="notif-list">' + screens_b.notif_item(NOTIFICATIONS[0]) + screens_b.notif_item(NOTIFICATIONS[4]) + '</div></div>',
+                       '<div class="card card--table"><div class="notif-list">' + screens_b.notif_item(NOTIFICATIONS[0]) + screens_b.notif_item(NOTIFICATIONS[4]) + '</div></div>',
                        "Mirrors the SMS and email content: date, approved hours, slot time. Unread items get a tint and a green dot."))
     out.append(section("Bar chart",
-                       f'<div class="card" style="width:680px"><div class="card__header"><div class="card__titles"><span class="card__title">Completed hours per week</span></div></div>'
+                       f'<div class="card" style="max-width:680px"><div class="card__header"><div class="card__titles"><span class="card__title">Completed hours per week</span></div></div>'
                        f'<div class="card__body">{screens_b.bar_chart(WEEKLY_COMPLETED)}</div></div>',
                        "Single series in brand green, so the title names it and no legend is needed. Bars are 44px with 4px rounded tops, value labels sit on the bars, and the grid is light (#E9EAEB)."))
 
     page = head("Design System", ".") + f"""<body>
 <style>
   /* design-system page chrome only */
-  .ds {{ width: var(--canvas-width); margin: 0 auto; padding: 48px 64px 96px; display: flex; flex-direction: column; gap: 56px; }}
+  .ds {{ width: 100%; max-width: var(--canvas-width); margin: 0 auto; padding: 48px 64px 96px; display: flex; flex-direction: column; gap: 56px; }}
   .ds__intro {{ display: flex; flex-direction: column; gap: 8px; }}
   .ds__section {{ display: flex; flex-direction: column; gap: 20px; }}
   .ds__section-head {{ display: flex; flex-direction: column; gap: 4px; padding-bottom: 12px; border-bottom: 1px solid var(--color-border-subtle); }}
@@ -331,10 +331,22 @@ def build():
   .ds-shell {{ border: 1px solid var(--color-border-subtle); border-radius: 8px; overflow: hidden; }}
   .ds-shell__body {{ display: flex; min-height: 640px; background: var(--color-bg-page); }}
   .ds-shell__content {{ flex: 1; padding: 32px 40px; }}
+  .ds-row__label {{ flex: none; }}
+  @media (max-width: 1280px) {{ .ds-swatch-grid {{ grid-template-columns: repeat(4, 1fr); }} .ds-icon-grid {{ grid-template-columns: repeat(7, 1fr); }} }}
+  @media (max-width: 1024px) {{ .ds-shell .sidenav {{ display: none; }} .ds-shell .app-header__menu {{ display: none; }} }}
+  @media (max-width: 768px) {{
+    .ds {{ padding: 32px 16px 64px; gap: 40px; }}
+    .ds-swatch-grid {{ grid-template-columns: repeat(2, 1fr); }}
+    .ds-icon-grid {{ grid-template-columns: repeat(4, 1fr); }}
+    .ds-type-row {{ grid-template-columns: minmax(0, 1fr); gap: 8px; }}
+    .ds-type-row span {{ overflow-wrap: anywhere; }}
+    .modal-overlay--static {{ flex-direction: column; padding: 16px; }}
+    .ds-shell__content {{ padding: 24px 16px; }}
+  }}
 </style>
 <div class="ds">
   <div class="ds__intro">
-    <img src="assets/logo-placeholder-color.svg" alt="Safaricom" width="192" height="48" style="width:192px;height:48px">
+    <img src="assets/safaricom-logo.png" alt="Safaricom" width="212" height="48" style="width:212px;height:48px">
     <h1 class="page-title">Design system: CX Intranet · Overtime Management (CEE)</h1>
     <p class="page-subtitle">Tokens from <code>css/tokens.css</code>, components from <code>css/components.css</code>. Extracted from the Figma export and the 5 sketches.</p>
   </div>

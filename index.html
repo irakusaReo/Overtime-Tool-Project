@@ -2,29 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=1440">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gallery · CX Intranet Overtime</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./css/tokens.css">
 <link rel="stylesheet" href="./css/components.css">
 <link rel="stylesheet" href="./css/layout.css">
+<link rel="stylesheet" href="./css/responsive.css">
 </head>
 <body>
 <style>
   .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 1024px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .gallery { grid-template-columns: minmax(0, 1fr); } }
   .gallery__item { display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; background: #fff; border: 1px solid var(--color-border-subtle); border-radius: 8px; color: var(--color-text-body); font-weight: 400; }
   .gallery__item:hover { border-color: var(--color-brand-200); text-decoration: none; }
   .gallery__label { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--color-text-heading); }
   .gallery__note { font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }
   .gallery__file { font-size: 12px; color: var(--color-text-muted); margin-top: 4px; }
 </style>
-<div class="canvas" style="padding:48px 64px">
+<div class="canvas canvas--padded">
   <div class="stack stack--8">
     <div class="page-header">
       <div class="page-header__titles">
-        <img src="assets/logo-placeholder-color.svg" alt="Safaricom" width="144" height="36" style="width:144px;height:36px;margin-bottom:8px">
+        <img src="assets/safaricom-logo.png" alt="Safaricom" width="159" height="36" style="width:159px;height:36px;margin-bottom:8px">
         <h1 class="page-title">CEE Overtime: screen gallery</h1>
-        <p class="page-subtitle">One static page per screen and state, at 1440px. Import each one with html.to.design.</p>
+        <p class="page-subtitle">One static page per screen and state. Responsive from 360px to 1440px; import into Figma at 1440px with html.to.design.</p>
       </div>
       <a class="btn btn--secondary" href="design-system.html">Design system</a>
     </div>

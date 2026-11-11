@@ -63,7 +63,7 @@ CANCEL_RULE = (f'<span class="note">{icon("info", "icon icon--sm")}You can cance
 
 
 def apps_card(tab, apps, rows_html, top=""):
-    return (f'<div class="card" style="overflow:hidden"><div style="padding-top:16px">{tabs_html(tab, apps)}</div>{top}'
+    return (f'<div class="card card--table"><div style="padding-top:16px">{tabs_html(tab, apps)}</div>{top}'
             + table(APP_HEAD, rows_html, {6: "table__th--action"}) + '</div>')
 
 
@@ -79,15 +79,15 @@ def my_applications():
 
     empty_apps = []
     page("my-applications--empty.html", "Empty", "No applications yet",
-         apps_header() + f'<div class="card" style="overflow:hidden"><div style="padding-top:16px">{tabs_html("All", empty_apps)}</div>'
+         apps_header() + f'<div class="card card--table"><div style="padding-top:16px">{tabs_html("All", empty_apps)}</div>'
          + empty_state("applications", "You haven't applied for overtime yet",
                        "Find a slot you're eligible for and apply. Your applications and their status will show here.",
                        f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>', pad="80px 24px") + '</div>')
     page("my-applications--loading.html", "Loading", "Skeleton rows",
-         apps_header() + CANCEL_RULE + f'<div class="card" style="overflow:hidden"><div style="padding-top:16px">{tabs_html("All", APPLICATIONS)}</div>'
+         apps_header() + CANCEL_RULE + f'<div class="card card--table"><div style="padding-top:16px">{tabs_html("All", APPLICATIONS)}</div>'
          + table(APP_HEAD, skeleton_rows([110, 96, 100, 32, 90, "pill", "btn"], 6), {6: "table__th--action"}) + '</div>')
     page("my-applications--error.html", "Error", "Load failure",
-         apps_header() + f'<div class="card" style="overflow:hidden"><div style="padding-top:16px">{tabs_html("All", APPLICATIONS)}</div>{error_state("your applications")}</div>')
+         apps_header() + f'<div class="card card--table"><div style="padding-top:16px">{tabs_html("All", APPLICATIONS)}</div>{error_state("your applications")}</div>')
 
     # cancel success: A-3321 now cancelled
     after = [dict(a) for a in APPLICATIONS]
@@ -162,16 +162,16 @@ def history():
             f'<td class="table__td"></td><td class="table__td table__td--num">{sum(h["hours"] for h in comp)} h</td>'
             f'<td class="table__td" colspan="2">completed · {len(ns)} No Show · {len(cx)} cancelled</td></tr></tfoot>')
     HH = ["Date", "Queue", "Slot time", "Hours", "Status", "Details"]
-    card = (f'<div class="card" style="overflow:hidden">{fb}' + table(HH, hist_rows(HISTORY), {3: "table__th--num"}, foot)
+    card = (f'<div class="card card--table">{fb}' + table(HH, hist_rows(HISTORY), {3: "table__th--num"}, foot)
             + f'<div class="pagination"><span>Showing {len(HISTORY)} of {len(HISTORY)} records</span></div></div>')
     write(G, "overtime-history.html", "Default", "Table with totals", app_page("Overtime History", "history", head + stats + card))
 
-    e = (f'<div class="card" style="overflow:hidden">{fb.replace(f"<strong>{len(HISTORY)}</strong> records", "<strong>0</strong> records")}'
+    e = (f'<div class="card card--table">{fb.replace(f"<strong>{len(HISTORY)}</strong> records", "<strong>0</strong> records")}'
          + empty_state("history", "No overtime history yet", "Completed, missed and cancelled overtime will show here after each shift.",
                        f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>', pad="80px 24px") + '</div>')
     write(G, "overtime-history--empty.html", "Empty", "No records", app_page("Overtime History", "history", head + e))
 
-    l = ('<div class="grid-3">' + stat_skeleton() * 3 + '</div>' + f'<div class="card" style="overflow:hidden">{fb}'
+    l = ('<div class="grid-3">' + stat_skeleton() * 3 + '</div>' + f'<div class="card card--table">{fb}'
          + table(HH, skeleton_rows([96, 110, 100, 32, "pill", 120], 7), {3: "table__th--num"}) + '</div>')
     write(G, "overtime-history--loading.html", "Loading", "Skeleton", app_page("Overtime History", "history", head + l))
     write(G, "overtime-history--error.html", "Error", "Load failure",
@@ -231,13 +231,13 @@ def reports():
         by_q[h["queue"]] = by_q.get(h["queue"], 0) + h["hours"]
     qrows = "".join(tr([(q, "table__td--strong"), (f"{v} h", "table__td--num"), (f"{round(100 * v / 33)}%", "table__td--num")])
                     for q, v in sorted(by_q.items(), key=lambda x: -x[1]))
-    qtable = (f'<div class="card" style="overflow:hidden"><div class="card__header"><span class="card__title">Completed hours by queue</span></div>'
+    qtable = (f'<div class="card card--table"><div class="card__header"><span class="card__title">Completed hours by queue</span></div>'
               + table(["Queue", "Hours", "Share"], qrows, {1: "table__th--num", 2: "table__th--num"}) + '</div>')
     cxl = [h for h in HISTORY if h["status"] in ("Cancelled", "No Show")]
     crows = "".join(tr([(h["date"], ""), (h["queue"], "table__td--strong"), (f'{h["start"]} – {h["end"]}', ""), (status(h["status"]), ""), (h["note"], "")]) for h in cxl)
-    ctable = (f'<div class="card" style="overflow:hidden"><div class="card__header"><span class="card__title">Cancellation history</span></div>'
+    ctable = (f'<div class="card card--table"><div class="card__header"><span class="card__title">Cancellation history</span></div>'
               + table(["Date", "Queue", "Slot time", "Status", "By"], crows) + '</div>')
-    body = stats + f'<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 380px">{chart}{qtable}</div>' + ctable
+    body = stats + f'<div class="grid-main-aside grid-main-aside--380">{chart}{qtable}</div>' + ctable
     write(G, "reports.html", "Default", "Summary, chart, by queue, cancellations, export", app_page("Reports", "reports", head + fbar() + body))
 
     write(G, "reports--export-success.html", "Export success", "Toast after CSV export",
@@ -252,7 +252,7 @@ def reports():
           app_page("Reports", "reports", head.replace('<button class="btn btn--secondary">', '<button class="btn btn--secondary" disabled>') + fbar("Oct 1 – Oct 31, 2024") + e))
 
     l = ('<div class="grid-3">' + stat_skeleton() * 3 + '</div>'
-         + '<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 380px"><div class="card"><div class="card__header">' + sk("220px", 20) + '</div>'
+         + '<div class="grid-main-aside grid-main-aside--380"><div class="card"><div class="card__header">' + sk("220px", 20) + '</div>'
          + '<div class="card__body"><div class="row" style="align-items:flex-end;gap:56px;height:240px;padding:0 48px">'
          + "".join(sk("48px", h, 4) for h in (80, 180, 160, 180, 12)) + '</div></div></div>'
          + '<div class="card"><div class="card__header">' + sk("180px", 20) + '</div><div class="card__body stack stack--4">' + sk("100%", 40, 8) * 3 + '</div></div></div>')
@@ -296,17 +296,17 @@ def notifications():
             f'<a class="tabs__tab{" tabs__tab--active" if i == 0 else ""}" href="notifications.html">{nm}<span class="tabs__count">{c}</span></a>'
             for i, (nm, c) in enumerate(zip(names, counts))) + '</div>')
     counts = [len(NOTIFICATIONS), unread, 2, 3, 1]
-    lst = f'<div class="card" style="overflow:hidden">{tabs(counts)}<div class="notif-list">{"".join(notif_item(n) for n in NOTIFICATIONS)}</div></div>'
+    lst = f'<div class="card card--table">{tabs(counts)}<div class="notif-list">{"".join(notif_item(n) for n in NOTIFICATIONS)}</div></div>'
     write(G, "notifications.html", "Default", "3 unread; approvals, cancellations, slot alerts", app_page("Notifications", "notifications", head + lst))
 
-    e = (f'<div class="card" style="overflow:hidden">{tabs([0, 0, 0, 0, 0])}' + empty_state("bell", "You're all caught up",
+    e = (f'<div class="card card--table">{tabs([0, 0, 0, 0, 0])}' + empty_state("bell", "You're all caught up",
          "Approvals, cancellations and new eligible slots will appear here, and by SMS and email.", pad="80px 24px") + '</div>')
     write(G, "notifications--empty.html", "Empty", "No notifications", app_page("Notifications", "notifications", head + e, notif_count=0))
 
     skn = "".join('<div class="notif">' + sk("40px", 40, 9999) + '<div class="notif__body">' + sk("260px", 18) + sk("420px", 14) + sk("120px", 22, 9999)
                   + '</div>' + sk("90px", 14) + '</div>' for _ in range(5))
     write(G, "notifications--loading.html", "Loading", "Skeleton",
-          app_page("Notifications", "notifications", head + f'<div class="card" style="overflow:hidden">{tabs(counts)}<div class="notif-list">{skn}</div></div>'))
+          app_page("Notifications", "notifications", head + f'<div class="card card--table">{tabs(counts)}<div class="notif-list">{skn}</div></div>'))
     write(G, "notifications--error.html", "Error", "Load failure",
           app_page("Notifications", "notifications", head + f'<div class="card">{error_state("your notifications")}</div>'))
 
@@ -349,7 +349,7 @@ def settings_body(weekday="10", weekend="8", err=False):
         f'<span class="toggle toggle--nowrap{" toggle--on" if on else ""}"><span class="toggle__track"><span class="toggle__thumb"></span></span><span class="check__text">'
         f'<span class="check__label">{n}</span><span class="check__desc">{d}</span></span></span>'
         for n, on, d in [("SMS", True, ME["phone"]), ("Email", True, ME["email"]), ("Microsoft Teams", False, "Off")])
-    notif = (f'<div class="card" style="overflow:hidden"><div class="card__header"><div class="card__titles"><span class="card__title">Notifications</span>'
+    notif = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Notifications</span>'
              f'<span class="card__subtitle">Choose how you hear about your overtime. Contact details come from your HR profile.</span></div></div>'
              f'<div class="card__body"><div class="row row--wrap" style="gap:16px 32px">{channels}</div></div>'
              f'<div class="matrix">' + table(["Event", "SMS", "Email", "Teams"], rows, {1: "table__th--center", 2: "table__th--center", 3: "table__th--center"}) + '</div></div>')
@@ -359,7 +359,7 @@ def settings_body(weekday="10", weekend="8", err=False):
             f'<div class="card__body">' + summary([("Name", ME["name"]), ("EK number", ME["ek"]), ("Team", ME["team"]), ("Team leader", ME["team_leader"]),
                                                     ("Skillsets", f'<span class="pill-list">{pills}</span>')]) + '</div></div>')
     actions = '<div class="row row--3" style="justify-content:flex-end"><a class="btn btn--secondary" href="my-settings.html">Cancel</a><a class="btn btn--primary" href="my-settings--saved.html">Save changes</a></div>'
-    return f'<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 400px;align-items:start"><div class="stack stack--6">{caps}{notif}{actions}</div>{prof}</div>'
+    return f'<div class="grid-main-aside grid-main-aside--400"><div class="stack stack--6">{caps}{notif}{actions}</div>{prof}</div>'
 
 
 def settings():
@@ -372,7 +372,7 @@ def settings():
     write(G, "my-settings--validation-error.html", "Validation error", "Empty required cap",
           app_page("My Settings", "settings", head + alert("error", "alert-circle", "Check your hour caps", "Your weekday cap is empty. Enter a number of hours to save.")
                    + settings_body(err=True)))
-    l = ('<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 400px"><div class="stack stack--6">'
+    l = ('<div class="grid-main-aside grid-main-aside--400"><div class="stack stack--6">'
          + ('<div class="card"><div class="card__header">' + sk("160px", 20) + '</div><div class="card__body stack stack--4">'
             + '<div class="form-grid">' + f'<div class="field">{sk("120px", 14)}{sk("100%", 44, 8)}</div>' * 3 + '</div>' + sk("100%", 8, 9999) + '</div></div>') * 2
          + '</div><div class="card"><div class="card__header">' + sk("100px", 20) + '</div><div class="card__body stack stack--3">' + sk("100%", 36, 6) * 5 + '</div></div></div>')
