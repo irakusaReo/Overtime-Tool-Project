@@ -22,7 +22,7 @@ def profile_card(me=ME, toggle=True):
     pills = "".join(f'<span class="pill">{s}</span>' for s in me["skills"])
     tg = ""
     if toggle:
-        tg = (f'<div class="stack stack--3" style="width:300px;padding-left:24px;border-left:1px solid var(--color-border-subtle)">'
+        tg = (f'<div class="stack stack--3 profile-card__aside">'
               f'<span class="toggle"><span class="toggle__track"><span class="toggle__thumb"></span></span><span class="check__text">'
               f'<span class="check__label">Apply on behalf of another person</span><span class="check__desc">Turn on to search a colleague by name or EK number.</span></span></span>'
               f'<a class="btn btn--link btn--sm" href="apply-on-behalf.html" style="align-self:flex-start">Go to Apply on Behalf →</a></div>')
@@ -82,10 +82,10 @@ def dashboard():
              + stat_card("Pending", str(len(PENDING)), "Awaiting Workforce")
              + stat_card("Approved this month", f"{MONTH_APPROVED} h", f"of {CAPS['monthly']} h monthly limit", pct(MONTH_APPROVED, CAPS["monthly"]))
              + caps_card() + '</div>')
-    upcoming = (f'<div class="card" style="overflow:hidden"><div class="card__header"><div class="card__titles"><span class="card__title">Upcoming approved overtime</span>'
+    upcoming = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Upcoming approved overtime</span>'
                 f'<span class="card__subtitle">{len(PENDING)} more applications are pending approval · <a href="my-applications--pending.html">View</a></span></div></div>'
                 + table(["Queue", "Date", "Slot time", "Status", "Action"], upcoming_rows(APPROVED), {4: "table__th--action"}) + '</div>')
-    main = dash_header() + banner + profile_card() + stats + f'<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 380px">{upcoming}{eligible_mini()}</div>'
+    main = dash_header() + banner + profile_card() + stats + f'<div class="grid-main-aside grid-main-aside--380">{upcoming}{eligible_mini()}</div>'
     write(G, "cee-dashboard.html", "Default", "Profile, stats, upcoming approved, eligible slots", app_page("Dashboard", "home", main))
 
     # empty: nothing applied or published yet
@@ -96,17 +96,17 @@ def dashboard():
                          f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>', pad="48px 24px") + '</div>')
     el0 = ('<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Eligible open slots</span></div></div>'
            + empty_state("slots", "No eligible slots right now", "We'll notify you when Workforce publishes one for your skills.", pad="40px 24px") + '</div>')
-    main = dash_header() + profile_card() + stats0 + f'<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 380px">{up0}{el0}</div>'
+    main = dash_header() + profile_card() + stats0 + f'<div class="grid-main-aside grid-main-aside--380">{up0}{el0}</div>'
     write(G, "cee-dashboard--empty.html", "Empty", "No applications or eligible slots yet", app_page("Dashboard", "home", main, notif_count=0))
 
     # loading
     prof_sk = ('<div class="card profile-card">' + sk("72px", 72, 9999) + '<div class="profile-card__main">' + sk("200px", 20) + sk("420px", 14)
                + '<div class="row row--2">' + sk("80px", 28, 9999) + sk("80px", 28, 9999) + sk("100px", 28, 9999) + '</div></div></div>')
-    up_sk = ('<div class="card" style="overflow:hidden"><div class="card__header">' + sk("220px", 20) + '</div>'
+    up_sk = ('<div class="card card--table"><div class="card__header">' + sk("220px", 20) + '</div>'
              + table(["Queue", "Date", "Slot time", "Status", "Action"], skeleton_rows([80, 80, 80, "pill", "btn"], 2), {4: "table__th--action"}) + '</div>')
     el_sk = '<div class="card"><div class="card__header">' + sk("160px", 20) + '</div><div class="card__body stack stack--4">' + (sk("100%", 40, 8) * 3) + '</div></div>'
     main = (dash_header() + prof_sk + '<div class="stat-grid">' + stat_skeleton() * 4 + '</div>'
-            + f'<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 380px">{up_sk}{el_sk}</div>')
+            + f'<div class="grid-main-aside grid-main-aside--380">{up_sk}{el_sk}</div>')
     write(G, "cee-dashboard--loading.html", "Loading", "Skeletons", app_page("Dashboard", "home", main))
 
     # error
@@ -264,7 +264,7 @@ def search_card(value="", placeholder=True, focus=False, menu="", error=False, h
            f'<div class="{cls}">{icon("search")}{v}</div><span class="field__hint">{hint}</span>{menu}</div>')
     return (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Find a colleague</span></div></div>'
             f'<div class="card__body"><div class="form-row" style="align-items:flex-start">{fld}'
-            f'<a class="btn btn--primary" href="apply-on-behalf--eligible.html" style="margin-top:26px">Search</a></div></div></div>')
+            f'<a class="btn btn--primary search-btn" href="apply-on-behalf--eligible.html">Search</a></div></div></div>')
 
 
 def colleague_card(c, step="2. Colleague"):
@@ -308,7 +308,7 @@ def behalf_slots_card(selected=None, cta=True):
         rows += tr([(s["queue"], "table__td--strong"), (f'{s["date"]}<span class="table__sub">{s["day"]}</span>', ""),
                     (f'<span class="slot-time__range">{s["start"]} – {s["end"]}</span><span class="table__sub">Window · {hours(s)} h</span>', ""),
                     (bp.capacity(s), ""), (act, "table__td--action")], "table__row--highlight" if sel else "")
-    return (f'<div class="card" style="overflow:hidden"><div class="card__header"><div class="card__titles"><span class="card__title">Choose one of Wanjiru\'s eligible slots</span>'
+    return (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Choose one of Wanjiru\'s eligible slots</span>'
             f'<span class="card__subtitle">{len(WANJIRU_SLOTS)} slots · Jan 10 – Jan 16, 2025</span></div></div>'
             + table(["Queue", "Date", "Slot time", "Remaining capacity", "Action"], rows, {4: "table__th--action"}) + '</div>')
 

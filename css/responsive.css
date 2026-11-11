@@ -1,0 +1,178 @@
+/* ==========================================================================
+   RESPONSIVE: loaded last. Desktop (≥1281px) is the 1440 design as imported
+   into Figma; these rules only adapt it to narrower screens.
+   Breakpoints: 1280 (laptop) · 1024 (tablet, off-canvas nav) · 768 (large phone) · 480 (phone)
+   ========================================================================== */
+
+/* ---------- ≤1280: laptop ------------------------------------------------ */
+@media (max-width: 1280px) {
+  :root { --content-padding-x: 32px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-main-aside, .grid-main-aside--380, .grid-main-aside--400, .grid-main-aside--440 { grid-template-columns: minmax(0, 1fr); }
+  .landing__cards { grid-template-columns: repeat(3, 1fr); }
+  .landing__hero { padding: 40px 40px 0; }
+  .landing__bar, .landing__cards, .landing__footer { padding-left: 40px; padding-right: 40px; }
+  .canvas--padded { padding: 40px 32px; }
+}
+
+/* ---------- ≤1024: tablet: sidebar becomes an off-canvas drawer ---------- */
+@media (max-width: 1024px) {
+  .app-header { padding: 8px 16px; gap: 12px; }
+  .app-header__menu {
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+    width: 40px; height: 40px; border-radius: var(--radius-md); color: var(--color-text-on-brand); cursor: pointer;
+  }
+  .app-header__brand { flex: 1; min-width: 0; }
+
+  .nav-toggle { display: block; position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+  .sidenav {
+    position: fixed; top: 0; bottom: 0; left: 0; z-index: 70;
+    width: min(296px, 85vw); overflow-y: auto;
+    transform: translateX(-100%); transition: transform .2s ease;
+    box-shadow: var(--shadow-xl);
+  }
+  .sidenav { justify-content: flex-start; }
+  .sidenav__list { flex: 1; padding-top: 16px; }
+  .sidenav__mobile-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 0 28px; }
+  .sidenav__mobile-head img { height: 30px; width: auto; }
+  .nav-scrim { position: fixed; inset: 0; z-index: 60; background: var(--color-overlay); cursor: pointer; }
+  .nav-toggle:checked ~ .app__body .sidenav { transform: none; }
+  .nav-toggle:checked ~ .app__body .nav-scrim { display: block; }
+  .nav-toggle:focus-visible ~ .app-header .app-header__menu { box-shadow: 0 0 0 3px rgba(255,255,255,.6); }
+
+  .tool-grid { grid-template-columns: repeat(2, 1fr); }
+  .tool-grid__wide { grid-column: span 2; }
+  .card--table { overflow-x: auto; }
+
+  /* landing: drop the decorative art layer, stack the hero */
+  .landing { height: auto; min-height: 0; background: #FFFFFF; }
+  .landing__art { display: none; }
+  .landing__hero { flex-direction: column; height: auto; gap: 24px; padding-bottom: 32px; }
+  .landing__hero > div:last-child { display: none; }
+  .landing__mark svg { width: 180px; height: 180px; }
+  .landing__copy { width: auto; }
+  .landing__cards { background: var(--color-brand-900); padding-top: 32px; padding-bottom: 24px; }
+  .landing__footer { background: var(--color-brand-900); margin-top: 0; padding-top: 8px; padding-bottom: 32px; }
+}
+
+/* ---------- ≤768: large phone ------------------------------------------- */
+@media (max-width: 768px) {
+  :root { --content-padding-x: 16px; --content-padding-y: 24px; }
+  .app__main { gap: var(--space-6); padding-bottom: 32px; }
+  .app-header__divider, .app-header__product { display: none; }
+
+  .page-header { flex-direction: column; align-items: stretch; gap: var(--space-4); }
+  .page-header__actions { flex-wrap: wrap; gap: var(--space-3); }
+
+  .grid-2, .grid-3, .form-grid { grid-template-columns: minmax(0, 1fr); }
+  .form-row { flex-direction: column; align-items: stretch; }
+  .search-btn { margin-top: 0; }
+
+  .filter-bar { flex-wrap: wrap; padding: 16px; }
+  .filter-bar > .field, .filter-bar > .field:first-child { width: 100%; }
+  .filter-bar > .field .datefield { width: 100%; }
+  .filter-bar__spacer { display: none; }
+  .result-count { padding-bottom: 0; }
+  .chip-row { padding: 12px 16px; }
+
+  .card__header { padding: 16px; flex-wrap: wrap; }
+  .card__body { padding: 0 16px 16px; }
+  .card__footer { padding: 16px; }
+  .card--table .table, .table-wrap .table { min-width: 720px; }
+  .table-wrap { overflow-x: auto; }
+  .tabs { overflow-x: auto; scrollbar-width: none; }
+  .tabs[style] { padding-left: 16px !important; padding-right: 16px !important; }
+  .tabs__tab { white-space: nowrap; flex: none; }
+  .pagination { flex-wrap: wrap; gap: 12px; padding: 12px 16px; }
+
+  .banner { align-items: flex-start; padding: 12px 16px; font-size: var(--text-sm-size); }
+  .alert__actions { flex-wrap: wrap; }
+
+  .profile-card { flex-wrap: wrap; padding: 16px; gap: var(--space-4); }
+  .profile-card__meta { flex-wrap: wrap; gap: 4px 16px; }
+  .profile-card__aside { width: 100%; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--color-border-subtle); }
+
+  .checklist { grid-template-columns: minmax(0, 1fr); }
+
+  .notif { flex-wrap: wrap; padding: 16px; gap: var(--space-3); }
+  .notif__body { flex-basis: calc(100% - 56px); }
+  .notif__facts { flex-wrap: wrap; gap: 4px 16px; }
+  .notif__aside { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; padding-left: 52px; }
+
+  .modal-overlay--top { padding-top: 72px; }
+  .modal__header { padding: 20px 16px 0; }
+  .modal__body { padding: 16px 16px 0; }
+  .modal__footer { padding: 24px 16px 16px; }
+
+  .toast-region { left: 16px; right: 16px; top: 72px; }
+  .toast { max-width: none; }
+
+  .home-hero { padding-left: 0; }
+  .home-section-head { flex-direction: column; align-items: stretch; }
+  .home-section-head__search { width: 100%; }
+  .tool-grid { grid-template-columns: minmax(0, 1fr); }
+  .tool-grid__wide { grid-column: auto; }
+  .tool-card { padding: 24px; min-height: 0; }
+
+  .empty-state { padding: 48px 16px; }
+  .empty-state[style] { padding: 48px 16px !important; }
+  .empty-state__actions { flex-wrap: wrap; justify-content: center; }
+
+  /* login */
+  .auth { min-height: 100vh; padding: 24px 16px; }
+  .auth__body { padding: 32px 24px 24px; }
+  .auth__footer { padding: 20px 24px; }
+
+  /* landing */
+  .landing__bar { height: 64px; padding: 0 16px; }
+  .landing__brand { gap: 14px; }
+  .landing__brand img { height: 30px; }
+  .landing__brand-divider { height: 28px; }
+  .landing__brand-name { font-size: 18px; }
+  .landing__tagline span { display: none; }
+  .landing__hero { padding: 24px 16px 24px; }
+  .landing__eyebrow { font-size: 13px; letter-spacing: 4px; }
+  .landing__cx { font-size: 88px; line-height: 76px; }
+  .landing__title { font-size: 36px; line-height: 42px; }
+  .landing__pillars { font-size: 17px; }
+  .landing__lead { font-size: 19px; line-height: 26px; }
+  .landing__mark { gap: 16px; }
+  .landing__mark svg { width: 120px; height: 120px; }
+  .landing__claim { font-size: 16px; line-height: 22px; }
+  .landing__cards { grid-template-columns: repeat(2, 1fr); padding: 24px 16px; gap: 10px; }
+  .landing-card { min-height: 0; padding: 16px; gap: 10px; }
+  .landing-card__icon { width: 56px; height: 56px; }
+  .landing-card__icon .icon { width: 28px !important; height: 28px !important; }
+  .landing-card__title { font-size: 19px; line-height: 26px; }
+  .landing-card__desc { font-size: 14px; line-height: 20px; }
+  .landing__footer { flex-direction: column; align-items: flex-start; gap: 16px; padding: 8px 16px 32px; }
+  .landing__footer-title { font-size: 18px; }
+  .landing__footer-sub { font-size: 11px; letter-spacing: 3px; }
+
+  .canvas--padded { padding: 24px 16px; }
+}
+
+/* ---------- ≤480: phone -------------------------------------------------- */
+@media (max-width: 480px) {
+  .app-header__user-text { display: none; }
+  .app-header__user { gap: 4px; }
+  .stat-grid { grid-template-columns: minmax(0, 1fr); }
+  .page-header__actions > .btn { flex: 1 1 auto; }
+  .modal__footer { flex-direction: column-reverse; }
+  .modal__icon { width: 40px; height: 40px; border-width: 6px; }
+  .profile-card .avatar--xl { width: 56px; height: 56px; font-size: var(--text-lg-size); }
+  .notif__facts { flex-direction: column; gap: 2px; }
+  .segmented { align-self: stretch; }
+  .segmented__item { flex: 1; text-align: center; }
+  .landing__cards { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidenav { transition: none; }
+}
+
+/* table toolbar (search + date + filters) */
+@media (max-width: 768px) {
+  .table-toolbar { flex-wrap: wrap; }
+  .table-toolbar__search { flex-basis: 100%; }
+}

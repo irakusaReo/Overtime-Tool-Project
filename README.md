@@ -12,11 +12,12 @@ Open `index.html` for the gallery of every page.
 |---|---|
 | `css/tokens.css` | Design tokens (CSS custom properties) extracted from the Figma export |
 | `css/components.css` | BEM components: header, sidebar, buttons, inputs, selects, date and search fields, tables, badges, stat cards, banners and alerts, modals, toasts, tooltip, empty, error and skeleton, tabs, checkbox, radio and toggle, profile card, tool card |
-| `css/layout.css` | 1440px canvas, app shell (header + sidebar + main), stacks and grids, auth layout |
+| `css/layout.css` | Fluid canvas (max 1440px), app shell (header + sidebar + main), stacks and grids, auth layout |
+| `css/responsive.css` | Breakpoints at 1280, 1024, 768 and 480px; loaded last on every page |
 | `design-system.html` | Every token and component on one page |
 | `index.html` | Gallery linking every page, grouped by screen |
-| `pages/*.html` | One static file per screen or state (1440px canvas) |
-| `assets/logo-placeholder-*.svg` | Placeholder logos. Replace them with the official asset and keep the filenames |
+| `pages/*.html` | One static file per screen or state, responsive from 360px to 1440px |
+| `assets/safaricom-logo.png` / `safaricom-logo-white.png` | The supplied Safaricom logo, cropped to its edges, with a transparent background. The white version keeps the red swoosh and turns the green wordmark white, for the green header and the Landing bar (as in the sketches). |
 | `assets/icons/*.svg` | Outline icon set; also inlined in every page |
 | `reference/` | Sketches (PNG), Figma CSS export, journey map (`.docx` plus a `.txt` made with pandoc) |
 | `tools/` | Optional Python authoring helpers that write the HTML: `build_pages.py` writes all pages and the gallery (screens live in `screens_a.py` and `screens_b.py`); `build_design_system.py` writes the design-system page. Shared helpers are in `ui.py`, `shell.py` and `icons.py`; sample data is in `data.py`. The committed HTML is the deliverable and needs no build step. |
@@ -175,7 +176,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 | Inputs 44px with #D5D7DA border; primary buttons #35A839 with skeuomorphic shadow | Matches the export |
 | Table rows 72px, cells #FDFDFD with 16px 24px padding, success badges #ECFDF3 / #ABEFC6 / #067647 | Matches the export |
 | Type: 24/32 titles, 18/28 card titles, 16/24 body, 14/20 tables, 12/18 badges | Matches the export |
-| Automated checks on all 65 pages at 1440px | No console errors, no horizontal scroll, no clipped cards or truncated controls |
+| Automated checks on all 65 pages plus the gallery and design system at 1440, 1024, 768 and 390px | No console errors, no page-level horizontal scroll, and nothing extends past the viewport except inside deliberate scroll areas (tables, tabs) |
 
 **Remaining deviations:**
 - The page title is 24px, which is the export value (see deviation 1 above).
@@ -190,6 +191,19 @@ The Landing sketch is one raster image, so it was rebuilt in HTML/CSS and inline
 - The "VIEW360" watermark is omitted.
 - The translucent blocks over the top bar use opacity instead of the export's `mix-blend-mode: color-dodge`, which import tools render inconsistently.
 - The dark greens `#07743D` / `#025C29` were sampled from the image and added as `--color-brand-800/900`.
+
+## Responsive behaviour
+
+The 1440px desktop layout is the design of record (it matches the sketches and is what Figma imports). Narrower screens adapt as follows:
+
+| Width | What changes |
+|---|---|
+| ≤1280px | Stat cards go to 2 per row; side-by-side panels (main + aside) stack; Landing cards go to 3 per row. |
+| ≤1024px | The sidebar becomes an off-canvas drawer, opened by a menu button in the header. It is CSS only (a hidden checkbox, no JavaScript) and closes from the × button or by tapping the dimmed area. Tool tiles go to 2 per row; the Landing art layer is replaced by a stacked hero on a dark green band. |
+| ≤768px | Page headers, forms and filters stack to one column. Tables scroll sideways inside their card (minimum width 720px), and tab rows scroll too. Modals and toasts span the screen with 16px margins. "CX INTRANET" is hidden next to the logo. |
+| ≤480px | Stat cards and Landing cards go to one per row; modal buttons stack; the user's name and role are hidden (the avatar stays). |
+
+To capture a mobile frame in Figma, import the same page with a 390px viewport.
 
 ## Importing into Figma (html.to.design)
 
