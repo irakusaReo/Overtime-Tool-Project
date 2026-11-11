@@ -1,0 +1,861 @@
+Project Name: Workforce Overtime Management Tool
+
+1. Journey Overview
+
+Purpose 
+
+Enable CEE/Support Analyst and Workforce Management teams to efficiently advertise, apply, approve, manage, monitor, and report on overtime opportunities.
+
+Primary Users
+
+-   CEE/Support Analyst (Self-Application)
+
+-   CEE/Support Analyst (Applying on Behalf of Another CEE/Support Analyst)
+
+-   Workforce Team (Approver & Administrator)
+
+-   Team Leader (View Only)
+
+Stakeholders
+
+-   Finance
+
+-   HR
+
+-   IPCC
+
+Systems
+
+-   Genesys Cloud
+
+-   Resource Management (HR/Employee Bio Data Systems/Bio Data)
+
+-   CX Intranet (HR Policies)
+
+-   Power BI
+
+-   Email/SMS/Microsoft Teams
+
+-   Microsoft Entra ID
+
+Key Principles
+
+-   Eligibility-based slot visibility
+
+-   Workforce-owned approvals
+
+-   Bulk management capabilities
+
+-   Automated no-show cancellation
+
+-   Self-service reporting
+
+-   Full audit trail
+
+-   Clean
+
+2. Personas
+
+CEE/Support Analyst
+
+Goals
+
+-   Find available overtime quickly
+
+-   Apply for self or colleague
+
+-   View application status
+
+-   Cancel when unable to attend
+
+-   View personal overtime history
+
+-   Automated and real time SMS and Email notification of approved or cancelled requests.
+
+Pain Points
+
+-   Lacking view of individualized eligible opportunities (Current advertisement mechanism relies on email).
+
+-   Late approval visibility
+
+-   Manual overtime tracking
+
+-   Current system requires CEE/Support Analyst to search for the name and EK number from the list of entire call centre CEE/Support Analysts.
+
+-   Current system displays all the skillsets
+
+-   Current system does not allow cancellations unless one changes the dates
+
+-   Current system allows CEE/Support Analyst to apply for roles that they are not eligible
+
+Workforce Planner
+
+Goals
+
+-   Fill overtime demand efficiently
+
+-   Bulk approve requests
+
+-   Manage advertised slots
+
+-   Monitor attendance
+
+-   Generate operational reports
+
+Pain Points 
+
+-   High volume approvals
+
+-   Manual attendance follow-up
+
+-   Ad hoc reporting requests
+
+Team Leader
+
+Goals
+
+-   View team participation
+
+-   Monitor attendance trends
+
+Permissions
+
+-   View only
+
+-   No approvals
+
+-   No slot management
+
+3. End-to-End Customer Journey
+
+Stage 1: Overtime Requirement Created
+
+Workforce Actions
+
+-   Workforce Analysts logs in
+
+-   Creates overtime campaign (advertisements)
+
+-   Sets:
+
+    -   Date
+
+    -   Start Time
+
+    -   End Time
+
+    -   Queue/Skill
+
+    -   System computes Duration (End Time – Start Time)
+
+    -   Workforce inputs slots available.
+
+    -   Number of agents for each slot.
+
+    -   System converts agents to hours (Hours = Number of Agents x Duration).
+
+    -   Select Eligibility Rules to Apply (Flexible rule: Absent Previous Week or Two Week).
+
+    -   Fixed rules: Fixed Rules: 11 hours, Annual Leave and 6-days rule. (Refer to CALL CENTER OVERTIME APPROVAL GUIDE).
+
+    -   Publish slots.
+
+-   Workforce Management creates an overtime advertisement using the following information:
+
+  ----------------------------------------------------------------------------------------------------------------
+  Field                            Description                                             Required
+  -------------------------------- ------------------------------------------------------- -----------------------
+  Skill                            Skill required for the overtime shift.                  Yes
+
+  Required Date                    Date on which overtime is required.                     Yes
+
+  Start Time                       Overtime Start time.                                    Yes
+
+  End Time                         Overtime end time.                                      Yes
+
+  CEEs/Support Analysts Required   Number of CEEs/Support Analysts required.               Yes
+
+  Published                        Controls visibility to applicants.                      Yes
+
+  Status                           Current advertisement lifecycle status.                 Yes
+
+  Created By                       Workforce analyst/user who created the advertisement.   Yes
+  ----------------------------------------------------------------------------------------------------------------
+
+System Actions
+
+-   Publishes overtime opportunity
+
+-   Determines eligible CEE/Support Analysts automatically (as per the CALL CENTER OVERTIME APPROVAL GUIDE)
+
+User Experience
+
+-   Clear availability planning
+
+Opportunities
+
+-   Forecast-driven slot creation
+
+Stage 2: Slot Advertisement
+
+CEE/Support Analyst Journey
+
+CEE/Support Analyst Views Available Slots
+
+System filters opportunities and only displays slots where CEE/Support Analyst is eligible.
+
+Touchpoints
+
+-   Dashboard
+
+-   Mobile/Email Notification (System Action)
+
+Rules
+
+Applying for Self
+
+CEE/Support Analyst sees:
+
+-   Own eligible slots only
+
+Applying for Another CEE/Support Analyst
+
+CEE/Support Analyst selects colleague (EK).
+
+System validates:
+
+-   Colleague eligibility
+
+-   Slot availability
+
+Only valid slots are displayed.
+
+Pain Points Addressed
+
+-   No confusion from seeing unavailable slots
+
+-   Reduced invalid applications
+
+Stage 3: Overtime Application
+
+Self Application
+
+CEE/Support Analyst Actions
+
+1.  Select Slot
+
+2.  Select preferred start time.
+
+3.  Input hours required.
+
+4.  System automatically generates End time (Prefferred start time + OT Hours).
+
+5.  Apply
+
+6.  Receive Confirmation (Slot Status)
+
+System Actions
+
+-   Capture application
+
+-   Send to Workforce Queue
+
+Application for Another CEE/Support Analyst
+
+CEE/Support Analyst Actions
+
+1.  Search CEE/Support Analyst by EK Number
+
+2.  Select CEE/Support Analyst
+
+3.  Select Eligible Slot
+
+4.  Select preferred start time.
+
+5.  Input hours required.
+
+6.  System automatically generates End time (Prefferred start time + OT Hours).
+
+7.  Submit
+
+System Actions
+
+-   Validate eligibility
+
+-   Validate slot capacity
+
+-   Route for approval
+
+Outcome
+
+-   Quick and simple submission
+
+Stage 4: Workforce Approval
+
+Workforce Actions
+
+Single Approval
+
+-   Review application
+
+-   Approve
+
+-   Reject
+
+Bulk Approval
+
+Workforce can:
+
+-   Multi-select requests
+
+-   Bulk approve
+
+-   Bulk reject
+
+System Actions
+
+-   Update slot capacity
+
+-   Notify applicants via SMS and Email.
+
+-   Update on GC for slot time.
+
+-   Update change of queue (if necessary) on GC at exactly start of OT.
+
+Pain Points Solved
+
+-   Reduced approval effort
+
+-   Faster turnaround times
+
+Stage 5: Approved Slot Management
+
+Workforce Functions
+
+Manage Advertised Slots
+
+Workforce may:
+
+Unpublish Slot
+
+-   Remove visibility
+
+-   Preserve history
+
+Republish Slot
+
+-   Re-open applications
+
+Edit Slot
+
+Modify:
+
+-   Start time
+
+-   End time
+
+-   Slot count
+
+-   Eligibility
+
+System Actions
+
+-   Recompute eligibility
+
+-   Notify affected CEE/Support Analysts
+
+-   Update on GC.
+
+User Experience
+
+-   Flexible workforce management
+
+Stage 6: Cancellation Journey
+
+CEE/Support Analyst Cancellation before OT Start Time
+
+CEE/Support Analyst Actions
+
+-   View Approved Slot
+
+-   Click Cancel
+
+System Actions
+
+-   Release slot.
+
+-   Increment OPEN slots.
+
+-   Notify Workforce
+
+-   Updates on GC.
+
+CEE/Support Analyst Cancellation after OT Start Time but before 20-minute mark.
+
+CEE/Support Analyst Actions
+
+-   View Approved Slot
+
+-   Click Cancel
+
+System Actions
+
+-   Release slot.
+
+-   Increment slots in next overlapping slot schedule.
+
+-   Notify CEE/Support Analyst on cancellation via SMS and Email.
+
+-   Notify Workforce on dashboard.
+
+-   Updates on GC.
+
+Workforce Cancellation
+
+Individual Cancellation
+
+-   Select Application
+
+-   Cancel
+
+Bulk Cancellation
+
+-   Select Multiple Applications
+
+-   Cancel All
+
+System Actions
+
+-   Release capacity
+
+-   Notify affected CEE/Support Analysts
+
+-   Update on GC.
+
+Stage 7: Attendance Validation
+
+Scheduled Overtime Start
+
+System Actions
+
+Monitor:
+
+-   Login timestamp
+
+-   Assigned overtime slot
+
+Attendance Decision Logic
+
+[]
+
+Business Rule
+
+If no login activity exists 20 minutes after scheduled start:
+
+-   Slot automatically cancelled.
+
+-   Slot pushed to next overlapping slot schedule.
+
+-   Attendance marked No Show
+
+Benefits
+
+-   Eliminates manual tracking
+
+-   Improves roster accuracy
+
+-   Creates reliable attendance metrics
+
+Stage 8: Overtime Completion
+
+Workforce Experience
+
+View Status
+
+-   Remaining Slots (Open).
+
+-   Draft
+
+-   Pending
+
+-   Slots Full
+
+-   Approved
+
+-   Cancelled
+
+  -----------------------------------------------------------------------------------------------------------------------------------
+  Status                              Meaning
+  ----------------------------------- -----------------------------------------------------------------------------------------------
+  DRAFT                               Advertisement has been created but is not visible to CEE/Support Analyst.
+
+  REMAINING SLOTS (OPEN)              Advertisements are published and accepting applications.
+
+  PENDING                             CEE/Support Analyst has applied awaiting workforce approval.
+
+  SLOTS FULL                          The required number of CEE/Support Analyst has been approved. (Timed to close by end of day).
+
+  APPROVED                            The applied slot has been granted by workforce.
+
+  CANCELLED                           Advertisement has been cancelled.
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+View History
+
+-   Date
+
+-   Hours
+
+-   Status
+
+-   Queue
+
+Workforce Experience
+
+View:
+
+-   Attendance
+
+-   Occupancy
+
+-   Fill Rate
+
+-   Cancellation Rate
+
+-   No Shows
+
+Stage 9: Reporting Journey
+
+CEE Reporting
+
+Allowed Scope
+
+-   Own records only
+
+Customizable Filters
+
+-   Date Range
+
+-   Status
+
+-   Queue
+
+Outputs
+
+-   Overtime History
+
+-   Approved Hours
+
+-   Completed Hours
+
+-   Cancellation History
+
+Workforce Reporting
+
+Customizable Filters
+
+-   CEE/Support Analyst
+
+-   Team
+
+-   Queue
+
+-   Date Range
+
+-   Status
+
+Sample Reports
+
+Application Report
+
+-   Submitted
+
+-   Approved
+
+-   Workforce Cancelled
+
+-   Agent Manually Cancelled
+
+Attendance Report
+
+-   Attended
+
+-   No-show
+
+Utilization Report
+
+-   Slots Advertised
+
+-   Slots Filled
+
+-   Fill %
+
+-   Ranking reports by CEE/Support Analyst, Queue, Team including graphical presentation.
+
+Cancellation Report
+
+-   By CEE/Support Analyst
+
+-   By Workforce (Slots released)
+
+-   Automatic/No-show
+
+Rejected Report
+
+-   By Workforce (When advertised slots are no longer required due to change in demand)
+
+-   Does not release slots.
+
+Eligibility Report
+
+-   Eligible Population
+
+-   Applicants
+
+-   Conversion %
+
+4. Stakeholder Requirements Matrix
+
+  ------------------------------------------------------------------------------------------
+  Capability                              CEE/Support Analyst   Workforce     Team Leader
+  --------------------------------------- --------------------- ------------- --------------
+  View Eligible Slots                     ✅                    ✅            ✅
+
+  Apply for Self                          ✅                    ❌            ❌
+
+  Apply for Another CEE/Support Analyst   ✅                    ❌            ❌
+
+  Approve Requests                        ❌                    ✅            ❌
+
+  Bulk Approvals                          ❌                    ✅            ❌
+
+  Cancel Own Slot                         ✅                    ✅            ❌
+
+  Cancel CEE/Support Analyst Slot         ❌                    ✅            ❌
+
+  Bulk Cancellation                       ❌                    ✅            ❌
+
+  Publish Slots                           ❌                    ✅            ❌
+
+  Unpublish Slots                         ❌                    ✅            ❌
+
+  Modify Slots                            ❌                    ✅            ❌
+
+  Self Reports                            ✅                    ✅            ❌
+
+  Team Reports                            ❌                    ✅            View Only
+
+  Attendance Monitoring                   ❌                    ✅            View Only
+  ------------------------------------------------------------------------------------------
+
+Key Automation Opportunities
+
+High Priority
+
+1.  Eligibility-based slot filtering
+
+2.  Automated Workforce approval queues
+
+3.  Auto-notifications
+
+4.  20-minute no-show cancellation
+
+5.  Bulk approval workflows
+
+6.  Bulk cancellation workflows
+
+7.  Real-time slot capacity management
+
+8.  Scheduled report generation
+
+9.  Update on GC.
+
+Medium Priority
+
+1.  Forecast-driven slot recommendations
+
+2.  CEE/Support Analyst overtime preference tracking
+
+3.  Predictive fill-rate analytics
+
+4.  Automated republishing of unfilled slots
+
+6. Success Metrics
+
+-   Application-to-approval SLA
+
+-   Slot fill rate %
+
+-   Overtime attendance %
+
+-   No-show %
+
+-   Auto-cancellation %
+
+-   Workforce processing time
+
+-   Bulk approval utilization %
+
+-   User satisfaction score
+
+-   Report generation turnaround time
+
+This CJM provides both the CEE/Support Analyst experience and the workforce operational journey, which will be the two most important stakeholder viewpoints for this overtime management tool.
+
+Appendices
+
+Appendix 1: User Stories
+
+CEE User Stories
+
+US-01: Profile Auto-population & Apply on Behalf Feature
+
+-   User Story: As a CEE, I want the dashboard to auto-populate my profile details and allow me to apply for Overtime (OT) on behalf of someone else, so that I can save time and assist my team members when needed.
+
+-   Acceptance Criteria:
+
+    -   AC1: When logged into the system, the dashboard must automatically display the logged-in CEE's profile and name without requiring manual data entry.
+
+    -   AC2: The system must provide a clear option (e.g., checkbox or toggle) to "Apply on behalf of another person."
+
+    -   AC3: Selecting this option must present a searchable field to select a different agent by name or employee ID.
+
+US-02: Skillset Visibility
+
+-   User Story: As a CEE, I want to view the specific skillsets that an agent can handle, so that OT requests can be aligned accurately with correct tasks.
+
+-   Acceptance Criteria:
+
+    -   AC1: The dashboard must display a visible list of skillsets/competencies associated with the selected agent's profile.
+
+US-03: Restricted OT Hour Visibility
+
+-   User Story: As a CEE, I want the system to restrict the visible precheck options to only the hours where OT is actively available, so that I do not waste time applying for invalid slots.
+
+-   Acceptance Criteria:
+
+    -   AC1: The OT qualification precheck must automatically filter out unavailable hours.
+
+    -   AC2: Users must only be able to see and select from hours designated as "Active OT Slots."
+
+US-04: Automated Backend OT Rule Checks
+
+-   User Story: As a CEE / System, I want the backend to automatically validate requests against predefined OT rules (6-day rule, sick off status, 11-hour rest rule), so that compliance issues are caught automatically before submission.
+
+-   Acceptance Criteria:
+
+    -   AC1: System must reject requests if the agent has worked 6 consecutive days.
+
+    -   AC2: System must block applications if the agent is marked as "Sick Off."
+
+    -   AC3: System must enforce an 11-hour rest window between shifts before approving an OT slot.
+
+US-05: Monthly/Weekly Hour Automation Caps
+
+-   User Story: As a CEE, I want an option to set automated caps on hours worked (e.g., maximum 10 weekday hours and 8 weekend hours), so that I can manage my scheduled availability without manual tracking.
+
+-   Acceptance Criteria:
+
+    -   AC1: Provide configuration inputs where a user can define their target/maximum hours split by weekday and weekend limits.
+
+WORKFORCE User Stories
+
+US-06: Workforce Qualification Prechecks
+
+-   User Story: As a Workforce Analyst, I want the system to automatically block unqualified agents or those who fail to meet shift thresholds from applying, so that unusable applications are filtered out instantly.
+
+-   Acceptance Criteria:
+
+    -   AC1: The system must run a qualification check at the moment of submission and display a hard stop error message if requirements aren't met.
+
+US-07: Automated SMS & Email Notifications
+
+-   User Story: As a Workforce Analyst, I want the system to send automated email and SMS notifications when OT is approved, so that agents are updated immediately without manual outreach.
+
+-   Acceptance Criteria:
+
+    -   AC1: Trigger a confirmation email and SMS instantly upon status change to "Approved."
+
+    -   AC2: Notifications must include key details: Date, Approved Hours, and Slot Time.
+
+US-08: Max Application Threshold Per Slot
+
+-   User Story: As a Workforce Analyst, I want to set a maximum threshold of applications allowed for any given OT slot, so that slots do not become over-allocated.
+
+-   Acceptance Criteria:
+
+    -   AC1: Admins must be able to define a maximum application cap per slot.
+
+    -   AC2: The slot must change status to "Closed" or "Full" once the cap is met.
+
+US-09: Bulk Approval Functionality
+
+-   User Story: As a Workforce Analyst, I want to bulk approve required application batches at once (e.g., approving 20 applications concurrently), so that I can minimize handle time and operational overhead.
+
+-   Acceptance Criteria:
+
+    -   AC1: The analyst must be able to select multiple agent rows using checkboxes and click a single "Bulk Approve" button.
+
+US-10: Accurate Data Export Formatting
+
+-   User Story: As a Workforce Analyst, I want the system to capture and retain the exact, correct agent details during data exports, so that there are no payload discrepancies in external reporting tools.
+
+-   Acceptance Criteria:
+
+    -   AC1: Exported files (.CSV/.XLSX) must cleanly capture all required fields (Agent ID, Name, Department, Approved Hours) without formatting errors.
+
+US-11: Auto-Cancellation for Inactive Agents
+
+-   User Story: As a Workforce Analyst, I want the system to automatically cancel an approved OT slot if the agent fails to log in, so that unfulfilled slots can be recycled or released back into the pool.
+
+-   Acceptance Criteria:
+
+    -   AC1: The backend must monitor active agent statuses against scheduled OT start times.
+
+    -   AC2: If an agent is not logged in within a configurable grace period after the OT start time, status must auto-update to "Cancelled - No Show."
+
+Team leader User Stores
+
+US-12: 
+
+Appendix 2: CALL CENTER OVERTIME APPROVAL GUIDELINES
+
+1.  OT approvals will be done on first come first served basis.
+
+2.  Overtime will be awarded on need basis after advertisement has been sent out.
+
+3.  Ensure you have the required Skill to support the queue whose overtime you are applying for.
+
+4.  Overtime will not be granted if the advertised slots are full.
+
+5.  When applying for Overtime on your off day, apply for a full day or split shift (6/7/5/4/3hours) depending on the advertised hours. Less than 3hrs will not be updated.
+
+6.  You must remain with at least one-off day in a week when applying for Overtime.
+
+7.  When on a scheduled 8hr shift you can apply for a maximum of 2hrs overtime Extension.
+
+8.  If you are granted full-shift overtime, a further two-hour overtime extension cannot be provided.
+
+9.  When affected by power/system outage or any other outage that may lead to you not completing the updated Overtime. Kindly raise a ticket for it to be cancelled and apply again when stable to do the Overtime.
+
+10. Do not apply for Overtime while on leave.
+
+11. Ensure you observe at least 11hours break to the next shift login when applying for Overtime(11-hour rule).
+
+12. Ensure you do not work for more than 6 consecutive days. Observe the rule for enough rest!
+
+13. When doing Overtime for another queue, ask for skill set changes via helpdesk 5 minutes to the start of the Overtime. Late requests or no requests at all will lead to Overtime cancellation.
+
+14. Overtime approval for the next day are done and updated the previous day between 11am-8pm. Apply early to allow for on time approval.
+
+15. For agents on WFO, You May apply for overtime as long as it does not interfere with your regular office schedule. Ensure you Work from the office on days scheduled to WFO.
+
+16. When doing overtime, ensure you don’t surpass the 72hrs overtime Limit in a month.
+
+17. Staff who have been redeployed to other queues because of ENT issues will not be allowed to do Voice overtime.
+
+18. Staff on mother’s shift, or unique short/special shifts that are less than 40hrs in a week are not eligible to do overtime
+
+19. Staff with special shift requests for off days will not be eligible for overtime on those off days.
+
+20. Staff on bundle shifts prescribed by the CHA will not be eligible for overtime during bundle breaks.

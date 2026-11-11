@@ -1,0 +1,141 @@
+/* ==========================================================================
+   Safaricom CX Intranet · Workforce Overtime Management Tool
+   DESIGN TOKENS
+   Source: reference/figma-export.css (Figma "Copy as CSS"), cross-checked
+   against reference/sketches/*.png.
+   Values marked [ADDITION] are not in the export: they were added to cover
+   states the sketches don't show. See README "Deviations & additions".
+   ========================================================================== */
+
+:root {
+  /* ---------- Brand green ------------------------------------------------ */
+  --color-brand-50:  #EBF6EB;   /* "Main Primary Green/50": tinted surfaces, active nav bg */
+  --color-brand-200: #A8DAAA;   /* "Main Primary Green/200": tinted borders */
+  --color-brand-500: #35A839;   /* primary: header, primary buttons, active nav, links */
+  --color-brand-600: #2D8F30;   /* required asterisk; primary hover */
+  --color-brand-700: #24732A;   /* [ADDITION] primary pressed */
+  --color-brand-800: #07743D;   /* [ADDITION] sampled from Landing sketch image: top bar */
+  --color-brand-900: #025C29;   /* [ADDITION] sampled from Landing sketch image: hero text, icon discs, footer */
+  --color-brand-alt-1: #1BA93A; /* landing-page shapes */
+  --color-brand-alt-2: #2CB34A; /* landing-page shapes */
+
+  /* ---------- Neutrals / text ------------------------------------------ */
+  --color-text-heading:   #181D27;
+  --color-text-body:      #414651;
+  --color-text-secondary: #535862;
+  --color-text-muted:     #717680;   /* placeholders, subtitles, captions */
+  --color-text-disabled:  #A4A7AE;
+  --color-text-on-brand:  #FFFFFF;
+
+  /* ---------- Borders --------------------------------------------------- */
+  --color-border:          #D5D7DA;  /* inputs, secondary buttons */
+  --color-border-subtle:   #E9EAEB;  /* cards, dividers, table lines */
+  --color-border-strong:   #A4A7AE;  /* checkbox / radio outline */
+
+  /* ---------- Surfaces -------------------------------------------------- */
+  --color-bg-page:     #FAFAFA;
+  --color-bg-card:     #FFFFFF;
+  --color-bg-cell:     #FDFDFD;      /* table body cells */
+  --color-bg-muted:    #F5F5F5;      /* dividers, skeletons, disabled fields */
+  --color-bg-table-head: #E9EAEB;    /* allocations table header (Create Slot sketch) */
+  --color-overlay:     rgba(0, 0, 0, 0.5);
+
+  /* ---------- Avatar ---------------------------------------------------- */
+  --color-avatar-bg:   #DCFAE6;
+  --color-avatar-text: #079455;
+
+  /* ---------- Status: success (Open / Approved / Completed) ------------- */
+  --color-success-bg:     #ECFDF3;
+  --color-success-border: #ABEFC6;
+  --color-success-text:   #067647;
+  --color-success-icon:   #17B26A;
+
+  /* ---------- Status: error (Rejected / No Show / destructive) ---------- */
+  --color-error-bg:     #FEF3F2;
+  --color-error-border: #FECDCA;
+  --color-error-text:   #B42318;
+  --color-error-icon:   #F04438;
+  --color-error-solid:  #D92D20;     /* destructive button fill, delete icon */
+  --color-error-brand:  #E62634;     /* trash icon in allocations table */
+
+  /* ---------- Status: pending / warning badge  [ADDITION] -------------- */
+  --color-warning-bg:     #FFFAEB;
+  --color-warning-border: #FEDF89;
+  --color-warning-text:   #B54708;
+  --color-warning-icon:   #F79009;
+
+  /* ---------- Attention banner (from export: "3 items require your attention") */
+  --color-attention-bg:   #FEF7C3;
+  --color-attention-text: #B93815;
+
+  /* ---------- Info / neutral badge  [ADDITION] ------------------------- */
+  --color-info-bg:     #F5F5F5;
+  --color-info-border: #E9EAEB;
+  --color-info-text:   #414651;
+
+  /* ---------- Focus ring  [ADDITION] ----------------------------------- */
+  --focus-ring: 0 0 0 4px rgba(53, 168, 57, 0.24);
+  --focus-ring-error: 0 0 0 4px rgba(240, 68, 56, 0.24);
+
+  /* ---------- Typography ------------------------------------------------ */
+  --font-family: 'Proxima Nova', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* size / line-height pairs, as used in the export */
+  --text-xs-size: 12px;  --text-xs-lh: 18px;   /* badges, helper text */
+  --text-sm-size: 14px;  --text-sm-lh: 20px;   /* labels, table cells, user name */
+  --text-md-size: 16px;  --text-md-lh: 24px;   /* body, nav items, buttons */
+  --text-lg-size: 18px;  --text-lg-lh: 28px;   /* card titles, "View all slots" */
+  --text-xl-size: 24px;  --text-xl-lh: 32px;   /* page titles, "Welcome back!" */
+  --text-display-size: 72px; --text-display-lh: 90px; /* landing hero only */
+
+  /* ---------- Spacing (4px base, matches export gaps/paddings) ---------- */
+  --space-0-5: 2px;
+  --space-1:   4px;
+  --space-1-5: 6px;
+  --space-2:   8px;
+  --space-2-5: 10px;
+  --space-3:   12px;
+  --space-3-5: 14px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+
+  /* ---------- Radii ----------------------------------------------------- */
+  --radius-xs:   4px;   /* checkbox */
+  --radius-sm:   6px;   /* nav item */
+  --radius-md:   8px;   /* inputs, buttons, cards */
+  --radius-lg:   12px;  /* modals, login card, large cards */
+  --radius-full: 9999px;/* badges, pills, avatar */
+
+  /* ---------- Shadows (export: Shadows/shadow-xs, shadow-xs-skeuomorphic) */
+  --shadow-xs: 0px 1px 2px rgba(10, 13, 18, 0.05);
+  --shadow-xs-skeuomorphic: 0px 1px 2px rgba(10, 13, 18, 0.05),
+                            inset 0px 0px 0px 1px rgba(10, 13, 18, 0.18),
+                            inset 0px -2px 0px rgba(10, 13, 18, 0.05);
+  --shadow-lg:  0px 12px 16px -4px rgba(10, 13, 18, 0.08),
+                0px 4px 6px -2px rgba(10, 13, 18, 0.03);   /* [ADDITION] toasts, menus */
+  --shadow-xl:  0px 20px 24px -4px rgba(10, 13, 18, 0.08),
+                0px 8px 8px -4px rgba(10, 13, 18, 0.03);   /* [ADDITION] modals */
+
+  /* ---------- Layout ---------------------------------------------------- */
+  --canvas-width:  1440px;
+  --header-height: 64px;
+  --sidebar-width: 296px;
+  --content-padding-x: 40px;
+  --content-padding-y: 32px;
+  --control-height-sm: 36px;
+  --control-height-md: 44px;   /* inputs, buttons (export: 44px) */
+  --control-height-lg: 48px;
+  --table-row-height: 72px;    /* export table cell: 72px, padding 16px 24px */
+  --icon-size: 20px;
+  --icon-stroke: 1.5;
+}
