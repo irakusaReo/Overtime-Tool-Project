@@ -4,43 +4,7 @@ import os
 from icons import icon
 from shell import head, header, sidebar, app_page
 from data import ME, SLOTS, TODAY, WEEK_RANGE, hours
-
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-PAGES = os.path.join(ROOT, "pages")
-REGISTRY = []   # (group, file, label, note) for index.html
-
-
-def write(group, fname, label, note, html):
-    os.makedirs(PAGES, exist_ok=True)
-    with open(os.path.join(PAGES, fname), "w") as f:
-        f.write(html)
-    REGISTRY.append((group, fname, label, note))
-
-
-def badge(kind, label, ico=None):
-    i = icon(ico, "icon icon--xs") if ico else ""
-    extra = "" if ico else " badge--no-icon"
-    return f'<span class="badge badge--{kind}{extra}">{i}{label}</span>'
-
-
-def field(label, inner, req=False, hint="", cls=""):
-    r = '<span class="field__required">*</span>' if req else ""
-    h = f'<span class="field__hint">{hint}</span>' if hint else ""
-    c = f" {cls}" if cls else ""
-    return f'<div class="field{c}"><label class="field__label">{label}{r}</label>{inner}{h}</div>'
-
-
-def select(value, ico=None, placeholder=False):
-    i = icon(ico) if ico else ""
-    v = f'<span class="input__placeholder">{value}</span>' if placeholder else f'<span class="input__value">{value}</span>'
-    return f'<div class="input select">{i}{v}{icon("chevron-down", "icon select__chevron")}</div>'
-
-
-def toast(kind, ico, title, text):
-    return (f'<div class="toast-region"><div class="toast toast--{kind}" role="status"><span class="toast__icon">{icon(ico)}</span>'
-            f'<div class="toast__body"><span class="toast__title">{title}</span><span class="toast__text">{text}</span></div>'
-            f'<button class="btn btn--ghost btn--icon-only btn--sm toast__close" aria-label="Dismiss">{icon("x")}</button></div></div>\n')
-
+from ui import ROOT, REGISTRY, write, badge, field, select, toast
 
 # ==========================================================================
 # LOGIN
@@ -227,7 +191,9 @@ def slot_row(s, row_cls=""):
     if s["state"] == "open":
         action = f'<a class="btn btn--primary btn--sm" href="apply-self.html">Apply</a>'
     elif s["state"] == "applied":
-        action = f'<span class="row row--3" style="justify-content:flex-end">{badge("warning", "Applied · Pending", "clock")}<a class="btn btn--link btn--sm" href="my-applications.html">View</a></span>'
+        action = f'<span class="row row--3" style="justify-content:flex-end">{badge("warning", "Applied · Pending", "clock")}<a class="btn btn--link btn--sm" href="my-applications--pending.html">View</a></span>'
+    elif s["state"] == "approved":
+        action = f'<span class="row row--3" style="justify-content:flex-end">{badge("success", "Approved", "check")}<a class="btn btn--link btn--sm" href="my-applications--approved.html">View</a></span>'
     else:
         action = '<button class="btn btn--sm btn--disabled" disabled>Full</button>'
     rc = f" {row_cls}" if row_cls else ""
@@ -284,8 +250,9 @@ def slots_card(inner_top, table_body=None, footer="", empty_html=""):
 
 
 def count_text(slots):
-    open_slots = [s for s in slots if s["state"] != "full"]
-    return f'<strong>{len(slots)}</strong> slots · <strong>{sum(s["left"] for s in open_slots)}</strong> positions open'
+    open_slots = [s for s in slots if s["state"] == "open"]
+    return f'<strong>{len(slots)}</strong> slots · <strong>{len(open_slots)}</strong> open to apply'
+
 
 
 def pager(n):
@@ -293,16 +260,17 @@ def pager(n):
 
 
 def available_slots():
-    G = "Available Slots"
-    rows = "".join(slot_row(s) for s in SLOTS)
+    G = "2 · Available Slots"
+    VISIBLE = [s for s in SLOTS if s["state"] != "full"]   # full slots are hidden from CEEs
+    rows = "".join(slot_row(s) for s in VISIBLE)
 
     # 1. default
     main = (slots_header() + ELIGIBLE_NOTE +
-            slots_card(filter_bar(count_html=count_text(SLOTS)), rows, pager(len(SLOTS))) + APPROVAL_TIP)
+            slots_card(filter_bar(count_html=count_text(VISIBLE)), rows, pager(len(VISIBLE))) + APPROVAL_TIP)
     write(G, "available-slots.html", "Default", "Eligible slots for the next 7 days", app_page("Available Slots", "slots", main))
 
     # 2. filtered
-    sm = [s for s in SLOTS if s["queue"] == "Social Media"]
+    sm = [s for s in VISIBLE if s["queue"] == "Social Media"]
     main = (slots_header() + ELIGIBLE_NOTE +
             slots_card(filter_bar("Social Media", count_html=count_text(sm)) + chips(["Queue: Social Media"]),
                        "".join(slot_row(s) for s in sm), pager(len(sm))) + APPROVAL_TIP)
@@ -350,22 +318,19 @@ def available_slots():
     write(G, "available-slots--error.html", "Error", "Load failure with retry", app_page("Available Slots", "slots", main))
 
     # 7. slot just filled
-    filled = [dict(s) for s in SLOTS]
-    for s in filled:
-        if s["id"] == "S-1042":
-            s["left"], s["state"] = 0, "full"
-    rows_f = "".join(slot_row(s, "table__row--muted" if s["id"] == "S-1042" else "") for s in filled)
+    filled = [dict(s) for s in VISIBLE if s["id"] != "S-1049"]   # it filled, so it drops out of the list
+    rows_f = "".join(slot_row(s) for s in filled)
     alert = (f'<div class="alert alert--warning">{icon("alert-triangle")}<div class="alert__body">'
              f'<span class="alert__title">That slot just filled up</span>'
-             f'<span class="alert__text">Line 100 · Fri Jan 10, 2025 · 18:00 – 22:00 reached capacity while you were applying, so your application wasn\'t submitted. '
-             f'The list has been refreshed. Other Line 100 slots are still open.</span></div>'
+             f'<span class="alert__text">Social Media · Sat Jan 11, 2025 · 14:00 – 20:00 reached capacity while you were applying, so your application wasn\'t submitted. '
+             f'Full slots are removed from your list. Other Social Media slots are still open.</span></div>'
              f'<button class="btn btn--ghost btn--icon-only btn--sm" aria-label="Dismiss" style="color:var(--color-warning-text)">{icon("x")}</button></div>')
     main = (slots_header() + alert +
             slots_card(filter_bar(count_html=count_text(filled)), rows_f, pager(len(filled))) + APPROVAL_TIP)
-    write(G, "available-slots--slot-filled.html", "Slot just filled", "Capacity reached while applying; row shows Full", app_page("Available Slots", "slots", main))
+    write(G, "available-slots--slot-filled.html", "Slot just filled", "Capacity reached while applying; slot removed from list", app_page("Available Slots", "slots", main))
 
     # 8. apply success toast
-    done = [dict(s) for s in SLOTS]
+    done = [dict(s) for s in VISIBLE]
     for s in done:
         if s["id"] == "S-1041":
             s["state"], s["left"] = "applied", 2
@@ -373,7 +338,7 @@ def available_slots():
     main = (slots_header() + ELIGIBLE_NOTE +
             slots_card(filter_bar(count_html=count_text(done)), rows_d, pager(len(done))) + APPROVAL_TIP)
     t = toast("success", "check-circle", "Application submitted",
-              "Social Media · Fri Jan 10, 2025 · 07:00 – 09:00 (2 h). Status: Pending.")
+              "Social Media · Fri Jan 10, 2025 · 08:00 – 10:00 (2 h). Status: Pending.")
     write(G, "available-slots--apply-success.html", "Apply success", "Toast + row marked Applied · Pending",
           app_page("Available Slots", "slots", main, overlay_html=t))
 
@@ -421,5 +386,12 @@ def index():
 
 
 if __name__ == "__main__":
-    login(); landing(); home(); available_slots(); index()
+    import screens_a, screens_b
+    login(); landing(); home()
+    screens_a.dashboard()
+    available_slots()
+    screens_a.apply_self(); screens_a.apply_on_behalf()
+    screens_b.my_applications(); screens_b.cancellation(); screens_b.history()
+    screens_b.reports(); screens_b.notifications(); screens_b.settings()
+    index()
     print(f"{len(REGISTRY)} pages written")

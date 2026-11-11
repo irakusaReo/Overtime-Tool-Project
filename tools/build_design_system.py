@@ -197,7 +197,7 @@ def build():
     # ---- Note + tooltip
     out.append(section("Inline note & tooltip",
                        f'<div class="card ds-pad row row--8" style="gap:64px;align-items:flex-start"><span class="note">{icon("info", "icon icon--sm")}Showing slots you\'re eligible for</span>'
-                       f'<span class="tooltip-anchor"><span class="tooltip">Auto-cancelled as No Show after 20 min</span><button class="btn btn--sm btn--secondary" disabled>Cancel</button></span></div>',
+                       f'<span class="tooltip-anchor" style="margin-top:44px"><span class="tooltip">Auto-cancelled as No Show after 20 min</span><button class="btn btn--sm btn--secondary" disabled>Cancel</button></span></div>',
                        "Tooltips are rendered statically, already open, so html.to.design captures them."))
 
     # ---- Table
@@ -271,7 +271,30 @@ def build():
     tool = (f'<a class="tool-card" href="#"><div class="tool-card__head"><span class="tool-card__icon">{icon("gift", "icon icon--lg")}</span><span class="tool-card__title">Overtime Management</span></div>'
             f'<div class="tool-card__row"><span class="tool-card__desc">Manage overtime opportunities, application, approvals and attendance.</span><span class="tool-card__arrow">{icon("arrow-up-right", "icon icon--lg")}</span></div></a>')
     avs = '<div class="row row--4"><span class="avatar avatar--sm">BK</span><span class="avatar">BK</span><span class="avatar avatar--lg">WN</span><span class="avatar avatar--xl">BK</span></div>'
-    out.append(section("Profile card, tool card & avatar", f'<div class="grid-main-aside" style="grid-template-columns:1fr 440px">{prof}{tool}</div>{avs}'))
+    out.append(section("Profile card, tool card & avatar", f'<div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 440px">{prof}{tool}</div>{avs}'))
+
+    # ---- Components added with the CEE screens
+    import screens_a, screens_b
+    from data import NOTIFICATIONS, WEEKLY_COMPLETED
+    menu = ('<div style="height:300px"><div class="field field--menu" style="width:340px"><label class="field__label">Preferred start time<span class="field__required">*</span></label>'
+            f'<div class="input select input--focus">{icon("clock")}<span class="input__value">08:00</span>{icon("chevron-down", "icon select__chevron")}</div>'
+            '<div class="menu" role="listbox">'
+            f'<div class="menu__item menu__item--selected">08:00 <span class="menu__meta">up to 3 h</span>{icon("check")}</div>'
+            '<div class="menu__item">09:00 <span class="menu__meta">up to 2 h</span></div><div class="menu__item">10:00 <span class="menu__meta">up to 1 h</span></div>'
+            f'<div class="menu__note">{icon("info", "icon icon--sm")}<span>07:00 hidden: overlaps your approved overtime.</span></div></div></div></div>')
+    cl = screens_a.checklist([(True, "6-day rule", "Has a rest day this week"), (True, "Sick Off", "Not marked Sick Off"),
+                              (True, "11-hour rest", "No conflict"), (False, "Annual Leave", "On leave Jan 8 – Jan 17, 2025")])
+    out.append(section("Dropdown, eligibility checklist & usage meter",
+                       f'<div class="grid-3" style="align-items:start">{menu}<div class="card ds-pad">{cl}</div>'
+                       f'<div class="card">{screens_a.caps_card()}</div></div>',
+                       "The dropdown is rendered open and absolutely positioned under its field. A failed rule uses the error tone. The usage bar turns amber when a cap is reached."))
+    out.append(section("Notification item",
+                       '<div class="card" style="overflow:hidden"><div class="notif-list">' + screens_b.notif_item(NOTIFICATIONS[0]) + screens_b.notif_item(NOTIFICATIONS[4]) + '</div></div>',
+                       "Mirrors the SMS and email content: date, approved hours, slot time. Unread items get a tint and a green dot."))
+    out.append(section("Bar chart",
+                       f'<div class="card" style="width:680px"><div class="card__header"><div class="card__titles"><span class="card__title">Completed hours per week</span></div></div>'
+                       f'<div class="card__body">{screens_b.bar_chart(WEEKLY_COMPLETED)}</div></div>',
+                       "Single series in brand green, so the title names it and no legend is needed. Bars are 44px with 4px rounded tops, value labels sit on the bars, and the grid is light (#E9EAEB)."))
 
     page = head("Design System", ".") + f"""<body>
 <style>
