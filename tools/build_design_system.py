@@ -312,7 +312,7 @@ def build():
   .ds-swatch__chip {{ height: 64px; border-bottom: 1px solid var(--color-border-subtle); }}
   .ds-swatch__meta {{ display: flex; flex-direction: column; gap: 2px; padding: 8px 10px 10px; }}
   .ds-swatch__hex {{ font-size: 14px; line-height: 20px; font-weight: 600; color: var(--color-text-heading); }}
-  .ds-swatch__token {{ font-size: 11px; line-height: 16px; color: var(--color-text-secondary); font-family: ui-monospace, Menlo, monospace; }}
+  .ds-swatch__token {{ font-size: 11px; line-height: 16px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }}
   .ds-swatch__use {{ font-size: 12px; line-height: 16px; color: var(--color-text-muted); }}
   .ds-type {{ display: flex; flex-direction: column; }}
   .ds-type-row {{ display: grid; grid-template-columns: 300px 1fr; align-items: center; gap: 24px; padding: 16px 24px; border-bottom: 1px solid var(--color-border-subtle); }}

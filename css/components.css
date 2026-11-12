@@ -17,7 +17,8 @@ body {
 h1, h2, h3, h4, p { margin: 0; }
 a { color: var(--color-brand-500); text-decoration: none; font-weight: var(--font-weight-semibold); }
 a:hover { text-decoration: underline; }
-button, input, select, textarea { font-family: inherit; }
+button, input, select, textarea, code, kbd, pre, svg text { font-family: inherit; }
+svg text { font-family: var(--font-family); }
 .icon { width: var(--icon-size); height: var(--icon-size); flex: none; display: block; }
 .icon--sm { width: 16px; height: 16px; }
 .icon--xs { width: 12px; height: 12px; }
@@ -198,6 +199,10 @@ button, input, select, textarea { font-family: inherit; }
 .form-row { display: flex; gap: var(--space-4); align-items: flex-end; }
 .form-row > .field { flex: 1; }
 .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6) var(--space-4); }
+/* Fields in a form grid share three rows (label / control / hint), so controls
+   line up across a row even when one label or hint wraps. */
+.form-grid > .field { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 6px; align-content: start; }
+.form-grid > .field > .field__label { align-self: end; }
 
 /* ---------- Checkbox / radio / toggle ---------------------------------- */
 .check { display: inline-flex; align-items: flex-start; gap: var(--space-3); cursor: pointer; }
@@ -630,3 +635,5 @@ button, input, select, textarea { font-family: inherit; }
 .as-of .icon { color: var(--color-text-muted); }
 .toggle--nowrap .check__desc { white-space: nowrap; }
 .skeleton { max-width: 100%; }
+/* Wrapper that anchors an open dropdown directly under its control. */
+.field__control { position: relative; }

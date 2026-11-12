@@ -41,13 +41,13 @@ SLOTS = [
 APPLICATIONS = [
     {"id": "A-3318", "queue": "Line 100",     "date": "Jan 10, 2025", "day": "Fri", "start": "06:00", "end": "08:00", "hours": 2, "applied": "Jan 8, 14:05", "status": "Approved", "note": "Started 06:00", "phase": "started"},
     {"id": "A-3321", "queue": "Line 100",     "date": "Jan 10, 2025", "day": "Fri", "start": "18:00", "end": "20:00", "hours": 2, "applied": "Jan 9, 08:47", "status": "Approved", "note": "Starts in 11 h 50 min", "phase": "before"},
-    {"id": "A-3327", "queue": "Line 200",     "date": "Jan 11, 2025", "day": "Sat", "start": "06:00", "end": "10:00", "hours": 4, "applied": "Jan 9, 10:12", "status": "Pending", "note": "Decision due Jan 10, 11:00–20:00"},
-    {"id": "A-3330", "queue": "Line 100",     "date": "Jan 11, 2025", "day": "Sat", "start": "17:00", "end": "21:00", "hours": 4, "applied": "Jan 9, 14:32", "status": "Pending", "note": "Decision due Jan 10, 11:00–20:00"},
-    {"id": "A-3336", "queue": "Line 200",     "date": "Jan 13, 2025", "day": "Mon", "start": "18:00", "end": "21:00", "hours": 3, "applied": "Jan 9, 19:05", "status": "Pending", "note": "Decision due Jan 12, 11:00–20:00"},
-    {"id": "A-3290", "queue": "Social Media", "date": "Jan 9, 2025",  "day": "Thu", "start": "18:00", "end": "22:00", "hours": 4, "applied": "Jan 8, 16:40", "status": "Rejected", "note": "Slot filled before review"},
-    {"id": "A-3284", "queue": "Line 100",     "date": "Jan 8, 2025",  "day": "Wed", "start": "18:00", "end": "20:00", "hours": 2, "applied": "Jan 6, 11:20", "status": "Cancelled", "note": "Cancelled by you · Jan 8, 09:10"},
-    {"id": "A-3271", "queue": "Line 200",     "date": "Jan 7, 2025",  "day": "Tue", "start": "06:00", "end": "10:00", "hours": 4, "applied": "Jan 5, 15:02", "status": "Cancelled", "note": "Cancelled by Workforce · demand changed"},
-    {"id": "A-3266", "queue": "Social Media", "date": "Jan 6, 2025",  "day": "Mon", "start": "07:00", "end": "09:00", "hours": 2, "applied": "Jan 4, 18:30", "status": "No Show", "note": "Auto-cancelled 07:20 · no login"},
+    {"id": "A-3327", "queue": "Line 200",     "date": "Jan 11, 2025", "day": "Sat", "start": "06:00", "end": "10:00", "hours": 4, "applied": "Jan 9, 10:12", "status": "Pending", "note": "Due Jan 10"},
+    {"id": "A-3330", "queue": "Line 100",     "date": "Jan 11, 2025", "day": "Sat", "start": "17:00", "end": "21:00", "hours": 4, "applied": "Jan 9, 14:32", "status": "Pending", "note": "Due Jan 10"},
+    {"id": "A-3336", "queue": "Line 200",     "date": "Jan 13, 2025", "day": "Mon", "start": "18:00", "end": "21:00", "hours": 3, "applied": "Jan 9, 19:05", "status": "Pending", "note": "Due Jan 12"},
+    {"id": "A-3290", "queue": "Social Media", "date": "Jan 9, 2025",  "day": "Thu", "start": "18:00", "end": "22:00", "hours": 4, "applied": "Jan 8, 16:40", "status": "Rejected", "note": "Slot full"},
+    {"id": "A-3284", "queue": "Line 100",     "date": "Jan 8, 2025",  "day": "Wed", "start": "18:00", "end": "20:00", "hours": 2, "applied": "Jan 6, 11:20", "status": "Cancelled", "note": "By you"},
+    {"id": "A-3271", "queue": "Line 200",     "date": "Jan 7, 2025",  "day": "Tue", "start": "06:00", "end": "10:00", "hours": 4, "applied": "Jan 5, 15:02", "status": "Cancelled", "note": "By Workforce"},
+    {"id": "A-3266", "queue": "Social Media", "date": "Jan 6, 2025",  "day": "Mon", "start": "07:00", "end": "09:00", "hours": 2, "applied": "Jan 4, 18:30", "status": "No Show", "note": "No login"},
 ]
 
 # Overtime history (past). status: Completed | No Show | Cancelled
@@ -90,11 +90,11 @@ WANJIRU_SLOTS = [
 NOTIFICATIONS = [
     {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 9, 19:42", "channels": ["SMS", "Email"]},
     {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "06:00 – 08:00", "when": "Jan 9, 18:15", "channels": ["SMS", "Email"]},
-    {"unread": True,  "type": "slot",      "title": "New slot you're eligible for", "queue": "Social Media", "date": "Sat Jan 11, 2025", "hours": None, "slot": "14:00 – 20:00", "when": "Jan 9, 16:00", "channels": ["Email", "Teams"], "extra": "6 positions · apply before 20:00 on Jan 10"},
-    {"unread": False, "type": "rejected",  "title": "Overtime not approved", "queue": "Social Media", "date": "Thu Jan 9, 2025", "hours": None, "slot": "18:00 – 22:00", "when": "Jan 8, 19:30", "channels": ["SMS", "Email"], "extra": "The slot filled before your application was reviewed."},
-    {"unread": False, "type": "cancelled", "title": "You cancelled overtime", "queue": "Line 100", "date": "Wed Jan 8, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 8, 09:10", "channels": ["SMS", "Email"], "extra": "The slot was released to other CEEs."},
-    {"unread": False, "type": "cancelled", "title": "Overtime cancelled by Workforce", "queue": "Line 200", "date": "Tue Jan 7, 2025", "hours": 4, "slot": "06:00 – 10:00", "when": "Jan 6, 17:20", "channels": ["SMS", "Email"], "extra": "Demand changed and the slot is no longer needed."},
-    {"unread": False, "type": "noshow",    "title": "Marked No Show", "queue": "Social Media", "date": "Mon Jan 6, 2025", "hours": 2, "slot": "07:00 – 09:00", "when": "Jan 6, 07:20", "channels": ["SMS", "Email"], "extra": "No login within 20 minutes of the start, so the slot was auto-cancelled."},
+    {"unread": True,  "type": "slot",      "title": "New slot you're eligible for", "queue": "Social Media", "date": "Sat Jan 11, 2025", "hours": None, "slot": "14:00 – 20:00", "when": "Jan 9, 16:00", "channels": ["Email", "Teams"], "extra": "6 positions"},
+    {"unread": False, "type": "rejected",  "title": "Overtime not approved", "queue": "Social Media", "date": "Thu Jan 9, 2025", "hours": None, "slot": "18:00 – 22:00", "when": "Jan 8, 19:30", "channels": ["SMS", "Email"], "extra": "Slot filled before review."},
+    {"unread": False, "type": "cancelled", "title": "You cancelled overtime", "queue": "Line 100", "date": "Wed Jan 8, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 8, 09:10", "channels": ["SMS", "Email"], "extra": "Slot released."},
+    {"unread": False, "type": "cancelled", "title": "Overtime cancelled by Workforce", "queue": "Line 200", "date": "Tue Jan 7, 2025", "hours": 4, "slot": "06:00 – 10:00", "when": "Jan 6, 17:20", "channels": ["SMS", "Email"], "extra": "Slot no longer needed."},
+    {"unread": False, "type": "noshow",    "title": "Marked No Show", "queue": "Social Media", "date": "Mon Jan 6, 2025", "hours": 2, "slot": "07:00 – 09:00", "when": "Jan 6, 07:20", "channels": ["SMS", "Email"], "extra": "No login within 20 min."},
 ]
 
 

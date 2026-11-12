@@ -68,10 +68,11 @@ def toast(kind, ico, title, text):
             f'<button class="btn btn--ghost btn--icon-only btn--sm toast__close" aria-label="Dismiss">{icon("x")}</button></div></div>\n')
 
 
-def alert(kind, ico, title, text, actions=""):
+def alert(kind, ico, title, text="", actions=""):
     a = f'<div class="alert__actions">{actions}</div>' if actions else ""
+    t = f'<span class="alert__text">{text}</span>' if text else ""
     return (f'<div class="alert alert--{kind}" role="{"alert" if kind == "error" else "status"}">{icon(ico)}<div class="alert__body">'
-            f'<span class="alert__title">{title}</span><span class="alert__text">{text}</span>{a}</div></div>')
+            f'<span class="alert__title">{title}</span>{t}{a}</div></div>')
 
 
 def modal(icon_kind, ico, title, text, body="", footer="", wide=False, close=True):
@@ -107,7 +108,7 @@ def empty_state(ico, title, desc, actions="", error=False, pad=""):
 
 def error_state(what, pad="96px 24px"):
     return empty_state("alert-circle", f"We couldn't load {what}",
-                       "Something went wrong on our side. Try again in a moment. If it keeps happening, raise a Help Desk ticket.",
+                       "Please try again. If it keeps failing, contact the Help Desk.",
                        f'<a class="btn btn--secondary" href="#">Contact Help Desk</a><a class="btn btn--primary" href="#">{icon("refresh")}Try again</a>',
                        error=True, pad=pad)
 
