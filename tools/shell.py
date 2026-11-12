@@ -28,6 +28,7 @@ def head(title, root=".."):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} · CX Intranet Overtime</title>
 {FONT_LINK}
+<link rel="stylesheet" href="{root}/css/fonts.css">
 <link rel="stylesheet" href="{root}/css/tokens.css">
 <link rel="stylesheet" href="{root}/css/components.css">
 <link rel="stylesheet" href="{root}/css/layout.css">

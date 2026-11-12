@@ -17,7 +17,8 @@ body {
 h1, h2, h3, h4, p { margin: 0; }
 a { color: var(--color-brand-500); text-decoration: none; font-weight: var(--font-weight-semibold); }
 a:hover { text-decoration: underline; }
-button, input, select, textarea { font-family: inherit; }
+button, input, select, textarea, code, kbd, pre, svg text { font-family: inherit; }
+svg text { font-family: var(--font-family); }
 .icon { width: var(--icon-size); height: var(--icon-size); flex: none; display: block; }
 .icon--sm { width: 16px; height: 16px; }
 .icon--xs { width: 12px; height: 12px; }

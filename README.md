@@ -10,6 +10,7 @@ Open `index.html` for the gallery of every page.
 
 | Path | Purpose |
 |---|---|
+| `css/fonts.css` | Proxima Nova `@font-face` (weights 400–900); expects licensed woff2 files in `assets/fonts/` |
 | `css/tokens.css` | Design tokens (CSS custom properties) extracted from the Figma export |
 | `css/components.css` | BEM components: header, sidebar, buttons, inputs, selects, date and search fields, tables, badges, stat cards, banners and alerts, modals, toasts, tooltip, empty, error and skeleton, tabs, checkbox, radio and toggle, profile card, tool card |
 | `css/layout.css` | Fluid canvas (max 1440px), app shell (header + sidebar + main), stacks and grids, auth layout |
@@ -34,7 +35,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 - **Attention banner:** these values were found in the export: `#FEF7C3` bg and `#B93815` text ("3 items require your attention").
 - **Avatar:** these values were found in the export: `#DCFAE6` bg and `#079455` initials.
 - **Pending / warning badge [addition]:** `#FFFAEB` / `#FEDF89` / `#B54708`, icon `#F79009`.
-- **Type:** Proxima Nova, falling back to Inter (loaded from Google Fonts), then system-ui. Sizes are 12/18, 14/20, 16/24, 18/28, 24/32 and 72/90 (landing).
+- **Type:** **Proxima Nova on every page and every element**, including chart labels. `css/fonts.css` declares weights 400–900, loaded from an installed copy or from licensed files in `assets/fonts/` (see that folder's README). The font is licensed, so it isn't committed; until the files are added, text falls back to Inter, then system-ui. Sizes are 12/18, 14/20, 16/24, 18/28, 24/32 and 72/90 (landing).
 - **Radius:** 6 (nav item), 8 (inputs, buttons, cards), 12 (modals), 9999 (badges). **Shadows:** `shadow-xs` and `shadow-xs-skeuomorphic` from the export; `shadow-lg` and `shadow-xl` are [additions] for toasts and modals.
 - **Layout:** header 64px, sidebar 296px, inputs and buttons 44px, table rows 72px (cell padding 16px 24px). All of these come from the export.
 
@@ -182,7 +183,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 - The page title is 24px, which is the export value (see deviation 1 above).
 - On the Create Slot sketch the table header is grey #E9EAEB. That style is kept as a `table--muted-head` variant, and CEE tables use a white header like the Status Overview sketch.
 - The Landing photo is replaced by an SVG panel (see below).
-- Proxima Nova falls back to Inter unless it's installed.
+- Proxima Nova shows only once licensed files are in `assets/fonts/` or the font is installed. Until then the fallback is Inter.
 
 ## Landing page rebuild notes
 
@@ -216,4 +217,4 @@ To capture a mobile frame in Figma, import the same page with a 390px viewport.
 1. Serve the folder locally so relative CSS and asset paths resolve, e.g. `python3 -m http.server 8000` from the repo root. Alternatively, use the plugin's file or HTML import.
 2. In Figma, run **html.to.design**, then **Import from URL** for each page, e.g. `http://localhost:8000/pages/available-slots.html`. Use viewport width **1440**, desktop.
 3. Each state is its own page, so each one imports as its own frame. Toasts and modals are already rendered open.
-4. Install Proxima Nova in Figma for an exact match. Otherwise the pages render in Inter.
+4. Install Proxima Nova in Figma, or as a desktop font, so the imported layers keep the typeface. Otherwise they use the fallback, Inter.

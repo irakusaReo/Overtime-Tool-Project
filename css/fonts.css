@@ -1,0 +1,62 @@
+/* ==========================================================================
+   PROXIMA NOVA: the brand typeface for every page.
+   Proxima Nova is a licensed font (Mark Simonson Studio), so it is not bundled here.
+   Each weight loads, in order:
+     1. a copy installed on the viewer's machine (local), or
+     2. licensed web files placed in /assets/fonts/ (see assets/fonts/README.md).
+   If neither is present, the token stack falls back to Inter, then system fonts.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Proxima Nova Regular'), local('ProximaNova-Regular'),
+       url('../assets/fonts/ProximaNova-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('Proxima Nova Medium'), local('ProximaNova-Medium'),
+       url('../assets/fonts/ProximaNova-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Proxima Nova Semibold'), local('ProximaNova-Semibold'),
+       url('../assets/fonts/ProximaNova-Semibold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Proxima Nova Bold'), local('ProximaNova-Bold'),
+       url('../assets/fonts/ProximaNova-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Proxima Nova Extrabold'), local('ProximaNova-Extrabold'),
+       url('../assets/fonts/ProximaNova-Extrabold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: local('Proxima Nova Black'), local('ProximaNova-Black'),
+       url('../assets/fonts/ProximaNova-Black.woff2') format('woff2');
+}

@@ -78,7 +78,7 @@
   --focus-ring-error: 0 0 0 4px rgba(240, 68, 56, 0.24);
 
   /* ---------- Typography ------------------------------------------------ */
-  --font-family: 'Proxima Nova', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-family: 'Proxima Nova', 'proxima-nova', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --font-weight-regular:  400;
   --font-weight-medium:   500;

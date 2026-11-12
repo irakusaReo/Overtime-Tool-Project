@@ -203,7 +203,7 @@ def bar_chart(data):
         bars += (f'<text x="{x + bw / 2:.1f}" y="{y - 8:.1f}" text-anchor="middle" font-size="13" font-weight="600" fill="#181D27">{v} h</text>'
                  f'<text x="{x + bw / 2:.1f}" y="{H - 14}" text-anchor="middle" font-size="12" fill="#535862">{lab}</text>')
     return (f'<svg class="chart" viewBox="0 0 {W} {H}" role="img" aria-label="Completed overtime hours per week, Dec 9 2024 to Jan 12 2025" '
-            f'font-family="Proxima Nova, Inter, system-ui, sans-serif">{g}<line x1="{L}" x2="{W - R}" y1="{T + ph}" y2="{T + ph}" stroke="#D5D7DA"/>{bars}</svg>')
+            f'>{g}<line x1="{L}" x2="{W - R}" y1="{T + ph}" y2="{T + ph}" stroke="#D5D7DA"/>{bars}</svg>')
 
 
 def reports():
