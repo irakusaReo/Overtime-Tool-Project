@@ -92,8 +92,6 @@
   .profile-card__meta { flex-wrap: wrap; gap: 4px 16px; }
   .profile-card__aside { width: 100%; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--color-border-subtle); }
 
-  .checklist { grid-template-columns: minmax(0, 1fr); }
-
   .notif { flex-wrap: wrap; padding: 16px; gap: var(--space-3); }
   .notif__body { flex-basis: calc(100% - 56px); }
   .notif__facts { flex-wrap: wrap; gap: 4px 16px; }

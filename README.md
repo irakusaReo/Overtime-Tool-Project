@@ -87,7 +87,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Slot selected | `pages/apply-on-behalf--form.html` | Start / hours / auto end, Submit |
 |  | Submitted | `pages/apply-on-behalf--success.html` | Success toast + confirmation |
 |  | Colleague not found | `pages/apply-on-behalf--not-found.html` | No match for EK number |
-|  | Colleague not eligible | `pages/apply-on-behalf--not-eligible.html` | Annual Leave fails; no slots shown |
+|  | Colleague not eligible | `pages/apply-on-behalf--not-eligible.html` | Outcome only; no slots shown |
 |  | Error | `pages/apply-on-behalf--error.html` | Eligibility service failed |
 | 5 · My Applications | Tab: All | `pages/my-applications.html` | 9 applications |
 |  | Tab: Pending | `pages/my-applications--pending.html` | 3 applications |
@@ -98,6 +98,10 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Loading | `pages/my-applications--loading.html` | Skeleton rows |
 |  | Error | `pages/my-applications--error.html` | Load failure |
 |  | Cancel success | `pages/my-applications--cancel-success.html` | Toast; row moves to Cancelled |
+|  | Edit pending | `pages/my-applications--edit.html` | Change slot, start time or hours |
+|  | Edit: choose slot | `pages/my-applications--edit-slots.html` | Eligible slots across queues |
+|  | Edit: new slot picked | `pages/my-applications--edit-changed.html` | Moved to Social Media |
+|  | Edit saved | `pages/my-applications--edit-success.html` | Toast; row updated, still Pending |
 | 6 · Cancellation | (a) Before start | `pages/cancel--before-start.html` | Confirm; slot will be released |
 |  | (b) Started, within 20 min | `pages/cancel--within-grace.html` | Warning copy; slot moves to next overlapping schedule |
 |  | (c) After 20 min | `pages/cancel--after-grace.html` | Cancel disabled with tooltip |
@@ -105,8 +109,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Empty | `pages/overtime-history--empty.html` | No records |
 |  | Loading | `pages/overtime-history--loading.html` | Skeleton |
 |  | Error | `pages/overtime-history--error.html` | Load failure |
-| 8 · Reports | Default | `pages/reports.html` | Summary, chart, by queue, cancellations, export |
-|  | Export success | `pages/reports--export-success.html` | Toast after CSV export |
+| 8 · Reports | Default | `pages/reports.html` | Summary, 1.5× / 2.0× hours, applied for others, chart, cancellations |
 |  | Empty | `pages/reports--empty.html` | No records for range |
 |  | Loading | `pages/reports--loading.html` | Skeleton |
 |  | Error | `pages/reports--error.html` | Load failure |
@@ -114,13 +117,13 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Empty | `pages/notifications--empty.html` | No notifications |
 |  | Loading | `pages/notifications--loading.html` | Skeleton |
 |  | Error | `pages/notifications--error.html` | Load failure |
-| 10 · My Settings | Default | `pages/my-settings.html` | Caps (US-05) + SMS / Email / Teams |
+| 10 · My Settings | Default | `pages/my-settings.html` | Caps (US-05) + SMS / Email |
 |  | Saved | `pages/my-settings--saved.html` | Success toast |
 |  | Validation error | `pages/my-settings--validation-error.html` | Empty required cap |
 |  | Loading | `pages/my-settings--loading.html` | Skeleton |
 |  | Error | `pages/my-settings--error.html` | Load failure |
 
-**65 pages in total.**
+**68 pages in total.**
 
 ## Navigation
 
@@ -132,15 +135,15 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 ## The prototype's story (sample data, `tools/data.py`)
 
 - **Now:** Fri Jan 10, 2025 at **06:10**. The after-grace page is shown "as of 06:25", and says so on the page.
-- **User:** Brian Kamau, EK10234, Line 100 – Team 4, Team Leader Grace Achieng. Skills: Line 100, Line 200, Social Media.
+- **User:** Brian Kamau, EK10234 (header role: CEE). Skills: Line 100, Line 200, Social Media.
 - **Applications (9):**
   - Approved (2): Jan 10, 06:00–08:00 (in progress) and Jan 10, 18:00–20:00.
   - Pending (3): Sat Jan 11, 06:00–10:00 and 17:00–21:00; Mon Jan 13, 18:00–21:00.
   - Rejected (1): Jan 9, slot filled.
   - Cancelled (3): by Brian on Jan 8, by Workforce on Jan 7, and No Show on Jan 6.
-- **History:** 10 records from Dec 14 to Jan 8: 33 h completed, 1 No Show, 2 cancelled. Reports uses the same records: 45 h approved, 33 h completed, 3 cancellations.
+- **History:** 10 records from Dec 14 to Jan 8: 33 h completed (28 h at 1.5×, plus 5 h at 2.0× on Boxing Day and New Year's Day), 1 No Show, 2 cancelled. Reports uses the same records: 45 h approved, 33 h completed, 3 cancellations, and 7 h applied for two colleagues.
 - **Caps this week:** weekday 4 of 10 h, weekend 8 of 8 h. The weekend cap is reached because both Saturday applications count, so applying for Sat 14:00 shows the over-cap state.
-- **Colleagues:** Wanjiru Njoroge (EK20417) is eligible. Otieno Mwangi (EK30981) is on annual leave, so not eligible. EK99999 is not found.
+- **Colleagues:** Wanjiru Njoroge (EK20417) is eligible. Otieno Mwangi (EK30981) is not eligible; the applicant sees no reason. EK99999 is not found.
 
 ## Assumptions (please confirm; none of these are stated in the journey map)
 
@@ -150,22 +153,31 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 4. **Start-time options (US-03)** list only hours that are inside the window and don't overlap the CEE's own approved overtime. A note in the dropdown explains any hidden hour.
 5. **Hour caps (US-05) are per week:** a Monday–Friday total and a Saturday–Sunday total. Approved and pending hours both count. Going over the cap blocks the application, with a link to change the caps. The 72 h monthly limit comes from guideline 16 and is read-only.
 6. **The rules are re-checked when the CEE submits (US-04/US-06),** even though the slot list is already filtered. A CEE's status can change between viewing and applying (for example, being marked Sick Off), so each of the four rules has its own hard-stop modal. For the 11-hour rule the modal offers a fix ("Change hours"); the others offer only "Back to slots".
-7. **Cancel is offered only on approved overtime,** as in Stage 6. Withdrawing a pending application isn't covered by the journey map, so it isn't offered.
+7. **Edit and cancel:**
+   - **Edit:** pending applications can be changed until approved (team review). The CEE can change the slot (any slot or queue they're eligible for), the start time and the hours.
+   - **Cancel:** only approved overtime can be cancelled, as in Stage 6. Withdrawing a pending application isn't offered.
 8. **Cancellation:**
    - (a) Before the start: the slot is released and Workforce is notified.
    - (b) Within 20 minutes after the start: a warning explains the slot moves to the next overlapping schedule and Workforce sees it on their dashboard.
    - (c) After 20 minutes: Cancel is disabled with the tooltip *"Auto-cancelled as No Show after 20 min"*, as the brief specifies.
    - Outages are pointed to a Help Desk ticket, per guideline 9.
 9. **Applying on behalf:**
-   - Eligibility is checked for the colleague before any slot is shown.
+   - Eligibility is checked for the colleague before any slot is shown. The applicant sees only the outcome (eligible or not), never which rule failed; the reasons are the colleague's own information (team review).
    - The application shows in the colleague's own My Applications, and the colleague gets the SMS and email notices. The person who applied for them doesn't track it.
 10. **Notifications:**
     - Approval messages are always sent by SMS and email (US-07), so those two checkboxes are locked on. Every other event and channel can be changed.
-    - Teams is an optional extra channel and is off by default.
+    - SMS and email are the only channels; Microsoft Teams was removed after team review.
 11. **Reports:**
     - "Approved hours" means every application that was ever approved in the range: completed, No Show, cancelled after approval, and approved but not yet worked.
-    - The CSV and XLSX exports carry Agent ID, Name, Department and Approved Hours (US-10).
-12. **Profile and skillsets** are read-only, synced from Resource Management. Corrections go through the Team Leader.
+    - There are no export buttons; CEEs don't export data (team review). US-10 exports are a Workforce feature.
+    - **Overtime rate:** 2.0× on a public holiday and 1.5× on any other day, weekends included. Rates apply to completed hours.
+    - **Applied for others:** hours the CEE submitted for colleagues, whatever their status.
+12. **Profile and skillsets** are read-only, synced from Resource Management. Team name, line and Team Leader aren't shown anywhere (team review).
+
+## Open questions
+
+- **Editing a pending application:** does saving keep its first-come-first-served place, or does it count as a new submission? The screens don't decide this; the toast only says it's still pending.
+- **1.5× vs 2.0×:** confirm that weekends and off days pay 1.5× (only public holidays pay 2.0×), and which public-holiday calendar applies.
 
 ## Self-check against the sketches
 
