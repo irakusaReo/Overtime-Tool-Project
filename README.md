@@ -98,10 +98,10 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Loading | `pages/my-applications--loading.html` | Skeleton rows |
 |  | Error | `pages/my-applications--error.html` | Load failure |
 |  | Cancel success | `pages/my-applications--cancel-success.html` | Toast; row moves to Cancelled |
-|  | Edit pending | `pages/my-applications--edit.html` | Change slot, start time or hours |
-|  | Edit: choose slot | `pages/my-applications--edit-slots.html` | Eligible slots across queues |
+|  | Edit pending | `pages/my-applications--edit.html` | Saving cancels and re-applies |
+|  | Edit: choose slot | `pages/my-applications--edit-slots.html` | Open eligible slots across queues |
 |  | Edit: new slot picked | `pages/my-applications--edit-changed.html` | Moved to Social Media |
-|  | Edit saved | `pages/my-applications--edit-success.html` | Toast; row updated, still Pending |
+|  | Edit saved | `pages/my-applications--edit-success.html` | Old application cancelled, new one Pending |
 | 6 · Cancellation | (a) Before start | `pages/cancel--before-start.html` | Confirm; slot will be released |
 |  | (b) Started, within 20 min | `pages/cancel--within-grace.html` | Warning copy; slot moves to next overlapping schedule |
 |  | (c) After 20 min | `pages/cancel--after-grace.html` | Cancel disabled with tooltip |
@@ -141,7 +141,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
   - Pending (3): Sat Jan 11, 06:00–10:00 and 17:00–21:00; Mon Jan 13, 18:00–21:00.
   - Rejected (1): Jan 9, slot filled.
   - Cancelled (3): by Brian on Jan 8, by Workforce on Jan 7, and No Show on Jan 6.
-- **History:** 10 records from Dec 14 to Jan 8: 33 h completed (28 h at 1.5×, plus 5 h at 2.0× on Boxing Day and New Year's Day), 1 No Show, 2 cancelled. Reports uses the same records: 45 h approved, 33 h completed, 3 cancellations, and 7 h applied for two colleagues.
+- **History:** 10 records from Dec 14 to Jan 8: 33 h completed (2 h at 1.5× on weekdays, 31 h at 2.0× on weekends and public holidays). There are also 16 h of regular shifts worked on Christmas Day and New Year's Day, paid at 2.0×, 1 No Show, 2 cancelled. Reports uses the same records: 45 h approved, 33 h completed, 3 cancellations, and 7 h applied for two colleagues.
 - **Caps this week:** weekday 4 of 10 h, weekend 8 of 8 h. The weekend cap is reached because both Saturday applications count, so applying for Sat 14:00 shows the over-cap state.
 - **Colleagues:** Wanjiru Njoroge (EK20417) is eligible. Otieno Mwangi (EK30981) is not eligible; the applicant sees no reason. EK99999 is not found.
 
@@ -154,7 +154,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 5. **Hour caps (US-05) are per week:** a Monday–Friday total and a Saturday–Sunday total. Approved and pending hours both count. Going over the cap blocks the application, with a link to change the caps. The 72 h monthly limit comes from guideline 16 and is read-only.
 6. **The rules are re-checked when the CEE submits (US-04/US-06),** even though the slot list is already filtered. A CEE's status can change between viewing and applying (for example, being marked Sick Off), so each of the four rules has its own hard-stop modal. For the 11-hour rule the modal offers a fix ("Change hours"); the others offer only "Back to slots".
 7. **Edit and cancel:**
-   - **Edit:** pending applications can be changed until approved (team review). The CEE can change the slot (any slot or queue they're eligible for), the start time and the hours.
+   - **Edit:** pending applications can be changed until approved. The CEE can change the slot, the start time and the hours. Only open slots they're eligible for are offered; full slots aren't listed. Saving cancels the current application, releasing its slot, and submits a new application, which joins the first-come-first-served queue. (Confirmed by the team.)
    - **Cancel:** only approved overtime can be cancelled, as in Stage 6. Withdrawing a pending application isn't offered.
 8. **Cancellation:**
    - (a) Before the start: the slot is released and Workforce is notified.
@@ -170,14 +170,14 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 11. **Reports:**
     - "Approved hours" means every application that was ever approved in the range: completed, No Show, cancelled after approval, and approved but not yet worked.
     - There are no export buttons; CEEs don't export data (team review). US-10 exports are a Workforce feature.
-    - **Overtime rate:** 2.0× on a public holiday and 1.5× on any other day, weekends included. Rates apply to completed hours.
+    - **Pay rates (confirmed by the team):** approved overtime worked on a weekday pays 1.5×. On a weekend or public holiday it pays 2.0×. Regular allocated shifts worked on a public holiday also pay 2.0×. Reports breaks these out as weekday overtime, weekend and holiday overtime, and shifts on public holidays.
     - **Applied for others:** hours the CEE submitted for colleagues, whatever their status.
 12. **Profile and skillsets** are read-only, synced from Resource Management. Team name, line and Team Leader aren't shown anywhere (team review).
 
-## Open questions
+## Decisions confirmed by the team
 
-- **Editing a pending application:** does saving keep its first-come-first-served place, or does it count as a new submission? The screens don't decide this; the toast only says it's still pending.
-- **1.5× vs 2.0×:** confirm that weekends and off days pay 1.5× (only public holidays pay 2.0×), and which public-holiday calendar applies.
+- **Editing a pending application:** first come, first served still applies. Saving cancels the old application, which frees its slot, and submits a new one. The slot list shows only slots that aren't full.
+- **Pay rates:** weekday overtime pays 1.5×. Weekend and public-holiday overtime pays 2.0×, as do regular allocated shifts worked on a public holiday.
 
 ## Self-check against the sketches
 

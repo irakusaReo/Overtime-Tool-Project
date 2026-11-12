@@ -1,7 +1,7 @@
 """My Applications, Cancellation flow, Overtime History, Reports, Notifications, My Settings."""
 from icons import icon
 from shell import app_page
-from data import ME, APPLICATIONS, HISTORY, WEEKLY_COMPLETED, NOTIFICATIONS, CAPS, WEEK_USAGE, SLOTS, ON_BEHALF, rate
+from data import ME, APPLICATIONS, HISTORY, WEEKLY_COMPLETED, NOTIFICATIONS, CAPS, WEEK_USAGE, SLOTS, ON_BEHALF, HOLIDAY_SHIFTS, rate
 from ui import (write, badge, status, field, select, text_input, toast, alert, modal, summary, page_header,
                 empty_state, error_state, table, tr, sk, skeleton_rows, stat_card, stat_skeleton, datefield)
 
@@ -126,12 +126,13 @@ def edit_pending():
                 items += (f'<div class="menu__item{" menu__item--selected" if is_cur else ""}">{edit_slot_label(o)}'
                           f'<span class="menu__meta">{meta}</span>{icon("check") if is_cur else ""}</div>')
             ctl = (f'<div class="field__control">{ctl}<div class="menu" role="listbox">{items}'
-                   f'<div class="menu__note">{icon("info", "icon icon--sm")}<span>Only slots you\'re eligible for.</span></div></div></div>')
-        return field("Slot", ctl, True, "Change to any eligible slot or queue")
+                   f'<div class="menu__note">{icon("info", "icon icon--sm")}<span>Only open slots you\'re eligible for. Full slots aren\'t listed.</span></div></div></div>')
+        return field("Slot", ctl, True, "Any open slot or queue you're eligible for")
 
     def edit_modal(chosen, start, hrs, end, hours_hint, open_menu=False):
         body = (slot_field(chosen, open_menu) + screens_a.time_fields(start, hrs, end, hours_hint=hours_hint)
-                + f'<span class="note">{icon("info", "icon icon--sm")}Weekend total stays 8 / {CAPS["weekend"]} h.</span>')
+                + alert("info", "info", "Saving replaces this application",
+                         f'Your current slot ({edit_slot_label(cur)}) is cancelled and released. The change is a new application: first come, first served.'))
         return modal("brand", "edit", "Edit application", "Pending applications can be changed until approved.", body,
                      '<a class="btn btn--secondary" href="my-applications--pending.html">Cancel</a>'
                      '<a class="btn btn--primary" href="my-applications--edit-success.html">Save changes</a>', wide=True)
@@ -139,20 +140,25 @@ def edit_pending():
     def page(fname, label, note, main, overlay=""):
         write(G, fname, label, note, app_page("Edit application", "applications", main, overlay_html=overlay))
 
-    page("my-applications--edit.html", "Edit pending", "Change slot, start time or hours",
+    page("my-applications--edit.html", "Edit pending", "Saving cancels and re-applies",
          bg, edit_modal(cur, "17:00", 4, "21:00", "Max 4 h"))
-    page("my-applications--edit-slots.html", "Edit: choose slot", "Eligible slots across queues",
+    page("my-applications--edit-slots.html", "Edit: choose slot", "Open eligible slots across queues",
          bg + '<div style="height:120px"></div>', edit_modal(cur, "17:00", 4, "21:00", "Max 4 h", open_menu=True))
     page("my-applications--edit-changed.html", "Edit: new slot picked", "Moved to Social Media",
          bg, edit_modal(alt, "14:00", 4, "18:00", "Max 6 h"))
 
+    # Saving = cancel the old application (slot released) + submit a new one (first come, first served).
     after = [dict(a) for a in APPLICATIONS]
     for a in after:
         if a["id"] == "A-3330":
-            a.update(queue="Social Media", start="14:00", end="18:00", note="Edited · due Jan 10")
-    page("my-applications--edit-success.html", "Edit saved", "Toast; row updated, still Pending",
-         apps_header() + CANCEL_RULE + apps_card("Pending", after, app_rows([a for a in after if a["status"] == "Pending"], highlight="A-3330")),
-         toast("success", "check-circle", "Application updated", "Social Media · Sat Jan 11 · 14:00 – 18:00. Still pending approval."))
+            a.update(status="Cancelled", note="Replaced by your edit")
+    new = {"id": "A-3341", "queue": "Social Media", "date": "Jan 11, 2025", "day": "Sat", "start": "14:00", "end": "18:00",
+           "hours": 4, "applied": "Jan 10, 06:14", "status": "Pending", "note": "New application · due Jan 10"}
+    after.insert(0, new)
+    page("my-applications--edit-success.html", "Edit saved", "Old application cancelled, new one Pending",
+         apps_header() + CANCEL_RULE + apps_card("Pending", after, app_rows([a for a in after if a["status"] == "Pending"], highlight="A-3341")),
+         toast("success", "check-circle", "Application changed",
+               "Line 100 · Sat 17:00 – 21:00 cancelled and released. New: Social Media · Sat 14:00 – 18:00, pending."))
 
 
 # ==========================================================================
@@ -281,7 +287,7 @@ def reports():
     total = sum(h["hours"] for h in comp)
     h15 = sum(h["hours"] for h in comp if rate(h) == "1.5")
     h20 = total - h15
-    hols = ", ".join(h["holiday"] for h in comp if rate(h) == "2.0")
+    hols = ", ".join(h["holiday"] for h in comp if h.get("holiday"))
     others = sum(o["hours"] for o in ON_BEHALF)
     stats = ('<div class="stat-grid">' + stat_card("Approved hours", "45 h", "12 approvals")
              + stat_card("Completed hours", f"{total} h", "73% of approved")
@@ -290,13 +296,21 @@ def reports():
     chart = (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Completed hours per week</span>'
              f'<span class="card__subtitle">Dec 9 – Jan 12</span></div></div>'
              f'<div class="card__body">{bar_chart(WEEKLY_COMPLETED)}</div></div>')
-    rates = (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Completed hours by rate</span></div></div>'
+    hs = sum(x["hours"] for x in HOLIDAY_SHIFTS)
+    h20_all = h20 + hs
+    biggest = max(h15, h20, hs)
+
+    def rate_row(b, label, hours, hint=""):
+        hint_html = f'<span class="usage__hint">{hint}</span>' if hint else ""
+        return (f'<div class="usage"><div class="usage__row"><span>{b}&nbsp; {label}</span><span><strong>{hours}</strong> h</span></div>'
+                f'<span class="usage__bar"><span class="usage__fill" style="width:{round(100 * hours / biggest)}%"></span></span>{hint_html}</div>')
+    rates = (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Hours by pay rate</span>'
+             f'<span class="card__subtitle">1.5× total {h15} h · 2.0× total {h20_all} h</span></div></div>'
              f'<div class="card__body stack stack--4">'
-             f'<div class="usage"><div class="usage__row"><span>{badge("neutral", "1.5×")}&nbsp; Regular days</span><span><strong>{h15}</strong> h</span></div>'
-             f'<span class="usage__bar"><span class="usage__fill" style="width:{round(100 * h15 / total)}%"></span></span></div>'
-             f'<div class="usage"><div class="usage__row"><span>{badge("brand", "2.0×")}&nbsp; Public holidays</span><span><strong>{h20}</strong> h</span></div>'
-             f'<span class="usage__bar"><span class="usage__fill" style="width:{round(100 * h20 / total)}%"></span></span>'
-             f'<span class="usage__hint">{hols}</span></div></div></div>')
+             + rate_row(badge("neutral", "1.5×"), "Weekday overtime", h15)
+             + rate_row(badge("brand", "2.0×"), "Weekend &amp; holiday overtime", h20, f"Weekends · {hols}")
+             + rate_row(badge("brand", "2.0×"), "Shifts on public holidays", hs, ", ".join(x["holiday"] for x in HOLIDAY_SHIFTS))
+             + '</div></div>')
     by_q = {}
     for h in comp:
         by_q[h["queue"]] = by_q.get(h["queue"], 0) + h["hours"]

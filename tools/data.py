@@ -64,9 +64,18 @@ HISTORY = [
     {"date": "Dec 14, 2024", "day": "Sat", "queue": "Social Media", "start": "07:00", "end": "11:00", "hours": 4, "status": "Completed", "note": "Logged in 06:59"},
 ]
 
-# Overtime pay rate: 2.0x on a public holiday, 1.5x on any other day (weekends included).
+# Pay rate (confirmed by the team): approved overtime on a weekday pays 1.5x;
+# on a weekend or public holiday it pays 2.0x. Regular allocated shifts worked
+# on a public holiday also pay 2.0x (HOLIDAY_SHIFTS below).
 def rate(rec):
-    return "2.0" if rec.get("holiday") else "1.5"
+    return "2.0" if rec.get("holiday") or rec["day"] in ("Sat", "Sun") else "1.5"
+
+
+# Regular (allocated) shifts Brian worked on public holidays in the report range: paid 2.0x.
+HOLIDAY_SHIFTS = [
+    {"date": "Dec 25, 2024", "day": "Wed", "holiday": "Christmas Day",  "start": "07:00", "end": "15:00", "hours": 8},
+    {"date": "Jan 1, 2025",  "day": "Wed", "holiday": "New Year's Day", "start": "08:00", "end": "16:00", "hours": 8},
+]
 
 
 # Applications Brian submitted on behalf of colleagues (Reports: "Applied for others")
