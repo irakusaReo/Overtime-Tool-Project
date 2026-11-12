@@ -40,7 +40,7 @@ def app_rows(apps, mode="normal", highlight=None):
         st = a["status"]
         if st == "Approved" and a.get("phase") == "started":
             st_html = status("In progress")
-            note = "Started 06:00 · logged in 05:58" if mode == "after_grace" else a["note"]
+            note = "Logged in 05:58" if mode == "after_grace" else a["note"]
         else:
             st_html, note = status(st), a["note"]
         out += tr([(a["queue"], "table__td--strong"), (f'{a["date"]}<span class="table__sub">{a["day"]}</span>', ""),
@@ -54,12 +54,11 @@ APP_HEAD = ["Queue", "Date", "Slot time", "Hours", "Applied", "Status", "Action"
 
 
 def apps_header(extra=""):
-    return page_header("My Applications", "Track the overtime you've applied for and cancel approved overtime if you can't make it.",
+    return page_header("My Applications", "Track and cancel your overtime.",
                        extra + f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>')
 
 
-CANCEL_RULE = (f'<span class="note">{icon("info", "icon icon--sm")}You can cancel approved overtime until 20 minutes after it starts. '
-               f'After that, a missed start is recorded as No Show.</span>')
+CANCEL_RULE = (f'<span class="note">{icon("info", "icon icon--sm")}Cancel up to 20 min after the start. After that, it\'s a No Show.</span>')
 
 
 def apps_card(tab, apps, rows_html, top=""):
@@ -80,8 +79,8 @@ def my_applications():
     empty_apps = []
     page("my-applications--empty.html", "Empty", "No applications yet",
          apps_header() + f'<div class="card card--table"><div style="padding-top:16px">{tabs_html("All", empty_apps)}</div>'
-         + empty_state("applications", "You haven't applied for overtime yet",
-                       "Find a slot you're eligible for and apply. Your applications and their status will show here.",
+         + empty_state("applications", "No applications yet",
+                       "Your applications will show here.",
                        f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>', pad="80px 24px") + '</div>')
     page("my-applications--loading.html", "Loading", "Skeleton rows",
          apps_header() + CANCEL_RULE + f'<div class="card card--table"><div style="padding-top:16px">{tabs_html("All", APPLICATIONS)}</div>'
@@ -93,11 +92,11 @@ def my_applications():
     after = [dict(a) for a in APPLICATIONS]
     for a in after:
         if a["id"] == "A-3321":
-            a["status"], a["note"] = "Cancelled", "Cancelled by you · Jan 10, 06:12"
+            a["status"], a["note"] = "Cancelled", "By you"
     page("my-applications--cancel-success.html", "Cancel success", "Toast; row moves to Cancelled",
          apps_header() + CANCEL_RULE + apps_card("All", after, app_rows(after, highlight="A-3321")),
          toast("success", "check-circle", "Overtime cancelled",
-               "Line 100 · Fri Jan 10 · 18:00 – 20:00. The slot was released and Workforce was notified. You'll get an SMS and email confirmation."))
+               "Line 100 · Fri Jan 10 · 18:00 – 20:00 released."))
 
 
 # ==========================================================================
@@ -114,19 +113,17 @@ def cancellation():
     a = next(x for x in APPLICATIONS if x["id"] == "A-3321")
     page("cancel--before-start.html", "(a) Before start", "Confirm; slot will be released", bg,
          modal("warning", "alert-triangle", "Cancel this overtime?",
-               "It starts in 11 h 50 min. Your slot will be released so another CEE can take it, and Workforce will be notified.",
-               summary([("Queue", a["queue"]), ("Date", f'Fri {a["date"]}'), ("Slot time", f'{a["start"]} – {a["end"]}'), ("Approved hours", f'{a["hours"]}')])
-               + f'<span class="note">{icon("sms", "icon icon--sm")}You\'ll get an SMS and email confirming the cancellation.</span>',
+               "Your slot will be released to other CEEs.",
+               summary([("Queue", a["queue"]), ("Date", f'Fri {a["date"]}'), ("Slot time", f'{a["start"]} – {a["end"]}'), ("Approved hours", f'{a["hours"]}')]),
                '<a class="btn btn--secondary" href="my-applications--approved.html">Keep my overtime</a>'
                '<a class="btn btn--destructive" href="my-applications--cancel-success.html">Yes, cancel overtime</a>'))
 
     b = next(x for x in APPLICATIONS if x["id"] == "A-3318")
     page("cancel--within-grace.html", "(b) Started, within 20 min", "Warning copy; slot moves to next overlapping schedule", bg,
-         modal("error", "alert-circle", "Your overtime has already started",
-               "Line 100 started at 06:00, 10 minutes ago. You can still cancel until 06:20.",
-               alert("warning", "alert-triangle", "Cancelling now affects the queue",
-                     "The slot moves to the next overlapping overtime schedule and Workforce is alerted on their dashboard. "
-                     "If you're having a power or system outage, raise a Help Desk ticket instead.")
+         modal("error", "alert-circle", "Your overtime has started",
+               "Started 06:00. You can cancel until 06:20.",
+               alert("warning", "alert-triangle", "The slot moves to the next overlapping schedule",
+                     "Having an outage? Raise a Help Desk ticket instead.")
                + summary([("Queue", b["queue"]), ("Date", f'Fri {b["date"]}'), ("Slot time", f'{b["start"]} – {b["end"]}'), ("Cancel allowed until", "06:20")]),
                '<a class="btn btn--secondary" href="my-applications--approved.html">Keep working</a>'
                '<a class="btn btn--destructive" href="my-applications--cancel-success.html">Cancel anyway</a>'))
@@ -150,7 +147,7 @@ def history():
     comp = [h for h in HISTORY if h["status"] == "Completed"]
     ns = [h for h in HISTORY if h["status"] == "No Show"]
     cx = [h for h in HISTORY if h["status"] == "Cancelled"]
-    head = page_header("Overtime History", "Your past overtime and attendance, from Genesys Cloud login records.",
+    head = page_header("Overtime History", "Your past overtime and attendance.",
                        f'<a class="btn btn--secondary" href="reports.html">{icon("reports")}Open reports</a>')
     fb = ('<div class="filter-bar">' + field("Date range", datefield("Dec 1, 2024 – Jan 9, 2025")) + field("Queue", select("All queues"))
           + field("Status", select("All statuses")) + '<span class="filter-bar__spacer"></span>'
@@ -167,7 +164,7 @@ def history():
     write(G, "overtime-history.html", "Default", "Table with totals", app_page("Overtime History", "history", head + stats + card))
 
     e = (f'<div class="card card--table">{fb.replace(f"<strong>{len(HISTORY)}</strong> records", "<strong>0</strong> records")}'
-         + empty_state("history", "No overtime history yet", "Completed, missed and cancelled overtime will show here after each shift.",
+         + empty_state("history", "No overtime history yet", "Past overtime will show here.",
                        f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>', pad="80px 24px") + '</div>')
     write(G, "overtime-history--empty.html", "Empty", "No records", app_page("Overtime History", "history", head + e))
 
@@ -213,7 +210,7 @@ def reports():
     G = "8 · Reports"
     acts = (f'<button class="btn btn--secondary">{icon("download")}Export CSV</button>'
             f'<button class="btn btn--secondary">{icon("download")}Export XLSX</button>')
-    head = page_header("Reports", "Your own overtime records only. Filter, then export for your records.", acts)
+    head = page_header("Reports", "Your own records only.", acts)
 
     def fbar(rng="Dec 1, 2024 – Jan 31, 2025"):
         return ('<div class="card"><div class="filter-bar" style="border-bottom:0">' + field("Date range", datefield(rng))
@@ -221,10 +218,10 @@ def reports():
                 + '<a class="btn btn--ghost" href="reports.html" style="margin-bottom:0">Reset</a></div></div>')
     comp = [h for h in HISTORY if h["status"] == "Completed"]
     stats = ('<div class="grid-3">' + stat_card("Approved hours", "45 h", "12 approvals")
-             + stat_card("Completed hours", f'{sum(h["hours"] for h in comp)} h', "73% of approved hours")
+             + stat_card("Completed hours", f'{sum(h["hours"] for h in comp)} h', "73% of approved")
              + stat_card("Cancellations", "3", "2 cancelled · 1 No Show") + '</div>')
     chart = (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Completed hours per week</span>'
-             f'<span class="card__subtitle">Dec 9, 2024 – Jan 12, 2025 · Jan 10 overtime is still in progress</span></div></div>'
+             f'<span class="card__subtitle">Dec 9 – Jan 12</span></div></div>'
              f'<div class="card__body">{bar_chart(WEEKLY_COMPLETED)}</div></div>')
     by_q = {}
     for h in comp:
@@ -243,10 +240,10 @@ def reports():
     write(G, "reports--export-success.html", "Export success", "Toast after CSV export",
           app_page("Reports", "reports", head + fbar() + body,
                    overlay_html=toast("success", "check-circle", "Report exported",
-                                      "overtime_EK10234_2024-12-01_2025-01-31.csv downloaded: 12 records with Agent ID, Name, Department and Approved Hours.")))
+                                      "overtime_EK10234_Dec-Jan.csv · 12 records")))
 
-    e = ('<div class="card">' + empty_state("reports", "No records in this date range",
-         "You didn't have any overtime between Oct 1 and Oct 31, 2024. Pick a wider range to see your records.",
+    e = ('<div class="card">' + empty_state("reports", "No records",
+         "Try a wider date range.",
          '<a class="btn btn--secondary" href="reports.html">Reset filters</a>', pad="80px 24px") + '</div>')
     write(G, "reports--empty.html", "Empty", "No records for range",
           app_page("Reports", "reports", head.replace('<button class="btn btn--secondary">', '<button class="btn btn--secondary" disabled>') + fbar("Oct 1 – Oct 31, 2024") + e))
@@ -286,7 +283,7 @@ def notif_item(n):
 def notifications():
     G = "9 · Notifications"
     unread = len([n for n in NOTIFICATIONS if n["unread"]])
-    head = page_header("Notifications", "Approvals, cancellations and slot alerts. The same messages are sent to you by SMS and email.",
+    head = page_header("Notifications", "Approvals, cancellations and slot alerts.",
                        f'<button class="btn btn--ghost">{icon("check")}Mark all as read</button>'
                        f'<a class="btn btn--secondary" href="my-settings.html">{icon("settings")}Notification settings</a>')
 
@@ -300,7 +297,7 @@ def notifications():
     write(G, "notifications.html", "Default", "3 unread; approvals, cancellations, slot alerts", app_page("Notifications", "notifications", head + lst))
 
     e = (f'<div class="card card--table">{tabs([0, 0, 0, 0, 0])}' + empty_state("bell", "You're all caught up",
-         "Approvals, cancellations and new eligible slots will appear here, and by SMS and email.", pad="80px 24px") + '</div>')
+         "New notifications will show here.", pad="80px 24px") + '</div>')
     write(G, "notifications--empty.html", "Empty", "No notifications", app_page("Notifications", "notifications", head + e, notif_count=0))
 
     skn = "".join('<div class="notif">' + sk("40px", 40, 9999) + '<div class="notif__body">' + sk("260px", 18) + sk("420px", 14) + sk("120px", 22, 9999)
@@ -321,24 +318,24 @@ def chk(on, disabled=False):
 
 
 def settings_body(weekday="10", weekend="8", err=False):
-    wd = (text_input("", True, cls="input--error input--focus", suffix='<span class="input__suffix">h per week</span>') if err
-          else text_input(weekday, suffix='<span class="input__suffix">h per week</span>'))
+    wd = (text_input("", True, cls="input--error input--focus", suffix='<span class="input__suffix">h / week</span>') if err
+          else text_input(weekday, suffix='<span class="input__suffix">h / week</span>'))
     caps = (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Hour caps</span>'
-            f'<span class="card__subtitle">Set the most overtime you want each week. We won\'t let you apply beyond these, so you don\'t have to track hours yourself.</span></div></div>'
+            f'<span class="card__subtitle">Max overtime per week. You can\'t apply beyond these.</span></div></div>'
             f'<div class="card__body stack stack--6"><div class="form-grid">'
-            + field("Weekday cap (Mon – Fri)", wd, True, "Enter your weekday cap in whole hours, e.g. 10" if err else "Default 10 h", "", err)
-            + field("Weekend cap (Sat – Sun)", text_input(weekend, suffix='<span class="input__suffix">h per week</span>'), True, "Default 8 h")
-            + field("Monthly limit", f'<div class="input input--readonly"><span class="input__value">{CAPS["monthly"]}</span><span class="input__suffix">h per month</span></div>',
-                    False, "Set by policy (Approval Guide, rule 16)")
+            + field("Weekday cap", wd, True, "Required" if err else "Mon – Fri", "", err)
+            + field("Weekend cap", text_input(weekend, suffix='<span class="input__suffix">h / week</span>'), True, "Sat – Sun")
+            + field("Monthly limit", f'<div class="input input--readonly"><span class="input__value">{CAPS["monthly"]}</span><span class="input__suffix">h / month</span></div>',
+                    False, "Set by policy")
             + '</div><div class="grid-2">'
-            + f'<div class="usage"><div class="usage__row"><span>This week · weekday</span><span><strong>{WEEK_USAGE["weekday"]}</strong> / {CAPS["weekday"]} h</span></div>'
-              f'<span class="usage__bar"><span class="usage__fill" style="width:40%"></span></span><span class="usage__hint">Approved and pending overtime count toward your cap</span></div>'
-            + f'<div class="usage"><div class="usage__row"><span>This week · weekend</span><span><strong>{WEEK_USAGE["weekend"]}</strong> / {CAPS["weekend"]} h</span></div>'
-              f'<span class="usage__bar"><span class="usage__fill usage__fill--full" style="width:100%"></span></span><span class="usage__hint usage__hint--warn">Cap reached: you can\'t apply for more weekend overtime this week</span></div>'
+            + f'<div class="usage"><div class="usage__row"><span>This week, weekday</span><span><strong>{WEEK_USAGE["weekday"]}</strong> / {CAPS["weekday"]} h</span></div>'
+              f'<span class="usage__bar"><span class="usage__fill" style="width:40%"></span></span><span class="usage__hint">Includes pending</span></div>'
+            + f'<div class="usage"><div class="usage__row"><span>This week, weekend</span><span><strong>{WEEK_USAGE["weekend"]}</strong> / {CAPS["weekend"]} h</span></div>'
+              f'<span class="usage__bar"><span class="usage__fill usage__fill--full" style="width:100%"></span></span><span class="usage__hint usage__hint--warn">Cap reached</span></div>'
             + '</div></div></div>')
-    events = [("Overtime approved", True, True, False, True, "Required: always sent by SMS and email"),
+    events = [("Overtime approved", True, True, False, True, "SMS and email required"),
               ("Overtime rejected", True, True, False, False, ""),
-              ("Overtime cancelled (by you, Workforce or No Show)", True, True, False, False, ""),
+              ("Overtime cancelled", True, True, False, False, ""),
               ("New slot I'm eligible for", False, True, True, False, "")]
     rows = ""
     for name, sms, mail, teams, locked, note in events:
@@ -350,12 +347,12 @@ def settings_body(weekday="10", weekend="8", err=False):
         f'<span class="check__label">{n}</span><span class="check__desc">{d}</span></span></span>'
         for n, on, d in [("SMS", True, ME["phone"]), ("Email", True, ME["email"]), ("Microsoft Teams", False, "Off")])
     notif = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Notifications</span>'
-             f'<span class="card__subtitle">Choose how you hear about your overtime. Contact details come from your HR profile.</span></div></div>'
+             f'<span class="card__subtitle">Contact details come from HR.</span></div></div>'
              f'<div class="card__body"><div class="row row--wrap" style="gap:16px 32px">{channels}</div></div>'
              f'<div class="matrix">' + table(["Event", "SMS", "Email", "Teams"], rows, {1: "table__th--center", 2: "table__th--center", 3: "table__th--center"}) + '</div></div>')
     pills = "".join(f'<span class="pill">{s}</span>' for s in ME["skills"])
     prof = (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Profile</span>'
-            f'<span class="card__subtitle">Synced from Resource Management. Ask your Team Leader to correct anything wrong.</span></div></div>'
+            f'<span class="card__subtitle">From Resource Management. Your Team Leader can update it.</span></div></div>'
             f'<div class="card__body">' + summary([("Name", ME["name"]), ("EK number", ME["ek"]), ("Team", ME["team"]), ("Team leader", ME["team_leader"]),
                                                     ("Skillsets", f'<span class="pill-list">{pills}</span>')]) + '</div></div>')
     actions = '<div class="row row--3" style="justify-content:flex-end"><a class="btn btn--secondary" href="my-settings.html">Cancel</a><a class="btn btn--primary" href="my-settings--saved.html">Save changes</a></div>'
@@ -368,9 +365,9 @@ def settings():
     write(G, "my-settings.html", "Default", "Caps (US-05) + SMS / Email / Teams", app_page("My Settings", "settings", head + settings_body()))
     write(G, "my-settings--saved.html", "Saved", "Success toast",
           app_page("My Settings", "settings", head + settings_body(),
-                   overlay_html=toast("success", "check-circle", "Settings saved", "Caps: 10 h weekday, 8 h weekend. Notifications by SMS and email.")))
+                   overlay_html=toast("success", "check-circle", "Settings saved", "Your changes were saved.")))
     write(G, "my-settings--validation-error.html", "Validation error", "Empty required cap",
-          app_page("My Settings", "settings", head + alert("error", "alert-circle", "Check your hour caps", "Your weekday cap is empty. Enter a number of hours to save.")
+          app_page("My Settings", "settings", head + alert("error", "alert-circle", "Weekday cap is required")
                    + settings_body(err=True)))
     l = ('<div class="grid-main-aside grid-main-aside--400"><div class="stack stack--6">'
          + ('<div class="card"><div class="card__header">' + sk("160px", 20) + '</div><div class="card__body stack stack--4">'

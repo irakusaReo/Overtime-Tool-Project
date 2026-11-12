@@ -212,18 +212,16 @@ def slots_header():
     return f"""<div class="page-header">
   <div class="page-header__titles">
     <h1 class="page-title">Available Slots</h1>
-    <p class="page-subtitle">Overtime published by Workforce for the next 7 days.</p>
+    <p class="page-subtitle">Overtime for the next 7 days.</p>
   </div>
   <div class="page-header__actions"><a class="btn btn--outline" href="apply-on-behalf.html">{icon("users-plus")}Apply on Behalf</a></div>
 </div>"""
 
 
-ELIGIBLE_NOTE = (f'<div class="banner banner--info">{icon("info")}<span>Showing slots you\'re eligible for '
-                 f'<span style="font-weight:400">· based on your skills ({", ".join(ME["skills"])}) and the overtime rules.</span></span></div>')
+ELIGIBLE_NOTE = (f'<div class="banner banner--info">{icon("info")}<span>Showing slots you\'re eligible for</span></div>')
 
 APPROVAL_TIP = (f'<div class="alert alert--info">{icon("clock")}<div class="alert__body"><span class="alert__title">Apply early</span>'
-                f'<span class="alert__text">Workforce approves next-day overtime between 11:00 and 20:00 the day before, first come first served. '
-                f'You\'ll get an SMS and email when it\'s approved.</span></div></div>')
+                f'<span class="alert__text">Next-day overtime is approved 11:00–20:00 the day before, first come first served.</span></div></div>')
 
 
 def filter_bar(queue="All my skills", time="Any time", date=WEEK_RANGE, count_html="", disabled=False):
@@ -279,7 +277,7 @@ def available_slots():
     # 3. no results for filters
     nores = (f'<div class="empty-state"><span class="empty-state__icon">{icon("search")}</span><div class="empty-state__text">'
              f'<span class="empty-state__title">No slots match your filters</span>'
-             f'<span class="empty-state__desc">There are no Line 200 slots in the evening this week. Try another time of day or queue.</span></div>'
+             f'<span class="empty-state__desc">Try another queue or time of day.</span></div>'
              f'<div class="empty-state__actions"><a class="btn btn--secondary" href="available-slots.html">Clear filters</a></div></div>')
     main = (slots_header() + ELIGIBLE_NOTE +
             slots_card(filter_bar("Line 200", "Evening (18–24)", count_html="<strong>0</strong> slots")
@@ -289,8 +287,7 @@ def available_slots():
     # 4. empty: nothing eligible at all
     empty = (f'<div class="empty-state" style="padding:96px 24px"><span class="empty-state__icon">{icon("slots")}</span><div class="empty-state__text">'
              f'<span class="empty-state__title">No eligible slots right now</span>'
-             f'<span class="empty-state__desc">Workforce hasn\'t published overtime for your skills ({", ".join(ME["skills"])}) in the next 7 days. '
-             f'We\'ll send you an SMS and email as soon as one opens.</span></div>'
+             f'<span class="empty-state__desc">We\'ll SMS and email you when one opens.</span></div>'
              f'<div class="empty-state__actions"><a class="btn btn--secondary" href="overtime-history.html">View my history</a>'
              f'<a class="btn btn--primary" href="my-settings.html">{icon("bell")}Notification settings</a></div></div>')
     main = (slots_header() + ELIGIBLE_NOTE +
@@ -312,7 +309,7 @@ def available_slots():
     # 6. error
     err = (f'<div class="empty-state" style="padding:96px 24px"><span class="empty-state__icon empty-state__icon--error">{icon("alert-circle")}</span><div class="empty-state__text">'
            f'<span class="empty-state__title">We couldn\'t load your slots</span>'
-           f'<span class="empty-state__desc">Something went wrong while checking your eligibility. Try again in a moment. If it keeps happening, raise a Help Desk ticket.</span></div>'
+           f'<span class="empty-state__desc">Please try again. If it keeps failing, contact the Help Desk.</span></div>'
            f'<div class="empty-state__actions"><a class="btn btn--secondary" href="#">Contact Help Desk</a><a class="btn btn--primary" href="available-slots.html">{icon("refresh")}Try again</a></div></div>')
     main = slots_header() + ELIGIBLE_NOTE + slots_card(filter_bar(), None, "", err)
     write(G, "available-slots--error.html", "Error", "Load failure with retry", app_page("Available Slots", "slots", main))
@@ -322,8 +319,7 @@ def available_slots():
     rows_f = "".join(slot_row(s) for s in filled)
     alert = (f'<div class="alert alert--warning">{icon("alert-triangle")}<div class="alert__body">'
              f'<span class="alert__title">That slot just filled up</span>'
-             f'<span class="alert__text">Social Media · Sat Jan 11, 2025 · 14:00 – 20:00 reached capacity while you were applying, so your application wasn\'t submitted. '
-             f'Full slots are removed from your list. Other Social Media slots are still open.</span></div>'
+             f'<span class="alert__text">Social Media · Sat Jan 11 · 14:00 – 20:00 filled before you applied. It\'s been removed from your list.</span></div>'
              f'<button class="btn btn--ghost btn--icon-only btn--sm" aria-label="Dismiss" style="color:var(--color-warning-text)">{icon("x")}</button></div>')
     main = (slots_header() + alert +
             slots_card(filter_bar(count_html=count_text(filled)), rows_f, pager(len(filled))) + APPROVAL_TIP)
@@ -338,7 +334,7 @@ def available_slots():
     main = (slots_header() + ELIGIBLE_NOTE +
             slots_card(filter_bar(count_html=count_text(done)), rows_d, pager(len(done))) + APPROVAL_TIP)
     t = toast("success", "check-circle", "Application submitted",
-              "Social Media · Fri Jan 10, 2025 · 08:00 – 10:00 (2 h). Status: Pending.")
+              "Social Media · Fri Jan 10 · 08:00 – 10:00. Pending approval.")
     write(G, "available-slots--apply-success.html", "Apply success", "Toast + row marked Applied · Pending",
           app_page("Available Slots", "slots", main, overlay_html=t))
 

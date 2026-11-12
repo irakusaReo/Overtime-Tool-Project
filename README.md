@@ -125,7 +125,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 
 - **Sidebar "Home"** opens the CEE Dashboard. **The header logo** opens the intranet Home; its *Overtime Management* tile also opens the Dashboard.
 - **Login:** *Proceed* and *Azure* go to the Landing page. The Landing cards *Home* and *Systems* open the Dashboard.
-- **Apply** on Available Slots or on the Dashboard opens the Apply for Self modal. *Applying for: Someone else* in that modal opens Apply on Behalf (US-01 AC2). The Dashboard profile card also shows the "Apply on behalf of another person" toggle.
+- **Apply** on Available Slots or on the Dashboard opens the Apply for Self modal. *Applying for: Someone else* in that modal opens Apply on Behalf (US-01 AC2). The Dashboard's *Apply on Behalf* button also opens it. (The toggle on the profile card was removed after team review.)
 - **Cancel** in My Applications opens the matching cancellation modal: (a) before start, or (b) within 20 minutes of the start.
 
 ## The prototype's story (sample data, `tools/data.py`)
@@ -191,6 +191,12 @@ The Landing sketch is one raster image, so it was rebuilt in HTML/CSS and inline
 - The "VIEW360" watermark is omitted.
 - The translucent blocks over the top bar use opacity instead of the export's `mix-blend-mode: color-dodge`, which import tools render inconsistently.
 - The dark greens `#07743D` / `#025C29` were sampled from the image and added as `--color-brand-800/900`.
+
+## Copy and alignment rules (from team review)
+
+- **Copy is short.** Subtitles are one short phrase. Alerts lead with the rule or outcome in the title and add one line only when needed. Hints are a few words (e.g. "Max 3 h", "Mon – Fri").
+- **Fields line up across a row.** In a `.form-grid`, each field shares three grid rows (label, control, hint) using CSS subgrid. Inputs stay aligned even when one label or hint wraps.
+- A script checks this on every page at 1440, 1366, 1280, 1024, 768 and 390px. It covers field inputs, stat-card labels and values, card titles in a row, and buttons beside inputs.
 
 ## Responsive behaviour
 
