@@ -157,7 +157,7 @@ def build():
         f'<label class="check"><span class="check__box check__box--checked">{ck}</span><span class="check__text"><span class="check__label">Apply on behalf of another CEE</span><span class="check__desc">Search a colleague by EK number or name</span></span></label>'
         f'<label class="check"><span class="check__box check__box--radio"></span><span class="check__text"><span class="check__label">Radio</span></span></label>'
         f'<label class="check"><span class="check__box check__box--radio check__box--checked"><span class="check__dot"></span></span><span class="check__text"><span class="check__label">Radio selected</span></span></label>'
-        f'<span class="toggle"><span class="toggle__track"><span class="toggle__thumb"></span></span><span class="check__text"><span class="check__label">Teams</span><span class="check__desc">Off</span></span></span>'
+        f'<span class="toggle"><span class="toggle__track"><span class="toggle__thumb"></span></span><span class="check__text"><span class="check__label">Email</span><span class="check__desc">Off</span></span></span>'
         f'<span class="toggle toggle--on"><span class="toggle__track"><span class="toggle__thumb"></span></span><span class="check__text"><span class="check__label">SMS</span><span class="check__desc">On</span></span></span>'
     )
     out.append(section("Checkbox, radio & toggle", f'<div class="card ds-pad"><div class="row row--8 row--wrap" style="gap:32px">{checks}</div></div>'))
@@ -266,7 +266,7 @@ def build():
     # ---- Profile card + tool card + avatar
     prof = (f'<div class="card profile-card"><span class="avatar avatar--xl">BK</span><div class="profile-card__main">'
             f'<div class="row row--3"><span class="profile-card__name">Brian Kamau</span>{badge("brand", "Eligible for overtime", "check")}</div>'
-            f'<div class="profile-card__meta"><span>EK number <strong>EK10234</strong></span><span>Team <strong>Line 100 – Team 4</strong></span><span>Team leader <strong>Grace Achieng</strong></span></div>'
+            f'<div class="profile-card__meta"><span>EK number <strong>EK10234</strong></span></div>'
             f'<div class="pill-list"><span class="pill">Line 100</span><span class="pill">Line 200</span><span class="pill">Social Media</span></div></div></div>')
     tool = (f'<a class="tool-card" href="#"><div class="tool-card__head"><span class="tool-card__icon">{icon("gift", "icon icon--lg")}</span><span class="tool-card__title">Overtime Management</span></div>'
             f'<div class="tool-card__row"><span class="tool-card__desc">Manage overtime opportunities, application, approvals and attendance.</span><span class="tool-card__arrow">{icon("arrow-up-right", "icon icon--lg")}</span></div></a>')
@@ -282,12 +282,11 @@ def build():
             f'<div class="menu__item menu__item--selected">08:00 <span class="menu__meta">up to 3 h</span>{icon("check")}</div>'
             '<div class="menu__item">09:00 <span class="menu__meta">up to 2 h</span></div><div class="menu__item">10:00 <span class="menu__meta">up to 1 h</span></div>'
             f'<div class="menu__note">{icon("info", "icon icon--sm")}<span>07:00 hidden: overlaps your approved overtime.</span></div></div></div></div>')
-    cl = screens_a.checklist([(True, "6-day rule", "Has a rest day this week"), (True, "Sick Off", "Not marked Sick Off"),
-                              (True, "11-hour rest", "No conflict"), (False, "Annual Leave", "On leave Jan 8 – Jan 17, 2025")])
-    out.append(section("Dropdown, eligibility checklist & usage meter",
-                       f'<div class="grid-3" style="align-items:start">{menu}<div class="card ds-pad">{cl}</div>'
+    cl = screens_a.eligibility_card("Wanjiru") + screens_a.eligibility_card("Otieno", False)
+    out.append(section("Dropdown, eligibility result & usage meter",
+                       f'<div class="grid-3" style="align-items:start">{menu}<div class="stack stack--4">{cl}</div>'
                        f'<div class="card">{screens_a.caps_card()}</div></div>',
-                       "The dropdown is rendered open and absolutely positioned under its field. A failed rule uses the error tone. The usage bar turns amber when a cap is reached."))
+                       "The dropdown is rendered open and absolutely positioned under its field. Eligibility shows only the outcome when applying for a colleague. The usage bar turns amber when a cap is reached."))
     out.append(section("Notification item",
                        '<div class="card card--table"><div class="notif-list">' + screens_b.notif_item(NOTIFICATIONS[0]) + screens_b.notif_item(NOTIFICATIONS[4]) + '</div></div>',
                        "Mirrors the SMS and email content: date, approved hours, slot time. Unread items get a tint and a green dot."))

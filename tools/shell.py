@@ -1,7 +1,7 @@
 """Shared page partials: <head>, green header, CEE sidebar."""
 from icons import icon
 
-USER = {"name": "Brian Kamau", "role": "CEE – Line 100", "initials": "BK"}
+USER = {"name": "Brian Kamau", "role": "CEE", "initials": "BK"}
 
 CEE_NAV = [
     # key,            label,             icon,            href (relative to /pages)

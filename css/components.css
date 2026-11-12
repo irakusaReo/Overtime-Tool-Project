@@ -579,19 +579,6 @@ svg text { font-family: var(--font-family); }
 .mark { background: var(--color-brand-50); color: var(--color-brand-700); border-radius: 2px; }
 
 /* ==========================================================================
-   ELIGIBILITY CHECKLIST
-   ========================================================================== */
-.checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3) var(--space-6); list-style: none; margin: 0; padding: 0; }
-.checklist__item { display: flex; gap: var(--space-3); align-items: flex-start; }
-.checklist__item .icon { margin-top: 0; }
-.checklist__item--pass .icon { color: var(--color-success-icon); }
-.checklist__item--fail .icon { color: var(--color-error-icon); }
-.checklist__text { display: flex; flex-direction: column; }
-.checklist__label { font-size: var(--text-sm-size); line-height: var(--text-sm-lh); font-weight: var(--font-weight-semibold); color: var(--color-text-heading); }
-.checklist__detail { font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-secondary); }
-.checklist__item--fail .checklist__detail { color: var(--color-error-text); }
-
-/* ==========================================================================
    USAGE METER (caps)
    ========================================================================== */
 .usage { display: flex; flex-direction: column; gap: 6px; }

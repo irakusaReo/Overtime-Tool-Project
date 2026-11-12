@@ -389,7 +389,7 @@ if __name__ == "__main__":
     screens_a.dashboard()
     available_slots()
     screens_a.apply_self(); screens_a.apply_on_behalf()
-    screens_b.my_applications(); screens_b.cancellation(); screens_b.history()
+    screens_b.my_applications(); screens_b.edit_pending(); screens_b.cancellation(); screens_b.history()
     screens_b.reports(); screens_b.notifications(); screens_b.settings()
     index()
     print(f"{len(REGISTRY)} pages written")

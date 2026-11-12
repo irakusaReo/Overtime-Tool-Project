@@ -4,6 +4,7 @@ html.to.design captures them as vectors (no sprites, no <use>, no icon fonts).
 Each icon is also written to /assets/icons/<name>.svg by build_pages.py."""
 
 ICONS = {
+    "edit": '<path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17l-1 3Z"/><path d="m14.5 7.5 3 3"/>',
     "menu": '<path d="M4 7h16M4 12h16M4 17h16"/>',
     "home": '<path d="M3 10.2 12 3l9 7.2V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.8Z"/>',
     "grid": '<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',
@@ -38,7 +39,6 @@ ICONS = {
     "refresh": '<path d="M20 11a8 8 0 0 0-14.6-4.5L3.5 9M3.5 4v5h5"/><path d="M4 13a8 8 0 0 0 14.6 4.5l1.9-2.5M20.5 20v-5h-5"/>',
     "mail": '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6 8.5-6"/>',
     "sms": '<path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/>',
-    "teams": '<rect x="3" y="6" width="12" height="12" rx="2"/><path d="M6.5 9.5h5M9 9.5V15"/><circle cx="18.5" cy="7.5" r="2"/><path d="M15 12h5.5v3.5a2.5 2.5 0 0 1-5 0"/>',
     "briefcase": '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5a1.5 1.5 0 0 1 1.5-1.5h4A1.5 1.5 0 0 1 15.5 5v2M3 12.5h18"/>',
     "id-card": '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M5.5 16c.5-1.6 1.8-2.5 3.5-2.5s3 .9 3.5 2.5M15 10h3.5M15 13.5h3.5"/>',
     "slash": '<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',

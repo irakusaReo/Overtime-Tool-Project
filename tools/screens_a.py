@@ -28,8 +28,7 @@ def profile_card(me=ME, toggle=False):
               f'<a class="btn btn--link btn--sm" href="apply-on-behalf.html" style="align-self:flex-start">Go to Apply on Behalf →</a></div>')
     return (f'<div class="card profile-card"><span class="avatar avatar--xl">{me["initials"]}</span><div class="profile-card__main">'
             f'<div class="row row--3"><span class="profile-card__name">{me["name"]}</span>{badge("brand", "Eligible for overtime", "check")}</div>'
-            f'<div class="profile-card__meta"><span>EK number <strong>{me["ek"]}</strong></span><span>Team <strong>{me["team"]}</strong></span>'
-            f'<span>Team leader <strong>{me["team_leader"]}</strong></span></div>'
+            f'<div class="profile-card__meta"><span>EK number <strong>{me["ek"]}</strong></span></div>'
             f'<div class="stack stack--2"><span class="text-sm text-muted">Skillsets</span><div class="pill-list">{pills}</div></div></div>{tg}</div>')
 
 
@@ -230,7 +229,7 @@ def apply_self():
               "You're working Mon Jan 6 – Sat Jan 11. Sun Jan 12 would be a 7th day in a row.")
     hard_stop("apply-self--ineligible-sick-off.html", "Ineligible: Sick Off", S41, "08:00", 2, "10:00",
               "You're on Sick Off today",
-              "If this is wrong, contact your Team Leader, Grace Achieng.")
+              "If this is wrong, contact your Team Leader.")
     hard_stop("apply-self--ineligible-11-hour.html", "Ineligible: 11-hour rest", S66, "19:00", 3, "22:00",
               "11-hour rest rule",
               "Ending at 22:00 leaves 9 h before your 07:00 shift. Choose 1 hour to finish by 20:00.",
@@ -268,30 +267,15 @@ def colleague_card(c, step="2. Colleague"):
     pills = "".join(f'<span class="pill">{s}</span>' for s in c["skills"])
     return (f'<div class="card profile-card"><span class="avatar avatar--lg">{c["initials"]}</span><div class="profile-card__main">'
             f'<span class="profile-card__name">{c["name"]}</span>'
-            f'<div class="profile-card__meta"><span>EK number <strong>{c["ek"]}</strong></span><span>Team <strong>{c["team"]}</strong></span></div>'
+            f'<div class="profile-card__meta"><span>EK number <strong>{c["ek"]}</strong></span></div>'
             f'<div class="pill-list">{pills}</div></div><a class="btn btn--secondary btn--sm" href="apply-on-behalf.html">Change colleague</a></div>')
 
 
-def checklist(results):
-    items = ""
-    for ok, label, detail in results:
-        items += (f'<li class="checklist__item checklist__item--{"pass" if ok else "fail"}">{icon("check-circle" if ok else "x-circle")}'
-                  f'<span class="checklist__text"><span class="checklist__label">{label}</span><span class="checklist__detail">{detail}</span></span></li>')
-    return f'<ul class="checklist">{items}</ul>'
-
-
-PASS_ALL = [(True, "6-day rule", "Rest day this week"), (True, "Sick Off", "Not on Sick Off"),
-            (True, "11-hour rest", "Checked per slot"), (True, "Annual Leave", "No leave this week")]
-
-
-def eligibility_card(name, ok=True, results=PASS_ALL):
+def eligibility_card(name, ok=True):
+    """Outcome only. Rule-level reasons stay private to the colleague (team review)."""
     if ok:
-        head = alert("success", "check-circle", f"{name} is eligible this week")
-    else:
-        head = alert("error", "alert-circle", f"{name} isn't eligible this week", "On annual leave until Jan 17.")
-    return (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Eligibility check</span>'
-            f'</div></div>'
-            f'<div class="card__body stack stack--4">{head}{checklist(results)}</div></div>')
+        return alert("success", "check-circle", f"{name} is eligible for overtime")
+    return alert("error", "alert-circle", f"{name} isn't eligible for overtime", "No slots can be booked for them right now.")
 
 
 def behalf_slots_card(selected=None, cta=True):
@@ -322,13 +306,13 @@ def behalf():
     res = '<div class="menu" role="listbox">' + "".join(
         f'<div class="menu__item{" menu__item--selected" if i == 0 else ""}"><span class="person"><span class="avatar avatar--sm">{r["name"][0]}{r["name"].split()[1][0]}</span>'
         f'<span class="person__text"><span class="person__name"><span class="mark">Wanj</span>{r["name"][4:]}</span>'
-        f'<span class="person__meta">{r["ek"]} · {r["team"]}</span></span></span></div>' for i, r in enumerate(SEARCH_RESULTS)) + '</div>'
+        f'<span class="person__meta">{r["ek"]}</span></span></span></div>' for i, r in enumerate(SEARCH_RESULTS)) + '</div>'
     page("apply-on-behalf--results.html", "Search results", "Typeahead by name or EK",
          behalf_header() + search_card("Wanj", False, True, res, hint="") + '<div style="height:260px"></div>')
 
     load = ('<div class="card profile-card">' + sk("56px", 56, 9999) + '<div class="profile-card__main">' + sk("180px", 20) + sk("320px", 14)
             + '<div class="row row--2">' + sk("80px", 28, 9999) * 3 + '</div></div></div>'
-            + alert("info", "refresh", "Checking Wanjiru's eligibility…", "6-day, Sick Off, 11-hour and Annual Leave rules."))
+            + alert("info", "refresh", "Checking Wanjiru's eligibility…"))
     page("apply-on-behalf--loading.html", "Checking eligibility", "Skeleton + rule check in progress",
          behalf_header() + search_card("Wanjiru Njoroge · EK20417", False) + load)
 
@@ -358,10 +342,8 @@ def behalf():
     page("apply-on-behalf--not-found.html", "Colleague not found", "No match for EK number",
          behalf_header() + search_card("EK99999", False, True, error=True, hint="") + nf)
 
-    fail = [(True, "6-day rule", "Rest day this week"), (True, "Sick Off", "Not on Sick Off"),
-            (True, "11-hour rest", "No conflict"), (False, "Annual Leave", "On leave Jan 8 – Jan 17")]
-    page("apply-on-behalf--not-eligible.html", "Colleague not eligible", "Annual Leave fails; no slots shown",
-         behalf_header() + search_card("Otieno Mwangi · EK30981", False) + colleague_card(O) + eligibility_card("Otieno", False, fail))
+    page("apply-on-behalf--not-eligible.html", "Colleague not eligible", "Outcome only; no slots shown",
+         behalf_header() + search_card("Otieno Mwangi · EK30981", False) + colleague_card(O) + eligibility_card("Otieno", False))
 
     page("apply-on-behalf--error.html", "Error", "Eligibility service failed",
          behalf_header() + search_card("Wanjiru Njoroge · EK20417", False) + colleague_card(W)

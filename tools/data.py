@@ -12,7 +12,7 @@ WEEK_RANGE = "Jan 10 – Jan 16, 2025"
 
 ME = {
     "name": "Brian Kamau", "initials": "BK", "ek": "EK10234",
-    "team": "Line 100 – Team 4", "team_leader": "Grace Achieng",
+    "team_leader": "Grace Achieng",
     "skills": ["Line 100", "Line 200", "Social Media"],
     "phone": "+254 7•• ••• 412", "email": "brian.kamau@safaricom.co.ke",
 }
@@ -56,12 +56,32 @@ HISTORY = [
     {"date": "Jan 7, 2025",  "day": "Tue", "queue": "Line 200",     "start": "06:00", "end": "10:00", "hours": 4, "status": "Cancelled", "note": "By Workforce"},
     {"date": "Jan 6, 2025",  "day": "Mon", "queue": "Social Media", "start": "07:00", "end": "09:00", "hours": 2, "status": "No Show",   "note": "Auto-cancelled 07:20"},
     {"date": "Jan 4, 2025",  "day": "Sat", "queue": "Line 100",     "start": "08:00", "end": "16:00", "hours": 8, "status": "Completed", "note": "Logged in 07:56"},
-    {"date": "Jan 2, 2025",  "day": "Thu", "queue": "Line 200",     "start": "18:00", "end": "20:00", "hours": 2, "status": "Completed", "note": "Logged in 17:58"},
+    {"date": "Jan 1, 2025",  "day": "Wed", "queue": "Line 200",     "start": "18:00", "end": "20:00", "hours": 2, "status": "Completed", "note": "Logged in 17:58", "holiday": "New Year's Day"},
     {"date": "Dec 28, 2024", "day": "Sat", "queue": "Social Media", "start": "06:00", "end": "12:00", "hours": 6, "status": "Completed", "note": "Logged in 05:57"},
-    {"date": "Dec 27, 2024", "day": "Fri", "queue": "Line 100",     "start": "18:00", "end": "21:00", "hours": 3, "status": "Completed", "note": "Logged in 17:59"},
+    {"date": "Dec 26, 2024", "day": "Thu", "queue": "Line 100",     "start": "18:00", "end": "21:00", "hours": 3, "status": "Completed", "note": "Logged in 17:59", "holiday": "Boxing Day"},
     {"date": "Dec 21, 2024", "day": "Sat", "queue": "Line 100",     "start": "08:00", "end": "16:00", "hours": 8, "status": "Completed", "note": "Logged in 07:55"},
     {"date": "Dec 18, 2024", "day": "Wed", "queue": "Line 200",     "start": "19:00", "end": "21:00", "hours": 2, "status": "Completed", "note": "Logged in 18:58"},
     {"date": "Dec 14, 2024", "day": "Sat", "queue": "Social Media", "start": "07:00", "end": "11:00", "hours": 4, "status": "Completed", "note": "Logged in 06:59"},
+]
+
+# Pay rate (confirmed by the team): approved overtime on a weekday pays 1.5x;
+# on a weekend or public holiday it pays 2.0x. Regular allocated shifts worked
+# on a public holiday also pay 2.0x (HOLIDAY_SHIFTS below).
+def rate(rec):
+    return "2.0" if rec.get("holiday") or rec["day"] in ("Sat", "Sun") else "1.5"
+
+
+# Regular (allocated) shifts Brian worked on public holidays in the report range: paid 2.0x.
+HOLIDAY_SHIFTS = [
+    {"date": "Dec 25, 2024", "day": "Wed", "holiday": "Christmas Day",  "start": "07:00", "end": "15:00", "hours": 8},
+    {"date": "Jan 1, 2025",  "day": "Wed", "holiday": "New Year's Day", "start": "08:00", "end": "16:00", "hours": 8},
+]
+
+
+# Applications Brian submitted on behalf of colleagues (Reports: "Applied for others")
+ON_BEHALF = [
+    {"date": "Jan 11, 2025", "day": "Sat", "name": "Wanjiru Njoroge", "ek": "EK20417", "queue": "Mpesa Corporate", "start": "09:00", "end": "13:00", "hours": 4, "status": "Pending"},
+    {"date": "Dec 19, 2024", "day": "Thu", "name": "Otieno Mwangi",   "ek": "EK30981", "queue": "Line 200",        "start": "18:00", "end": "21:00", "hours": 3, "status": "Completed"},
 ]
 
 # Completed hours by week, Dec 9 2024 – Jan 12 2025 (for the Reports chart)
@@ -69,15 +89,15 @@ WEEKLY_COMPLETED = [("Dec 9–15", 4), ("Dec 16–22", 10), ("Dec 23–29", 9), 
 
 # Colleagues for Apply on Behalf
 COLLEAGUES = {
-    "wanjiru": {"name": "Wanjiru Njoroge", "initials": "WN", "ek": "EK20417", "team": "Line 100 – Team 4",
+    "wanjiru": {"name": "Wanjiru Njoroge", "initials": "WN", "ek": "EK20417",
                 "skills": ["Line 100", "Mpesa Corporate", "Social Media"]},
-    "otieno":  {"name": "Otieno Mwangi", "initials": "OM", "ek": "EK30981", "team": "Line 200 – Team 2",
+    "otieno":  {"name": "Otieno Mwangi", "initials": "OM", "ek": "EK30981",
                 "skills": ["Line 200", "Data Support"]},
 }
 SEARCH_RESULTS = [  # typing "Wanj" / "EK204"
-    {"name": "Wanjiru Njoroge", "ek": "EK20417", "team": "Line 100 – Team 4"},
-    {"name": "Wanjiku Kamau",   "ek": "EK20488", "team": "Social Media – Team 1"},
-    {"name": "Wanjala Barasa",  "ek": "EK20462", "team": "Mpesa Corporate – Team 3"},
+    {"name": "Wanjiru Njoroge", "ek": "EK20417"},
+    {"name": "Wanjiku Kamau",   "ek": "EK20488"},
+    {"name": "Wanjala Barasa",  "ek": "EK20462"},
 ]
 WANJIRU_SLOTS = [
     {"id": "S-1041", "queue": "Social Media",    "date": "Jan 10, 2025", "day": "Fri", "start": "07:00", "end": "11:00", "left": 3, "total": 10},
@@ -90,7 +110,7 @@ WANJIRU_SLOTS = [
 NOTIFICATIONS = [
     {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 9, 19:42", "channels": ["SMS", "Email"]},
     {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "06:00 – 08:00", "when": "Jan 9, 18:15", "channels": ["SMS", "Email"]},
-    {"unread": True,  "type": "slot",      "title": "New slot you're eligible for", "queue": "Social Media", "date": "Sat Jan 11, 2025", "hours": None, "slot": "14:00 – 20:00", "when": "Jan 9, 16:00", "channels": ["Email", "Teams"], "extra": "6 positions"},
+    {"unread": True,  "type": "slot",      "title": "New slot you're eligible for", "queue": "Social Media", "date": "Sat Jan 11, 2025", "hours": None, "slot": "14:00 – 20:00", "when": "Jan 9, 16:00", "channels": ["Email"], "extra": "6 positions"},
     {"unread": False, "type": "rejected",  "title": "Overtime not approved", "queue": "Social Media", "date": "Thu Jan 9, 2025", "hours": None, "slot": "18:00 – 22:00", "when": "Jan 8, 19:30", "channels": ["SMS", "Email"], "extra": "Slot filled before review."},
     {"unread": False, "type": "cancelled", "title": "You cancelled overtime", "queue": "Line 100", "date": "Wed Jan 8, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 8, 09:10", "channels": ["SMS", "Email"], "extra": "Slot released."},
     {"unread": False, "type": "cancelled", "title": "Overtime cancelled by Workforce", "queue": "Line 200", "date": "Tue Jan 7, 2025", "hours": 4, "slot": "06:00 – 10:00", "when": "Jan 6, 17:20", "channels": ["SMS", "Email"], "extra": "Slot no longer needed."},
