@@ -102,3 +102,15 @@ def hours(slot):
     h1, m1 = map(int, slot["start"].split(":"))
     h2, m2 = map(int, slot["end"].split(":"))
     return (h2 * 60 + m2 - h1 * 60 - m1) // 60
+
+
+# Notifications (mirror SMS / email content: Date, Approved hours, Slot time)
+NOTIFICATIONS = [
+    {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 9, 19:42", "channels": ["SMS", "Email"]},
+    {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "06:00 – 08:00", "when": "Jan 9, 18:15", "channels": ["SMS", "Email"]},
+    {"unread": True,  "type": "slot",      "title": "New slot you're eligible for", "queue": "Social Media", "date": "Sat Jan 11, 2025", "hours": None, "slot": "14:00 – 20:00", "when": "Jan 9, 16:00", "channels": ["Email"], "extra": "6 positions"},
+    {"unread": False, "type": "rejected",  "title": "Overtime not approved", "queue": "Social Media", "date": "Thu Jan 9, 2025", "hours": None, "slot": "18:00 – 22:00", "when": "Jan 8, 19:30", "channels": ["SMS", "Email"], "extra": "Slot filled before review."},
+    {"unread": False, "type": "cancelled", "title": "You cancelled overtime", "queue": "Line 100", "date": "Wed Jan 8, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 8, 09:10", "channels": ["SMS", "Email"], "extra": "Slot released."},
+    {"unread": False, "type": "cancelled", "title": "Overtime cancelled by Workforce", "queue": "Line 200", "date": "Tue Jan 7, 2025", "hours": 4, "slot": "06:00 – 10:00", "when": "Jan 6, 17:20", "channels": ["SMS", "Email"], "extra": "Slot no longer needed."},
+    {"unread": False, "type": "noshow",    "title": "Marked No Show", "queue": "Social Media", "date": "Mon Jan 6, 2025", "hours": 2, "slot": "07:00 – 09:00", "when": "Jan 6, 07:20", "channels": ["SMS", "Email"], "extra": "No login within 20 min."},
+]

@@ -390,6 +390,6 @@ if __name__ == "__main__":
     available_slots()
     screens_a.apply_self(); screens_a.apply_on_behalf()
     screens_b.my_applications(); screens_b.edit_pending(); screens_b.cancellation(); screens_b.history()
-    screens_b.reports(); screens_b.settings()
+    screens_b.reports(); screens_b.settings(); screens_b.notifications()
     index()
     print(f"{len(REGISTRY)} pages written")

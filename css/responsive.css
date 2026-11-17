@@ -27,6 +27,7 @@
     width: 40px; height: 40px; border-radius: var(--radius-md); color: var(--color-text-on-brand); cursor: pointer;
   }
   .app-header__brand { flex: 1; min-width: 0; }
+  .bell-menu { right: 16px; }
 
   .nav-toggle { display: block; position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
   .sidenav {
@@ -73,7 +74,7 @@
   .search-btn { margin-top: 0; }
 
   .filter-bar { flex-wrap: wrap; padding: 16px; }
-  .filter-bar > .field, .filter-bar > .field:first-child { width: 100%; }
+  .filter-bar > .field, .filter-bar > .field:first-child, .filter-bar > .field.field--narrow { width: 100%; }
   .filter-bar > .field .datefield { width: 100%; }
   .filter-bar__spacer { display: none; }
   .result-count { padding-bottom: 0; }
@@ -95,6 +96,11 @@
   .profile-card { flex-wrap: wrap; padding: 16px; gap: var(--space-4); }
   .profile-card__meta { flex-wrap: wrap; gap: 4px 16px; }
   .profile-card__aside { width: 100%; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--color-border-subtle); }
+
+  .notif { flex-wrap: wrap; padding: 16px; gap: var(--space-3); }
+  .notif__body { flex-basis: calc(100% - 56px); }
+  .notif__facts { flex-wrap: wrap; gap: 4px 16px; }
+  .notif__aside { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; padding-left: 52px; }
 
 
   .modal-overlay--top { padding-top: 72px; }
@@ -159,6 +165,7 @@
   .modal__footer { flex-direction: column-reverse; }
   .modal__icon { width: 40px; height: 40px; border-width: 6px; }
   .profile-card .avatar--xl { width: 56px; height: 56px; font-size: var(--text-lg-size); }
+  .notif__facts { flex-direction: column; gap: 2px; }
   .segmented { align-self: stretch; }
   .segmented__item { flex: 1; text-align: center; }
   .landing__cards { grid-template-columns: minmax(0, 1fr); }

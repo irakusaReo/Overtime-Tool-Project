@@ -62,6 +62,19 @@ def dash_header():
                        f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>')
 
 
+def dashboard_main():
+    """Default dashboard content (also used behind the open bell dropdown)."""
+    stats = ('<div class="grid-3">'
+             + stat_card("Eligible open slots", str(len(OPEN)), f'{sum(s["left"] for s in OPEN)} positions')
+             + stat_card("Pending", str(len(PENDING)), "Awaiting Workforce")
+             + stat_card("Approved this month", f"{MONTH_APPROVED} h", f"of {CAPS['monthly']} h monthly limit", pct(MONTH_APPROVED, CAPS["monthly"]))
+             + '</div>')
+    upcoming = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Upcoming approved overtime</span>'
+                f'<span class="card__subtitle">{len(PENDING)} pending · <a href="my-applications--pending.html">View</a></span></div></div>'
+                + table(["Queue", "Date", "Slot time", "Status", "Action"], upcoming_rows(APPROVED), {4: "table__th--action"}) + '</div>')
+    return dash_header() + profile_card() + stats + f'<div class="grid-main-aside grid-main-aside--380">{upcoming}{eligible_mini()}</div>'
+
+
 def dashboard():
     G = "1 · CEE Dashboard"
     stats = ('<div class="grid-3">'
