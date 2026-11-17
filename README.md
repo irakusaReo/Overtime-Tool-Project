@@ -14,7 +14,7 @@ Open `index.html` for the gallery of every page.
 | `css/tokens.css` | Design tokens (CSS custom properties) extracted from the Figma export |
 | `css/components.css` | BEM components: header, sidebar, buttons, inputs, selects, date and search fields, tables, badges, stat cards, banners and alerts, modals, toasts, tooltip, empty, error and skeleton, tabs, checkbox, radio and toggle, profile card, tool card |
 | `css/layout.css` | Fluid canvas (max 1440px), app shell (header + sidebar + main), stacks and grids, auth layout |
-| `css/responsive.css` | Breakpoints at 1280, 1024, 768 and 480px; loaded last on every page |
+| `css/responsive.css` | Breakpoints at 1366, 1280, 1024, 768 and 480px; loaded last on every page |
 | `design-system.html` | Every token and component on one page |
 | `index.html` | Gallery linking every page, grouped by screen |
 | `pages/*.html` | One static file per screen or state, responsive from 360px to 1440px |
@@ -35,7 +35,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 - **Attention banner:** these values were found in the export: `#FEF7C3` bg and `#B93815` text ("3 items require your attention").
 - **Avatar:** these values were found in the export: `#DCFAE6` bg and `#079455` initials.
 - **Pending / warning badge [addition]:** `#FFFAEB` / `#FEDF89` / `#B54708`, icon `#F79009`.
-- **Type:** **Proxima Nova on every page and every element**, including chart labels. `css/fonts.css` declares weights 400–900, loaded from an installed copy or from licensed files in `assets/fonts/` (see that folder's README). The font is licensed, so it isn't committed; until the files are added, text falls back to Inter, then system-ui. Sizes are 12/18, 14/20, 16/24, 18/28, 24/32 and 72/90 (landing).
+- **Type:** **Proxima Nova on every page and every element**. `css/fonts.css` declares weights 400–900, loaded from an installed copy or from licensed files in `assets/fonts/` (see that folder's README). The font is licensed, so it isn't committed; until the files are added, text falls back to Inter, then system-ui. Sizes are 12/18, 14/20, 16/24, 18/28, 24/32 and 72/90 (landing).
 - **Radius:** 6 (nav item), 8 (inputs, buttons, cards), 12 (modals), 9999 (badges). **Shadows:** `shadow-xs` and `shadow-xs-skeuomorphic` from the export; `shadow-lg` and `shadow-xl` are [additions] for toasts and modals.
 - **Layout:** header 64px, sidebar 296px, inputs and buttons 44px, table rows 72px (cell padding 16px 24px). All of these come from the export.
 
@@ -74,7 +74,6 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Checking eligibility | `pages/apply-self--loading.html` | Submitting; rules being checked |
 |  | Confirmation | `pages/apply-self--confirmation.html` | Application submitted, Pending |
 |  | Slot just filled | `pages/apply-self--slot-filled.html` | Capacity reached on submit |
-|  | Over my hour cap | `pages/apply-self--cap-exceeded.html` | Weekend cap (US-05) blocks apply |
 |  | Ineligible: 6-day rule | `pages/apply-self--ineligible-6-day.html` | Hard stop on submit |
 |  | Ineligible: Sick Off | `pages/apply-self--ineligible-sick-off.html` | Hard stop on submit |
 |  | Ineligible: 11-hour rest | `pages/apply-self--ineligible-11-hour.html` | Hard stop on submit |
@@ -83,7 +82,9 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 | 4 · Apply on Behalf | Search | `pages/apply-on-behalf.html` | Empty search |
 |  | Search results | `pages/apply-on-behalf--results.html` | Typeahead by name or EK |
 |  | Checking eligibility | `pages/apply-on-behalf--loading.html` | Skeleton + rule check in progress |
-|  | Colleague eligible | `pages/apply-on-behalf--eligible.html` | Profile, rule checks, their eligible slots |
+|  | Colleague eligible | `pages/apply-on-behalf--eligible.html` | Eligible + slots with date filter |
+|  | Date filter applied | `pages/apply-on-behalf--date-filtered.html` | Slots for Jan 11 – Jan 12 only |
+|  | Date filter: no slots | `pages/apply-on-behalf--date-no-results.html` | No eligible slots in the range |
 |  | Slot selected | `pages/apply-on-behalf--form.html` | Start / hours / auto end, Submit |
 |  | Submitted | `pages/apply-on-behalf--success.html` | Success toast + confirmation |
 |  | Colleague not found | `pages/apply-on-behalf--not-found.html` | No match for EK number |
@@ -109,21 +110,16 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Empty | `pages/overtime-history--empty.html` | No records |
 |  | Loading | `pages/overtime-history--loading.html` | Skeleton |
 |  | Error | `pages/overtime-history--error.html` | Load failure |
-| 8 · Reports | Default | `pages/reports.html` | Summary, 1.5× / 2.0× hours, applied for others, chart, cancellations |
+| 8 · Reports | Default | `pages/reports.html` | Summary, hours by pay rate, cancellation history |
 |  | Empty | `pages/reports--empty.html` | No records for range |
 |  | Loading | `pages/reports--loading.html` | Skeleton |
 |  | Error | `pages/reports--error.html` | Load failure |
-| 9 · Notifications | Default | `pages/notifications.html` | 3 unread; approvals, cancellations, slot alerts |
-|  | Empty | `pages/notifications--empty.html` | No notifications |
-|  | Loading | `pages/notifications--loading.html` | Skeleton |
-|  | Error | `pages/notifications--error.html` | Load failure |
-| 10 · My Settings | Default | `pages/my-settings.html` | Caps (US-05) + SMS / Email |
+| 9 · My Settings | Default | `pages/my-settings.html` | SMS / email preferences + profile |
 |  | Saved | `pages/my-settings--saved.html` | Success toast |
-|  | Validation error | `pages/my-settings--validation-error.html` | Empty required cap |
 |  | Loading | `pages/my-settings--loading.html` | Skeleton |
 |  | Error | `pages/my-settings--error.html` | Load failure |
 
-**68 pages in total.**
+**64 pages in total.**
 
 ## Navigation
 
@@ -142,7 +138,6 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
   - Rejected (1): Jan 9, slot filled.
   - Cancelled (3): by Brian on Jan 8, by Workforce on Jan 7, and No Show on Jan 6.
 - **History:** 10 records from Dec 14 to Jan 8: 33 h completed (2 h at 1.5× on weekdays, 31 h at 2.0× on weekends and public holidays). There are also 16 h of regular shifts worked on Christmas Day and New Year's Day, paid at 2.0×, 1 No Show, 2 cancelled. Reports uses the same records: 45 h approved, 33 h completed, 3 cancellations, and 7 h applied for two colleagues.
-- **Caps this week:** weekday 4 of 10 h, weekend 8 of 8 h. The weekend cap is reached because both Saturday applications count, so applying for Sat 14:00 shows the over-cap state.
 - **Colleagues:** Wanjiru Njoroge (EK20417) is eligible. Otieno Mwangi (EK30981) is not eligible; the applicant sees no reason. EK99999 is not found.
 
 ## Assumptions (please confirm; none of these are stated in the journey map)
@@ -151,7 +146,7 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 2. **Approval timing follows guideline 14:** next-day overtime is approved the previous day between 11:00 and 20:00. So at 06:10 on Jan 10, only Jan 10 overtime can already be approved; Jan 11 onward is still pending.
 3. **A slot is a published window.** The CEE picks a start time and hours inside it, and the end time is calculated (Stage 3). Remaining capacity counts people, not hours.
 4. **Start-time options (US-03)** list only hours that are inside the window and don't overlap the CEE's own approved overtime. A note in the dropdown explains any hidden hour.
-5. **Hour caps (US-05) are per week:** a Monday–Friday total and a Saturday–Sunday total. Approved and pending hours both count. Going over the cap blocks the application, with a link to change the caps. The 72 h monthly limit comes from guideline 16 and is read-only.
+5. **No personal hour caps.** The weekday and weekend caps from US-05 were removed after team review: they're gone from the Dashboard, My Settings and the Apply form, along with the over-cap state. The 72 h monthly limit (guideline 16) still shows on the Dashboard as policy information.
 6. **The rules are re-checked when the CEE submits (US-04/US-06),** even though the slot list is already filtered. A CEE's status can change between viewing and applying (for example, being marked Sick Off), so each of the four rules has its own hard-stop modal. For the 11-hour rule the modal offers a fix ("Change hours"); the others offer only "Back to slots".
 7. **Edit and cancel:**
    - **Edit:** pending applications can be changed until approved. The CEE can change the slot, the start time and the hours. Only open slots they're eligible for are offered; full slots aren't listed. Saving cancels the current application, releasing its slot, and submits a new application, which joins the first-come-first-served queue. (Confirmed by the team.)
@@ -163,15 +158,17 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
    - Outages are pointed to a Help Desk ticket, per guideline 9.
 9. **Applying on behalf:**
    - Eligibility is checked for the colleague before any slot is shown. The applicant sees only the outcome (eligible or not), never which rule failed; the reasons are the colleague's own information (team review).
+   - The colleague's eligible slots can be narrowed by a date or date range (team review).
    - The application shows in the colleague's own My Applications, and the colleague gets the SMS and email notices. The person who applied for them doesn't track it.
 10. **Notifications:**
+    - There's no in-app Notifications page; it was removed after team review. Updates arrive by SMS and email, configured in My Settings. With it, the Dashboard's attention banner (which linked there) was removed.
     - Approval messages are always sent by SMS and email (US-07), so those two checkboxes are locked on. Every other event and channel can be changed.
     - SMS and email are the only channels; Microsoft Teams was removed after team review.
 11. **Reports:**
     - "Approved hours" means every application that was ever approved in the range: completed, No Show, cancelled after approval, and approved but not yet worked.
     - There are no export buttons; CEEs don't export data (team review). US-10 exports are a Workforce feature.
     - **Pay rates (confirmed by the team):** approved overtime worked on a weekday pays 1.5×. On a weekend or public holiday it pays 2.0×. Regular allocated shifts worked on a public holiday also pay 2.0×. Reports breaks these out as weekday overtime, weekend and holiday overtime, and shifts on public holidays.
-    - **Applied for others:** hours the CEE submitted for colleagues, whatever their status.
+    - Reports shows the summary cards, Hours by pay rate and Cancellation history. Completed hours per week, Completed hours by queue and Applied for others were removed after team review.
 12. **Profile and skillsets** are read-only, synced from Resource Management. Team name, line and Team Leader aren't shown anywhere (team review).
 
 ## Decisions confirmed by the team
@@ -217,10 +214,13 @@ The 1440px desktop layout is the design of record (it matches the sketches and i
 
 | Width | What changes |
 |---|---|
-| ≤1280px | Stat cards go to 2 per row; side-by-side panels (main + aside) stack; Landing cards go to 3 per row. |
+| ≤1366px | Side-by-side panels (main + aside) stack. |
+| ≤1280px | Stat cards go to 2 per row; Landing cards go to 3 per row. |
 | ≤1024px | The sidebar becomes an off-canvas drawer, opened by a menu button in the header. It is CSS only (a hidden checkbox, no JavaScript) and closes from the × button or by tapping the dimmed area. Tool tiles go to 2 per row; the Landing art layer is replaced by a stacked hero on a dark green band. |
 | ≤768px | Page headers, forms and filters stack to one column. Tables scroll sideways inside their card (minimum width 720px), and tab rows scroll too. Modals and toasts span the screen with 16px margins. "CX INTRANET" is hidden next to the logo. |
 | ≤480px | Stat cards and Landing cards go to one per row; modal buttons stack; the user's name and role are hidden (the avatar stays). |
+
+Wide tables scroll sideways inside their card instead of being cut off. From 1024px up this only happens in the 1025–1280px band, where the sidebar is still visible.
 
 To capture a mobile frame in Figma, import the same page with a 390px viewport.
 

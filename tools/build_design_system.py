@@ -177,8 +177,8 @@ def build():
         '<div class="stat-card"><span class="stat-card__label">Open Slots</span><span class="stat-card__value">14</span><span class="stat-card__meta">78 positions</span></div>'
         '<div class="stat-card"><span class="stat-card__label">Pending</span><span class="stat-card__value">2</span><span class="stat-card__meta">Awaiting Workforce</span></div>'
         '<div class="stat-card"><span class="stat-card__label">Approved this month</span><span class="stat-card__value">18 h</span><span class="stat-card__meta">6 slots</span></div>'
-        '<div class="stat-card"><span class="stat-card__label">Hours vs cap</span><span class="stat-card__value">18 / 72</span>'
-        '<span class="stat-card__bar"><span class="stat-card__bar-fill" style="width:25%"></span></span><span class="stat-card__meta">Monthly limit</span></div>'
+        '<div class="stat-card"><span class="stat-card__label">Monthly limit</span><span class="stat-card__value">14 / 72 h</span>'
+        '<span class="stat-card__bar"><span class="stat-card__bar-fill" style="width:25%"></span></span><span class="stat-card__meta">Approved this month</span></div>'
     )
     out.append(section("Stat cards", f'<div class="stat-grid">{stats}</div>', "Centred label, value and meta, matching the Status Overview sketch."))
 
@@ -275,7 +275,6 @@ def build():
 
     # ---- Components added with the CEE screens
     import screens_a, screens_b
-    from data import NOTIFICATIONS, WEEKLY_COMPLETED
     menu = ('<div style="height:300px"><div class="field field--menu" style="width:340px"><label class="field__label">Preferred start time<span class="field__required">*</span></label>'
             f'<div class="input select input--focus">{icon("clock")}<span class="input__value">08:00</span>{icon("chevron-down", "icon select__chevron")}</div>'
             '<div class="menu" role="listbox">'
@@ -283,17 +282,14 @@ def build():
             '<div class="menu__item">09:00 <span class="menu__meta">up to 2 h</span></div><div class="menu__item">10:00 <span class="menu__meta">up to 1 h</span></div>'
             f'<div class="menu__note">{icon("info", "icon icon--sm")}<span>07:00 hidden: overlaps your approved overtime.</span></div></div></div></div>')
     cl = screens_a.eligibility_card("Wanjiru") + screens_a.eligibility_card("Otieno", False)
+    usage = ('<div class="card"><div class="card__body stack stack--4" style="padding-top:20px">'
+             '<div class="usage"><div class="usage__row"><span><span class="badge badge--neutral badge--no-icon">1.5×</span>&nbsp; Weekday overtime</span><span><strong>2</strong> h</span></div>'
+             '<span class="usage__bar"><span class="usage__fill" style="width:6%"></span></span></div>'
+             '<div class="usage"><div class="usage__row"><span><span class="badge badge--brand badge--no-icon">2.0×</span>&nbsp; Weekend &amp; holiday overtime</span><span><strong>31</strong> h</span></div>'
+             '<span class="usage__bar"><span class="usage__fill" style="width:100%"></span></span><span class="usage__hint">Weekends · public holidays</span></div></div></div>')
     out.append(section("Dropdown, eligibility result & usage meter",
-                       f'<div class="grid-3" style="align-items:start">{menu}<div class="stack stack--4">{cl}</div>'
-                       f'<div class="card">{screens_a.caps_card()}</div></div>',
-                       "The dropdown is rendered open and absolutely positioned under its field. Eligibility shows only the outcome when applying for a colleague. The usage bar turns amber when a cap is reached."))
-    out.append(section("Notification item",
-                       '<div class="card card--table"><div class="notif-list">' + screens_b.notif_item(NOTIFICATIONS[0]) + screens_b.notif_item(NOTIFICATIONS[4]) + '</div></div>',
-                       "Mirrors the SMS and email content: date, approved hours, slot time. Unread items get a tint and a green dot."))
-    out.append(section("Bar chart",
-                       f'<div class="card" style="max-width:680px"><div class="card__header"><div class="card__titles"><span class="card__title">Completed hours per week</span></div></div>'
-                       f'<div class="card__body">{screens_b.bar_chart(WEEKLY_COMPLETED)}</div></div>',
-                       "Single series in brand green, so the title names it and no legend is needed. Bars are 44px with 4px rounded tops, value labels sit on the bars, and the grid is light (#E9EAEB)."))
+                       f'<div class="grid-3" style="align-items:start">{menu}<div class="stack stack--4">{cl}</div>{usage}</div>',
+                       "The dropdown is rendered open and absolutely positioned under its field. Eligibility shows only the outcome when applying for a colleague. The usage meter shows hours by pay rate on Reports."))
 
     page = head("Design System", ".") + f"""<body>
 <style>

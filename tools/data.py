@@ -3,7 +3,6 @@
 Prototype "now" = Fri Jan 10, 2025, 06:10 (the sketches' date).
 Guideline 14: next-day overtime is approved the previous day (11:00–20:00),
 so only Jan 10 overtime can already be Approved; Jan 11+ is still Pending.
-Weekly caps (US-05) are read as per calendar week (Mon–Sun): weekday 10 h, weekend 8 h.
 """
 
 TODAY = "Jan 10, 2025"
@@ -16,9 +15,7 @@ ME = {
     "skills": ["Line 100", "Line 200", "Social Media"],
     "phone": "+254 7•• ••• 412", "email": "brian.kamau@safaricom.co.ke",
 }
-CAPS = {"weekday": 10, "weekend": 8, "monthly": 72}
-# this week (Mon Jan 6 – Sun Jan 12), approved + pending hours
-WEEK_USAGE = {"weekday": 4, "weekend": 8}      # Fri 06–08 + Fri 18–20 ; Sat 06–10 + Sat 17–21 (pending)
+CAPS = {"monthly": 72}          # monthly overtime limit, Approval Guide rule 16
 MONTH_APPROVED = 14                              # Jan: completed 10 h + approved today 4 h
 
 QUEUES = ["Line 100", "Line 200", "Line 300", "Social Media", "Mpesa Corporate", "Data Support"]
@@ -78,14 +75,7 @@ HOLIDAY_SHIFTS = [
 ]
 
 
-# Applications Brian submitted on behalf of colleagues (Reports: "Applied for others")
-ON_BEHALF = [
-    {"date": "Jan 11, 2025", "day": "Sat", "name": "Wanjiru Njoroge", "ek": "EK20417", "queue": "Mpesa Corporate", "start": "09:00", "end": "13:00", "hours": 4, "status": "Pending"},
-    {"date": "Dec 19, 2024", "day": "Thu", "name": "Otieno Mwangi",   "ek": "EK30981", "queue": "Line 200",        "start": "18:00", "end": "21:00", "hours": 3, "status": "Completed"},
-]
 
-# Completed hours by week, Dec 9 2024 – Jan 12 2025 (for the Reports chart)
-WEEKLY_COMPLETED = [("Dec 9–15", 4), ("Dec 16–22", 10), ("Dec 23–29", 9), ("Dec 30–Jan 5", 10), ("Jan 6–12", 0)]
 
 # Colleagues for Apply on Behalf
 COLLEAGUES = {
@@ -106,16 +96,6 @@ WANJIRU_SLOTS = [
     {"id": "S-1059", "queue": "Mpesa Corporate", "date": "Jan 13, 2025", "day": "Mon", "start": "18:00", "end": "22:00", "left": 2, "total": 4},
 ]
 
-# Notifications (mirror SMS / email content: Date, Approved hours, Slot time)
-NOTIFICATIONS = [
-    {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 9, 19:42", "channels": ["SMS", "Email"]},
-    {"unread": True,  "type": "approved",  "title": "Overtime approved", "queue": "Line 100", "date": "Fri Jan 10, 2025", "hours": 2, "slot": "06:00 – 08:00", "when": "Jan 9, 18:15", "channels": ["SMS", "Email"]},
-    {"unread": True,  "type": "slot",      "title": "New slot you're eligible for", "queue": "Social Media", "date": "Sat Jan 11, 2025", "hours": None, "slot": "14:00 – 20:00", "when": "Jan 9, 16:00", "channels": ["Email"], "extra": "6 positions"},
-    {"unread": False, "type": "rejected",  "title": "Overtime not approved", "queue": "Social Media", "date": "Thu Jan 9, 2025", "hours": None, "slot": "18:00 – 22:00", "when": "Jan 8, 19:30", "channels": ["SMS", "Email"], "extra": "Slot filled before review."},
-    {"unread": False, "type": "cancelled", "title": "You cancelled overtime", "queue": "Line 100", "date": "Wed Jan 8, 2025", "hours": 2, "slot": "18:00 – 20:00", "when": "Jan 8, 09:10", "channels": ["SMS", "Email"], "extra": "Slot released."},
-    {"unread": False, "type": "cancelled", "title": "Overtime cancelled by Workforce", "queue": "Line 200", "date": "Tue Jan 7, 2025", "hours": 4, "slot": "06:00 – 10:00", "when": "Jan 6, 17:20", "channels": ["SMS", "Email"], "extra": "Slot no longer needed."},
-    {"unread": False, "type": "noshow",    "title": "Marked No Show", "queue": "Social Media", "date": "Mon Jan 6, 2025", "hours": 2, "slot": "07:00 – 09:00", "when": "Jan 6, 07:20", "channels": ["SMS", "Email"], "extra": "No login within 20 min."},
-]
 
 
 def hours(slot):

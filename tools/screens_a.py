@@ -1,7 +1,7 @@
 """CEE Dashboard, Apply for Self (modal), Apply on Behalf."""
 from icons import icon
 from shell import app_page
-from data import ME, SLOTS, APPLICATIONS, CAPS, WEEK_USAGE, MONTH_APPROVED, COLLEAGUES, SEARCH_RESULTS, WANJIRU_SLOTS, hours
+from data import ME, SLOTS, APPLICATIONS, CAPS, MONTH_APPROVED, COLLEAGUES, SEARCH_RESULTS, WANJIRU_SLOTS, hours
 from ui import (write, badge, status, field, select, text_input, toast, alert, modal, summary, page_header,
                 empty_state, error_state, table, tr, sk, skeleton_rows, stat_card, stat_skeleton)
 import build_pages as bp
@@ -30,16 +30,6 @@ def profile_card(me=ME, toggle=False):
             f'<div class="row row--3"><span class="profile-card__name">{me["name"]}</span>{badge("brand", "Eligible for overtime", "check")}</div>'
             f'<div class="profile-card__meta"><span>EK number <strong>{me["ek"]}</strong></span></div>'
             f'<div class="stack stack--2"><span class="text-sm text-muted">Skillsets</span><div class="pill-list">{pills}</div></div></div>{tg}</div>')
-
-
-def caps_card(weekday=WEEK_USAGE["weekday"], weekend=WEEK_USAGE["weekend"]):
-    wk_full = weekend >= CAPS["weekend"]
-    return (f'<div class="stat-card stat-card--left"><span class="stat-card__label">Hours vs caps · this week</span>'
-            f'<div class="usage"><div class="usage__row"><span>Weekday</span><span><strong>{weekday}</strong> / {CAPS["weekday"]} h</span></div>'
-            f'<span class="usage__bar"><span class="usage__fill" style="width:{pct(weekday, CAPS["weekday"])}%"></span></span></div>'
-            f'<div class="usage"><div class="usage__row"><span>Weekend</span><span><strong>{weekend}</strong> / {CAPS["weekend"]} h</span></div>'
-            f'<span class="usage__bar"><span class="usage__fill{" usage__fill--full" if wk_full else ""}" style="width:{pct(weekend, CAPS["weekend"])}%"></span></span>'
-            f'{"<span class=\"usage__hint usage__hint--warn\">Cap reached (incl. pending)</span>" if wk_full else ""}</div></div>')
 
 
 def upcoming_rows(apps):
@@ -74,22 +64,20 @@ def dash_header():
 
 def dashboard():
     G = "1 · CEE Dashboard"
-    banner = ('<div class="banner banner--attention">3 items require your attention. '
-              '<a href="notifications.html">View Details</a></div>')
-    stats = ('<div class="stat-grid">'
+    stats = ('<div class="grid-3">'
              + stat_card("Eligible open slots", str(len(OPEN)), f'{sum(s["left"] for s in OPEN)} positions')
              + stat_card("Pending", str(len(PENDING)), "Awaiting Workforce")
              + stat_card("Approved this month", f"{MONTH_APPROVED} h", f"of {CAPS['monthly']} h monthly limit", pct(MONTH_APPROVED, CAPS["monthly"]))
-             + caps_card() + '</div>')
+             + '</div>')
     upcoming = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Upcoming approved overtime</span>'
                 f'<span class="card__subtitle">{len(PENDING)} pending · <a href="my-applications--pending.html">View</a></span></div></div>'
                 + table(["Queue", "Date", "Slot time", "Status", "Action"], upcoming_rows(APPROVED), {4: "table__th--action"}) + '</div>')
-    main = dash_header() + banner + profile_card() + stats + f'<div class="grid-main-aside grid-main-aside--380">{upcoming}{eligible_mini()}</div>'
+    main = dash_header() + profile_card() + stats + f'<div class="grid-main-aside grid-main-aside--380">{upcoming}{eligible_mini()}</div>'
     write(G, "cee-dashboard.html", "Default", "Profile, stats, upcoming approved, eligible slots", app_page("Dashboard", "home", main))
 
     # empty: nothing applied or published yet
-    stats0 = ('<div class="stat-grid">' + stat_card("Eligible open slots", "0", "0 positions") + stat_card("Pending", "0", "Awaiting Workforce")
-              + stat_card("Approved this month", "0 h", f"of {CAPS['monthly']} h monthly limit", 0) + caps_card(0, 0) + '</div>')
+    stats0 = ('<div class="grid-3">' + stat_card("Eligible open slots", "0", "0 positions") + stat_card("Pending", "0", "Awaiting Workforce")
+              + stat_card("Approved this month", "0 h", f"of {CAPS['monthly']} h monthly limit", 0) + '</div>')
     up0 = ('<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Upcoming approved overtime</span></div></div>'
            + empty_state("calendar", "No upcoming overtime", "Approved overtime will show here.",
                          f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>', pad="48px 24px") + '</div>')
@@ -156,11 +144,9 @@ S66 = next(s for s in SLOTS if s["id"] == "S-1066")
 
 
 def apply_modal(slot, start, hrs, end, top_alert="", title="Apply for overtime", footer=None, start_menu=None, icon_kind="brand",
-                ico="slots", text=None, error_on=None, err_hint="", hours_hint="", cap_note=True):
+                ico="slots", text=None, error_on=None, err_hint="", hours_hint=""):
     t = text if text is not None else f'{slot["queue"]} · {slot["day"]} {slot["date"]}'
-    cap = (f'<span class="note">{icon("info", "icon icon--sm")}Weekday total after approval: {WEEK_USAGE["weekday"] + hrs} / {CAPS["weekday"]} h</span>'
-           if cap_note else "")
-    body = top_alert + applying_for() + slot_summary(slot) + time_fields(start, hrs, end, start_menu, hours_hint, error_on=error_on, err_hint=err_hint) + cap
+    body = top_alert + applying_for() + slot_summary(slot) + time_fields(start, hrs, end, start_menu, hours_hint, error_on=error_on, err_hint=err_hint)
     f = footer if footer is not None else '<a class="btn btn--secondary" href="available-slots.html">Cancel</a><a class="btn btn--primary" href="apply-self--confirmation.html">Apply</a>'
     return modal(icon_kind, ico, title, t, body, f, wide=True)
 
@@ -207,14 +193,6 @@ def apply_self():
                summary([("Queue", S49["queue"]), ("Date", f'Sat {S49["date"]}'), ("Slot window", "14:00 – 20:00"), ("Remaining", "0 of 6 positions")]),
                '<a class="btn btn--primary" href="available-slots--slot-filled.html">Back to available slots</a>'))
 
-    # cap exceeded (US-05)
-    cap_alert = alert("warning", "alert-triangle", "Over your weekend cap",
-                      f'You have 8 / {CAPS["weekend"]} h booked this weekend. This would make 10 h.',
-                      '<a class="btn btn--link btn--sm" href="my-settings.html">Change my caps</a>')
-    page("apply-self--cap-exceeded.html", "Over my hour cap", "Weekend cap (US-05) blocks apply",
-         apply_modal(S49, "14:00", 2, "16:00", top_alert=cap_alert, cap_note=False,
-                     footer='<a class="btn btn--secondary" href="available-slots.html">Back to slots</a><button class="btn btn--primary" disabled>Apply</button>'))
-
     # hard-stop ineligibility (US-04 / US-06)
     def hard_stop(fname, label, slot, start, hrs, end, rule, copy, footer_extra="", error_on=None, err_hint=""):
         a = alert("error", "alert-circle", rule, copy)
@@ -222,7 +200,7 @@ def apply_self():
              (footer_extra or '<button class="btn btn--primary" disabled>Apply</button>'))
         page(fname, label, "Hard stop on submit",
              apply_modal(slot, start, hrs, end, top_alert=a, title="You can't apply for this slot", icon_kind="error", ico="alert-circle",
-                         footer=f, cap_note=False, error_on=error_on, err_hint=err_hint))
+                         footer=f, error_on=error_on, err_hint=err_hint))
 
     hard_stop("apply-self--ineligible-6-day.html", "Ineligible: 6-day rule", S53, "08:00", 4, "12:00",
               "6-day rule",
@@ -278,18 +256,31 @@ def eligibility_card(name, ok=True):
     return alert("error", "alert-circle", f"{name} isn't eligible for overtime", "No slots can be booked for them right now.")
 
 
-def behalf_slots_card(selected=None, cta=True):
+def behalf_slots_card(selected=None, cta=True, date_range="Jan 10 – Jan 16, 2025", days=None):
+    """Colleague's eligible slots with a date / date-range filter (team review)."""
+    slots = [s for s in WANJIRU_SLOTS if days is None or s["date"] in days]
+    chips = ""
+    if days is not None:
+        chips = (f'<div class="chip-row"><span class="chip-row__label">Filtered by</span><span class="chip">Date: {date_range}'
+                 f'<span style="display:inline-flex">{icon("x", "icon icon--sm")}</span></span>'
+                 f'<a class="btn btn--link btn--sm" href="apply-on-behalf--eligible.html" style="margin-left:8px">Clear</a></div>')
+    fbar = ('<div class="filter-bar">' + field("Date or date range", f'<div class="input datefield">{icon("calendar")}<span>{date_range}</span></div>')
+            + '<span class="filter-bar__spacer"></span>'
+            + f'<span class="result-count"><strong>{len(slots)}</strong> slots</span></div>')
+    head = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Wanjiru\'s eligible slots</span>'
+            f'</div></div>{fbar}{chips}')
+    if not slots:
+        return head + empty_state("calendar", "No slots in this date range", "Try a wider range.",
+                                  '<a class="btn btn--secondary" href="apply-on-behalf--eligible.html">Clear filter</a>', pad="48px 24px") + '</div>'
     rows = ""
-    for s in WANJIRU_SLOTS:
+    for s in slots:
         sel = s["id"] == selected
         act = (badge("brand", "Selected", "check") if sel else
                (f'<a class="btn btn--secondary btn--sm" href="apply-on-behalf--form.html">Select</a>' if cta else ""))
         rows += tr([(s["queue"], "table__td--strong"), (f'{s["date"]}<span class="table__sub">{s["day"]}</span>', ""),
                     (f'<span class="slot-time__range">{s["start"]} – {s["end"]}</span><span class="table__sub">Window · {hours(s)} h</span>', ""),
                     (bp.capacity(s), ""), (act, "table__td--action")], "table__row--highlight" if sel else "")
-    return (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Wanjiru\'s eligible slots</span>'
-            f'<span class="card__subtitle">{len(WANJIRU_SLOTS)} slots · Jan 10 – Jan 16, 2025</span></div></div>'
-            + table(["Queue", "Date", "Slot time", "Remaining capacity", "Action"], rows, {4: "table__th--action"}) + '</div>')
+    return head + table(["Queue", "Date", "Slot time", "Remaining capacity", "Action"], rows, {4: "table__th--action"}) + '</div>'
 
 
 def behalf():
@@ -317,7 +308,11 @@ def behalf():
          behalf_header() + search_card("Wanjiru Njoroge · EK20417", False) + load)
 
     base = behalf_header() + search_card("Wanjiru Njoroge · EK20417", False) + colleague_card(W) + eligibility_card("Wanjiru")
-    page("apply-on-behalf--eligible.html", "Colleague eligible", "Profile, rule checks, their eligible slots", base + behalf_slots_card())
+    page("apply-on-behalf--eligible.html", "Colleague eligible", "Eligible + slots with date filter", base + behalf_slots_card())
+    page("apply-on-behalf--date-filtered.html", "Date filter applied", "Slots for Jan 11 – Jan 12 only",
+         base + behalf_slots_card(date_range="Jan 11 – Jan 12, 2025", days={"Jan 11, 2025", "Jan 12, 2025"}))
+    page("apply-on-behalf--date-no-results.html", "Date filter: no slots", "No eligible slots in the range",
+         base + behalf_slots_card(date_range="Jan 15 – Jan 16, 2025", days={"Jan 15, 2025", "Jan 16, 2025"}))
 
     sel = WANJIRU_SLOTS[1]
     form = (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Application details</span>'
