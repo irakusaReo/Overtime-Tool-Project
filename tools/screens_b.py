@@ -1,7 +1,7 @@
 """My Applications, Cancellation flow, Overtime History, Reports, Notifications, My Settings."""
 from icons import icon
 from shell import app_page
-from data import ME, APPLICATIONS, HISTORY, SLOTS, HOLIDAY_SHIFTS, rate
+from data import ME, APPLICATIONS, HISTORY, SLOTS, HOLIDAY_SHIFTS, NOTIFICATIONS, rate
 from ui import (write, badge, status, field, select, text_input, toast, alert, modal, summary, page_header,
                 empty_state, error_state, table, tr, sk, skeleton_rows, stat_card, stat_skeleton, datefield)
 
@@ -211,11 +211,17 @@ def history():
     cx = [h for h in HISTORY if h["status"] == "Cancelled"]
     head = page_header("Overtime History", "Your past overtime and attendance.",
                        f'<a class="btn btn--secondary" href="reports.html">{icon("reports")}Open reports</a>')
-    fb = ('<div class="filter-bar">' + field("Date range", datefield("Dec 1, 2024 – Jan 9, 2025")) + field("Queue", select("All queues"))
-          + field("Status", select("All statuses")) + '<span class="filter-bar__spacer"></span>'
-          + f'<span class="result-count"><strong>{len(HISTORY)}</strong> records</span></div>')
-    h15 = sum(h["hours"] for h in comp if rate(h) == "1.5"); h20 = sum(h["hours"] for h in comp) - h15
-    stats = ('<div class="grid-3">' + stat_card("Completed", f'{sum(h["hours"] for h in comp)} h', f"{h15} h at 1.5× · {h20} h at 2.0×")
+    def fbar(rate_value="All rates", count=len(HISTORY)):
+        return ('<div class="filter-bar">' + field("Date range", datefield("Dec 1, 2024 – Jan 9, 2025")) + field("Queue", select("All queues"))
+                + field("Status", select("All statuses")) + field("Rate", select(rate_value), cls="field--narrow") + '<span class="filter-bar__spacer"></span>'
+                + f'<span class="result-count"><strong>{count}</strong> records</span></div>')
+    fb = fbar()
+    c15 = [h for h in comp if rate(h) == "1.5"]; c20 = [h for h in comp if rate(h) == "2.0"]
+    h15 = sum(h["hours"] for h in c15); h20 = sum(h["hours"] for h in c20)
+    # Team review: 1.5x and 2.0x completed overtime are tracked in separate cards.
+    stats = ('<div class="stat-grid">'
+             + stat_card(f'{badge("neutral", "1.5×")} Overtime', f"{h15} h", f"{len(c15)} weekday shift{'s' if len(c15) != 1 else ''}")
+             + stat_card(f'{badge("brand", "2.0×")} Overtime', f"{h20} h", f"{len(c20)} weekend/holiday shifts")
              + stat_card("No Show", str(len(ns)), f'{sum(h["hours"] for h in ns)} h missed')
              + stat_card("Cancelled", str(len(cx)), f'{sum(h["hours"] for h in cx)} h released') + '</div>')
     foot = (f'<tfoot class="table__foot"><tr class="table__row"><td class="table__td">Total · {len(HISTORY)} records</td><td class="table__td"></td>'
@@ -224,14 +230,25 @@ def history():
     HH = ["Date", "Queue", "Slot time", "Hours", "Rate", "Status", "Details"]
     card = (f'<div class="card card--table">{fb}' + table(HH, hist_rows(HISTORY), {3: "table__th--num"}, foot)
             + f'<div class="pagination"><span>Showing {len(HISTORY)} of {len(HISTORY)} records</span></div></div>')
-    write(G, "overtime-history.html", "Default", "Table with totals", app_page("Overtime History", "history", head + stats + card))
+    write(G, "overtime-history.html", "Default", "1.5× and 2.0× cards, table with totals", app_page("Overtime History", "history", head + stats + card))
+
+    # Rate filter: only 2.0x overtime
+    rows20 = [h for h in HISTORY if h["status"] == "Completed" and rate(h) == "2.0"]
+    chips = ('<div class="chip-row"><span class="chip-row__label">Filtered by</span><span class="chip">Rate: 2.0×'
+             f'<span style="display:inline-flex">{icon("x", "icon icon--sm")}</span></span>'
+             '<a class="btn btn--link btn--sm" href="overtime-history.html" style="margin-left:8px">Clear</a></div>')
+    foot20 = (f'<tfoot class="table__foot"><tr class="table__row"><td class="table__td">Total · {len(rows20)} records</td><td class="table__td"></td>'
+              f'<td class="table__td"></td><td class="table__td table__td--num">{h20} h</td><td class="table__td table__td--wrap" colspan="3">completed at 2.0×</td></tr></tfoot>')
+    card20 = (f'<div class="card card--table">{fbar("2.0×", len(rows20))}{chips}' + table(HH, hist_rows(rows20), {3: "table__th--num"}, foot20) + '</div>')
+    write(G, "overtime-history--rate-2x.html", "Filtered: 2.0× only", "Rate filter shows one overtime group",
+          app_page("Overtime History", "history", head + stats + card20))
 
     e = (f'<div class="card card--table">{fb.replace(f"<strong>{len(HISTORY)}</strong> records", "<strong>0</strong> records")}'
          + empty_state("history", "No overtime history yet", "Past overtime will show here.",
                        f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>', pad="80px 24px") + '</div>')
     write(G, "overtime-history--empty.html", "Empty", "No records", app_page("Overtime History", "history", head + e))
 
-    l = ('<div class="grid-3">' + stat_skeleton() * 3 + '</div>' + f'<div class="card card--table">{fb}'
+    l = ('<div class="stat-grid">' + stat_skeleton() * 4 + '</div>' + f'<div class="card card--table">{fb}'
          + table(HH, skeleton_rows([80, 90, 90, 28, "pill", "pill", 90], 7), {3: "table__th--num"}) + '</div>')
     write(G, "overtime-history--loading.html", "Loading", "Skeleton", app_page("Overtime History", "history", head + l))
     write(G, "overtime-history--error.html", "Error", "Load failure",
@@ -296,6 +313,65 @@ def reports():
          + table(["Date", "Queue", "Slot time", "Status", "By"], skeleton_rows([96, 110, 100, "pill", 120], 3)) + '</div>')
     write(G, "reports--loading.html", "Loading", "Skeleton", app_page("Reports", "reports", head + fbar() + l))
     write(G, "reports--error.html", "Error", "Load failure", app_page("Reports", "reports", head + fbar() + f'<div class="card">{error_state("your report")}</div>'))
+
+
+# ==========================================================================
+# 10. NOTIFICATIONS (page reached from the header bell)
+# ==========================================================================
+NICON = {"approved": "check-circle", "slot": "slots", "cancelled": "x-circle", "rejected": "x", "noshow": "slash"}
+CH_ICON = {"SMS": "sms", "Email": "mail"}
+
+
+def notif_item(n):
+    facts = f'<span>Date <strong>{n["date"]}</strong></span>'
+    if n["hours"]:
+        facts += f'<span>{"Approved hours" if n["type"] == "approved" else "Hours"} <strong>{n["hours"]}</strong></span>'
+    facts += f'<span>Slot time <strong>{n["slot"]}</strong></span>'
+    extra = f'<span class="notif__extra">{n["extra"]}</span>' if n.get("extra") else ""
+    ch = "".join(f'<span class="badge badge--neutral">{icon(CH_ICON[c], "icon icon--xs")}{c}</span>' for c in n["channels"])
+    dot = '<span class="unread-dot" aria-label="Unread"></span>' if n["unread"] else ""
+    cta = ('<a class="btn btn--secondary btn--sm" href="apply-self.html">Apply</a>' if n["type"] == "slot" else
+           ('<a class="btn btn--link btn--sm" href="my-applications--approved.html">View</a>' if n["type"] == "approved" else ""))
+    return (f'<div class="notif{" notif--unread" if n["unread"] else ""}"><span class="notif__icon notif__icon--{n["type"]}">{icon(NICON[n["type"]])}</span>'
+            f'<div class="notif__body"><span class="notif__title">{n["title"]} {badge("brand", n["queue"])}</span>'
+            f'<div class="notif__facts">{facts}</div>{extra}<div class="notif__channels">{ch}</div></div>'
+            f'<div class="notif__aside"><span class="row row--2">{dot}{n["when"]}</span>{cta}</div></div>')
+
+
+def notifications():
+    G = "10 · Notifications"
+    unread = len([n for n in NOTIFICATIONS if n["unread"]])
+    head = page_header("Notifications", "Approvals, cancellations and slot alerts.",
+                       f'<button class="btn btn--ghost">{icon("check")}Mark all as read</button>'
+                       f'<a class="btn btn--secondary" href="my-settings.html">{icon("settings")}Settings</a>')
+
+    def tabs(counts):
+        names = ["All", "Unread", "Approvals", "Cancellations", "Slot alerts"]
+        return ('<div class="tabs" style="padding:16px 24px 0">' + "".join(
+            f'<a class="tabs__tab{" tabs__tab--active" if i == 0 else ""}" href="notifications.html">{nm}<span class="tabs__count">{c}</span></a>'
+            for i, (nm, c) in enumerate(zip(names, counts))) + '</div>')
+    counts = [len(NOTIFICATIONS), unread, 2, 3, 1]
+    lst = f'<div class="card card--table">{tabs(counts)}<div class="notif-list">{"".join(notif_item(n) for n in NOTIFICATIONS)}</div></div>'
+    write(G, "notifications.html", "All notifications", "Opened from the bell's View all", app_page("Notifications", None, head + lst))
+
+    # Header bell dropdown (team review): unread notifications + View all
+    import screens_a
+    dash = screens_a.dashboard_main()
+    write(G, "cee-dashboard--bell-open.html", "Bell dropdown", "Unread notifications + View all",
+          app_page("Dashboard", "home", dash, bell_open=True))
+    write(G, "cee-dashboard--bell-empty.html", "Bell dropdown: none unread", "All caught up + View all",
+          app_page("Dashboard", "home", dash, bell_open=True, notif_count=0))
+
+    e = (f'<div class="card card--table">{tabs([0, 0, 0, 0, 0])}' + empty_state("bell", "You're all caught up",
+         "New notifications will show here.", pad="80px 24px") + '</div>')
+    write(G, "notifications--empty.html", "Empty", "No notifications", app_page("Notifications", None, head + e, notif_count=0))
+
+    skn = "".join('<div class="notif">' + sk("40px", 40, 9999) + '<div class="notif__body">' + sk("260px", 18) + sk("420px", 14) + sk("120px", 22, 9999)
+                  + '</div>' + sk("90px", 14) + '</div>' for _ in range(5))
+    write(G, "notifications--loading.html", "Loading", "Skeleton",
+          app_page("Notifications", None, head + f'<div class="card card--table">{tabs(counts)}<div class="notif-list">{skn}</div></div>'))
+    write(G, "notifications--error.html", "Error", "Load failure",
+          app_page("Notifications", None, head + f'<div class="card">{error_state("your notifications")}</div>'))
 
 
 # ==========================================================================

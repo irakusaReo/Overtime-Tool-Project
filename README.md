@@ -106,7 +106,8 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 | 6 · Cancellation | (a) Before start | `pages/cancel--before-start.html` | Confirm; slot will be released |
 |  | (b) Started, within 20 min | `pages/cancel--within-grace.html` | Warning copy; slot moves to next overlapping schedule |
 |  | (c) After 20 min | `pages/cancel--after-grace.html` | Cancel disabled with tooltip |
-| 7 · Overtime History | Default | `pages/overtime-history.html` | Table with totals |
+| 7 · Overtime History | Default | `pages/overtime-history.html` | 1.5× and 2.0× cards, table with totals |
+|  | Filtered: 2.0× only | `pages/overtime-history--rate-2x.html` | Rate filter shows one overtime group |
 |  | Empty | `pages/overtime-history--empty.html` | No records |
 |  | Loading | `pages/overtime-history--loading.html` | Skeleton |
 |  | Error | `pages/overtime-history--error.html` | Load failure |
@@ -118,8 +119,14 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 |  | Saved | `pages/my-settings--saved.html` | Success toast |
 |  | Loading | `pages/my-settings--loading.html` | Skeleton |
 |  | Error | `pages/my-settings--error.html` | Load failure |
+| 10 · Notifications | All notifications | `pages/notifications.html` | Opened from the bell's View all |
+|  | Bell dropdown | `pages/cee-dashboard--bell-open.html` | Unread notifications + View all |
+|  | Bell dropdown: none unread | `pages/cee-dashboard--bell-empty.html` | All caught up + View all |
+|  | Empty | `pages/notifications--empty.html` | No notifications |
+|  | Loading | `pages/notifications--loading.html` | Skeleton |
+|  | Error | `pages/notifications--error.html` | Load failure |
 
-**64 pages in total.**
+**71 pages in total.**
 
 ## Navigation
 
@@ -161,13 +168,15 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
    - The colleague's eligible slots can be narrowed by a date or date range (team review).
    - The application shows in the colleague's own My Applications, and the colleague gets the SMS and email notices. The person who applied for them doesn't track it.
 10. **Notifications:**
-    - There's no in-app Notifications page; it was removed after team review. Updates arrive by SMS and email, configured in My Settings. With it, the Dashboard's attention banner (which linked there) was removed.
+    - Notifications open from a **bell button in the header**, left of the user's name. It shows the unread count; clicking it opens a dropdown of unread notifications with a **View all** button that leads to the full Notifications page. The page isn't in the sidebar. The bell is CSS only (a hidden checkbox, no JavaScript); `cee-dashboard--bell-open.html` shows it open for Figma.
+    - SMS and email copies are configured in My Settings. The Dashboard's attention banner was removed earlier and stays removed.
     - Approval messages are always sent by SMS and email (US-07), so those two checkboxes are locked on. Every other event and channel can be changed.
     - SMS and email are the only channels; Microsoft Teams was removed after team review.
 11. **Reports:**
     - "Approved hours" means every application that was ever approved in the range: completed, No Show, cancelled after approval, and approved but not yet worked.
     - There are no export buttons; CEEs don't export data (team review). US-10 exports are a Workforce feature.
     - **Pay rates (confirmed by the team):** approved overtime worked on a weekday pays 1.5×. On a weekend or public holiday it pays 2.0×. Regular allocated shifts worked on a public holiday also pay 2.0×. Reports breaks these out as weekday overtime, weekend and holiday overtime, and shifts on public holidays.
+    - **Overtime History** tracks 1.5× and 2.0× overtime in separate cards, and a Rate filter shows one group at a time (`overtime-history--rate-2x.html`).
     - Reports shows the summary cards, Hours by pay rate and Cancellation history. Completed hours per week, Completed hours by queue and Applied for others were removed after team review.
 12. **Profile and skillsets** are read-only, synced from Resource Management. Team name, line and Team Leader aren't shown anywhere (team review).
 

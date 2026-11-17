@@ -14,6 +14,8 @@
 <body>
 <div class="app">
 <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">
+<input type="checkbox" id="bell-toggle" class="bell-toggle" aria-label="Show notifications">
+<label class="bell-scrim" for="bell-toggle" aria-label="Close notifications"></label>
 <header class="app-header">
   <label class="app-header__menu" for="nav-toggle" aria-label="Open menu"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></label>
   <a class="app-header__brand" href="home.html" aria-label="CX Intranet home">
@@ -22,6 +24,7 @@
     <span class="app-header__product">CX INTRANET</span>
   </a>
   <div class="app-header__user">
+    <label class="app-header__bell" for="bell-toggle" aria-label="Notifications, 0 unread"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 1 1 12 0c0 4.5 2 6 2 6H4s2-1.5 2-6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></label>
     <span class="avatar">BK</span>
     <div class="app-header__user-text">
       <span class="app-header__user-name">Brian Kamau</span>
@@ -29,6 +32,7 @@
     </div>
     <button class="app-header__icon-btn" type="button" aria-label="Account menu"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
   </div>
+  <div class="bell-menu" role="dialog" aria-label="Notifications"><div class="bell-menu__head"><span class="bell-menu__title">Notifications</span><span class="bell-menu__count">0 unread</span><span class="grow"></span></div><div class="bell-menu__list"><div class="bell-menu__empty"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 10"/></svg><span>You're all caught up</span></div></div><div class="bell-menu__foot"><a class="btn btn--secondary btn--block" href="notifications.html">View all</a></div></div>
 </header>
 <div class="app__body">
 <label class="nav-scrim" for="nav-toggle" aria-label="Close menu"></label>

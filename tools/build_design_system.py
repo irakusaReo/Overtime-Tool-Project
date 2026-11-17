@@ -101,7 +101,7 @@ def build():
 
     # ---- App shell
     out.append(section("App shell: header + CEE sidebar",
-                       f'<div class="ds-shell">{header(".", home_href="pages/home.html")}<div class="ds-shell__body">{sidebar("slots", href_prefix="pages/", logo_root=".")}'
+                       f'<div class="ds-shell">{header(".", home_href="pages/home.html", href_prefix="pages/")}<div class="ds-shell__body">{sidebar("slots", href_prefix="pages/", logo_root=".")}'
                        f'<div class="ds-shell__content"><div class="page-header__titles"><h1 class="page-title">Page title</h1>'
                        f'<p class="page-subtitle">Content area · #FAFAFA · padding 32px 40px</p></div></div></div></div>',
                        "Header 64px, #35A839. Sidebar 296px, white; items 40px with 6px radius; active item text and icon #35A839. Log out pinned to the bottom."))
@@ -287,6 +287,10 @@ def build():
              '<span class="usage__bar"><span class="usage__fill" style="width:6%"></span></span></div>'
              '<div class="usage"><div class="usage__row"><span><span class="badge badge--brand badge--no-icon">2.0×</span>&nbsp; Weekend &amp; holiday overtime</span><span><strong>31</strong> h</span></div>'
              '<span class="usage__bar"><span class="usage__fill" style="width:100%"></span></span><span class="usage__hint">Weekends · public holidays</span></div></div></div>')
+    from shell import bell_menu
+    out.append(section("Header bell & notifications dropdown",
+                       f'<div class="row row--6 row--wrap" style="align-items:flex-start">{bell_menu(3, static=True, href_prefix="pages/")}{bell_menu(0, static=True, href_prefix="pages/")}</div>',
+                       "The bell sits left of the user's name and shows the unread count. Clicking it opens unread notifications with View all. It's CSS only (a hidden checkbox, no JavaScript)."))
     out.append(section("Dropdown, eligibility result & usage meter",
                        f'<div class="grid-3" style="align-items:start">{menu}<div class="stack stack--4">{cl}</div>{usage}</div>',
                        "The dropdown is rendered open and absolutely positioned under its field. Eligibility shows only the outcome when applying for a colleague. The usage meter shows hours by pay rate on Reports."))
