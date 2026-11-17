@@ -11,7 +11,6 @@ CEE_NAV = [
     ("behalf",        "Apply on Behalf", "users-plus",    "apply-on-behalf.html"),
     ("history",       "Overtime History","history",       "overtime-history.html"),
     ("reports",       "Reports",         "reports",       "reports.html"),
-    ("notifications", "Notifications",   "bell",          "notifications.html"),
     ("settings",      "My Settings",     "settings",      "my-settings.html"),
 ]
 

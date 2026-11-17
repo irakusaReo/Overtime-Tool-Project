@@ -17,8 +17,7 @@ body {
 h1, h2, h3, h4, p { margin: 0; }
 a { color: var(--color-brand-500); text-decoration: none; font-weight: var(--font-weight-semibold); }
 a:hover { text-decoration: underline; }
-button, input, select, textarea, code, kbd, pre, svg text { font-family: inherit; }
-svg text { font-family: var(--font-family); }
+button, input, select, textarea, code, kbd, pre { font-family: inherit; }
 .icon { width: var(--icon-size); height: var(--icon-size); flex: none; display: block; }
 .icon--sm { width: 16px; height: 16px; }
 .icon--xs { width: 12px; height: 12px; }
@@ -501,19 +500,11 @@ svg text { font-family: var(--font-family); }
 .profile-card { display: flex; gap: var(--space-6); align-items: flex-start; padding: 24px; }
 .profile-card__main { display: flex; flex-direction: column; gap: var(--space-3); flex: 1; min-width: 0; }
 .profile-card__aside { width: 300px; padding-left: 24px; border-left: 1px solid var(--color-border-subtle); }
-.card--table { overflow: hidden; }
+.card--table { overflow-x: auto; overflow-y: hidden; }   /* wide tables scroll inside the card instead of clipping */
 .search-btn { margin-top: 26px; }
 .profile-card__name { font-size: var(--text-lg-size); line-height: var(--text-lg-lh); font-weight: var(--font-weight-semibold); color: var(--color-text-heading); }
 .profile-card__meta { display: flex; gap: var(--space-6); font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-secondary); }
 .profile-card__meta strong { color: var(--color-text-heading); font-weight: var(--font-weight-semibold); }
-
-/* ==========================================================================
-   BAR CHART (inline SVG wrapper)
-   ========================================================================== */
-.chart { display: block; width: 100%; height: auto; }
-.chart-legend { display: flex; gap: var(--space-4); font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-secondary); }
-.chart-legend__item { display: inline-flex; align-items: center; gap: var(--space-2); }
-.chart-legend__swatch { width: 10px; height: 10px; border-radius: 2px; }
 
 /* ==========================================================================
    CAPACITY METER (Available Slots)
@@ -530,7 +521,7 @@ svg text { font-family: var(--font-family); }
 /* ==========================================================================
    FILTER BAR + CHIPS
    ========================================================================== */
-.filter-bar { display: flex; align-items: flex-end; gap: var(--space-4); padding: 20px 24px; border-bottom: 1px solid var(--color-border-subtle); }
+.filter-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4); padding: 20px 24px; border-bottom: 1px solid var(--color-border-subtle); }
 .filter-bar > .field { width: 220px; }
 .filter-bar > .field:first-child { width: auto; }
 .filter-bar > .field--grow { flex: 1; width: auto; }
@@ -590,27 +581,6 @@ svg text { font-family: var(--font-family); }
 .usage__hint { font-size: var(--text-xs-size); line-height: var(--text-xs-lh); color: var(--color-text-muted); }
 .usage__hint--warn { color: var(--color-warning-text); }
 .stat-card--left { align-items: stretch; text-align: left; gap: var(--space-3); }
-
-/* ==========================================================================
-   NOTIFICATION ITEM
-   ========================================================================== */
-.notif-list { display: flex; flex-direction: column; }
-.notif { display: flex; gap: var(--space-4); padding: 20px 24px; border-bottom: 1px solid var(--color-border-subtle); background: var(--color-bg-card); }
-.notif:last-child { border-bottom: 0; }
-.notif--unread { background: #F7FBF7; }
-.notif__icon { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); }
-.notif__icon--approved { background: var(--color-success-bg); color: var(--color-success-icon); }
-.notif__icon--slot { background: var(--color-brand-50); color: var(--color-brand-500); }
-.notif__icon--cancelled { background: var(--color-bg-muted); color: var(--color-text-secondary); }
-.notif__icon--rejected, .notif__icon--noshow { background: var(--color-error-bg); color: var(--color-error-icon); }
-.notif__body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.notif__title { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-md-size); line-height: var(--text-md-lh); font-weight: var(--font-weight-semibold); color: var(--color-text-heading); }
-.notif__facts { display: flex; gap: var(--space-6); font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-secondary); }
-.notif__facts strong { color: var(--color-text-heading); font-weight: var(--font-weight-semibold); }
-.notif__extra { font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-body); }
-.notif__channels { display: flex; gap: var(--space-2); }
-.notif__aside { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); flex: none; font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-muted); }
-.unread-dot { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--color-brand-500); flex: none; }
 
 /* settings matrix */
 .matrix .table__td, .matrix .table__th { height: 56px; padding: 12px 24px; }
