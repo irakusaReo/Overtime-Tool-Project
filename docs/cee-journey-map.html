@@ -1,0 +1,346 @@
+<title>CEE Overtime Journey Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: lifecycle strip → swimlane matrix (scrolls sideways) → one flow row per journey, happy path left to right, branches beneath */
+:root{
+  --bg:#F7F9F7; --surface:#FFFFFF; --sunk:#EEF2EE; --line:#DDE3DD; --line-soft:#E9EDE9;
+  --ink:#181D27; --ink-2:#414651; --ink-3:#5F6670;
+  --brand:#35A839; --brand-ink:#24732A; --brand-soft:#EBF6EB; --brand-line:#A8DAAA;
+  --warn:#B54708; --warn-soft:#FFFAEB; --warn-line:#FEDF89;
+  --stop:#B42318; --stop-soft:#FEF3F2; --stop-line:#FECDCA;
+  --state:#535862; --state-soft:#F3F4F5; --state-line:#D5D7DA;
+  --wf:#4A5AA8; --wf-soft:#EEF0FA; --wf-line:#C4CAEB;
+  --f-display:"Space Grotesk","Inter",system-ui,sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1411; --surface:#161D18; --sunk:#1C241E; --line:#2B352E; --line-soft:#232C25;
+  --ink:#E8EDE9; --ink-2:#C2CAC4; --ink-3:#97A19A;
+  --brand:#4FC254; --brand-ink:#7AD67E; --brand-soft:#16301A; --brand-line:#2E6B33;
+  --warn:#F5B451; --warn-soft:#2E2410; --warn-line:#6B4E17;
+  --stop:#F59A90; --stop-soft:#321816; --stop-line:#6E2A24;
+  --state:#AEB4BC; --state-soft:#1F2522; --state-line:#38423B;
+  --wf:#A4B0F0; --wf-soft:#1C2036; --wf-line:#3A4372;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1411; --surface:#161D18; --sunk:#1C241E; --line:#2B352E; --line-soft:#232C25;
+  --ink:#E8EDE9; --ink-2:#C2CAC4; --ink-3:#97A19A;
+  --brand:#4FC254; --brand-ink:#7AD67E; --brand-soft:#16301A; --brand-line:#2E6B33;
+  --warn:#F5B451; --warn-soft:#2E2410; --warn-line:#6B4E17;
+  --stop:#F59A90; --stop-soft:#321816; --stop-line:#6E2A24;
+  --state:#AEB4BC; --state-soft:#1F2522; --state-line:#38423B;
+  --wf:#A4B0F0; --wf-soft:#1C2036; --wf-line:#3A4372;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+.mono{font-family:var(--f-mono)}
+a{color:var(--brand-ink)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+
+/* Header band */
+.band{background:var(--brand);color:#fff}
+.band .wrap{padding-block:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.band__mark{font-family:var(--f-display);font-weight:700;letter-spacing:.08em;font-size:12px;text-transform:uppercase}
+.band__sep{width:1px;height:18px;background:rgba(255,255,255,.45)}
+.band__sub{font-size:13px;opacity:.92}
+
+.intro{padding-block:40px 24px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:32px;align-items:end}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-ink);margin-bottom:10px}
+.intro h1{font-size:clamp(28px,4vw,40px);line-height:1.1}
+.intro p{color:var(--ink-2);max-width:62ch;margin:14px 0 0}
+.persona{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:grid;gap:10px}
+.persona__top{display:flex;gap:12px;align-items:center}
+.avatar{width:40px;height:40px;border-radius:50%;background:#DCFAE6;color:#079455;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.persona__name{font-weight:600}
+.persona__meta{font-size:13px;color:var(--ink-3)}
+.persona dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:13px}
+.persona dt{color:var(--ink-3)} .persona dd{margin:0;font-variant-numeric:tabular-nums}
+
+section{padding-block:28px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.sec-head h2{font-size:22px}
+.sec-head p{margin:0;color:var(--ink-3);font-size:14px;max-width:60ch}
+
+/* Lifecycle strip */
+.life{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.life__node{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:8px;background:var(--surface);border:1px solid var(--line);text-decoration:none;color:inherit;min-width:0}
+.life__node:hover{border-color:var(--brand-line)}
+.life__id{font-family:var(--f-mono);font-size:11px;color:var(--brand-ink);font-weight:500}
+.life__name{font-weight:600;font-size:14px}
+.life__node--wf{background:var(--wf-soft);border-color:var(--wf-line);border-style:dashed}
+.life__node--wf .life__id{color:var(--wf)}
+.life__fork{display:flex;flex-direction:column;gap:6px}
+.life__arrow{align-self:center;color:var(--ink-3);font-size:18px;line-height:1}
+.life__note{margin-top:12px;font-size:13px;color:var(--ink-3)}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--ink-2);margin-top:16px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.sw{width:14px;height:14px;border-radius:4px;border:1.5px solid}
+.sw--happy{background:var(--brand-soft);border-color:var(--brand)}
+.sw--alt{background:var(--warn-soft);border-color:var(--warn);border-style:dashed}
+.sw--stop{background:var(--stop-soft);border-color:var(--stop)}
+.sw--state{background:var(--state-soft);border-color:var(--state);border-style:dotted}
+.sw--wf{background:var(--wf-soft);border-color:var(--wf);border-style:dashed}
+
+/* Swimlane matrix */
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.lanes{border-collapse:separate;border-spacing:0;min-width:1180px;width:100%;font-size:13px}
+.lanes th,.lanes td{padding:12px 14px;vertical-align:top;border-bottom:1px solid var(--line-soft);text-align:left}
+.lanes tr:last-child td,.lanes tr:last-child th{border-bottom:0}
+.lanes thead th{background:var(--sunk);font-family:var(--f-display);font-size:14px;font-weight:600;border-bottom:1px solid var(--line)}
+.lanes thead th small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--brand-ink);font-weight:500}
+.lanes tbody th{position:sticky;left:0;background:var(--surface);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);font-weight:600;width:120px;border-right:1px solid var(--line-soft)}
+.lanes thead th:first-child{position:sticky;left:0;z-index:1}
+.lanes td{color:var(--ink-2)}
+.lanes ul{margin:0;padding-left:16px}
+.chip{display:inline-block;font-size:11px;font-weight:500;padding:1px 8px;border-radius:999px;margin:0 4px 4px 0;white-space:nowrap}
+.chip--ch{background:var(--brand-soft);color:var(--brand-ink)}
+.chip--wf{background:var(--wf-soft);color:var(--wf)}
+.bar{display:flex;gap:2px;margin-top:6px}
+.bar i{display:block;height:6px;border-radius:2px}
+.count{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+
+/* Journey flows */
+.journey{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:18px;overflow:hidden}
+.journey__head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 24px;padding:20px 22px 16px;border-bottom:1px solid var(--line-soft)}
+.journey__id{font-family:var(--f-mono);font-size:12px;color:var(--brand-ink);font-weight:500}
+.journey__head h3{font-size:20px;margin-top:2px}
+.journey__goal{margin:6px 0 0;color:var(--ink-2);max-width:70ch}
+.journey__facts{display:grid;gap:6px;font-size:13px;align-content:start;min-width:0}
+.fact{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px}
+.fact b{font-weight:600;color:var(--ink-3);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
+.journey__body{padding:18px 22px 22px;display:grid;gap:18px}
+.lane-label{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:8px}
+
+.flow{display:flex;gap:0;overflow-x:auto;padding-bottom:6px}
+.step{flex:0 0 210px;display:flex;align-items:stretch}
+.step + .step::before{content:"";flex:0 0 18px;align-self:center;height:2px;background:var(--brand-line);position:relative}
+.node{flex:1;min-width:0;border:1.5px solid var(--brand);background:var(--brand-soft);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.node__id{font-family:var(--f-mono);font-size:11px;color:var(--brand-ink);font-weight:500}
+.node__do{font-weight:600;font-size:14px;line-height:1.35;color:var(--ink)}
+.node__sys{font-size:12.5px;color:var(--ink-2);line-height:1.4}
+.frame{margin-top:auto;padding-top:6px;font-family:var(--f-mono);font-size:11px;color:var(--ink-3);word-break:break-all}
+.frame::before{content:"▢ ";color:var(--ink-3)}
+
+.branches{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.br{border-radius:8px;padding:10px 12px;border:1.5px solid;display:flex;flex-direction:column;gap:4px;min-width:0}
+.br--alt{background:var(--warn-soft);border-color:var(--warn);border-style:dashed}
+.br--stop{background:var(--stop-soft);border-color:var(--stop)}
+.br--state{background:var(--state-soft);border-color:var(--state);border-style:dotted}
+.br__from{font-family:var(--f-mono);font-size:11px;font-weight:500}
+.br--alt .br__from{color:var(--warn)} .br--stop .br__from{color:var(--stop)} .br--state .br__from{color:var(--state)}
+.br__what{font-weight:600;font-size:13.5px;line-height:1.35}
+.br__out{font-size:12.5px;color:var(--ink-2)}
+
+.handoff{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:8px;background:var(--wf-soft);border:1.5px dashed var(--wf-line);font-size:13px;color:var(--ink-2)}
+.handoff b{color:var(--wf);font-weight:600;white-space:nowrap}
+.rule{font-size:13px;color:var(--ink-2);padding-left:12px;border-left:3px solid var(--brand-line)}
+
+/* Figma setup + open points */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;min-width:0}
+.panel h3{font-size:16px;margin-bottom:10px}
+.panel ol,.panel ul{margin:0;padding-left:20px;color:var(--ink-2);font-size:14px;display:grid;gap:6px}
+.code{font-family:var(--f-mono);font-size:12.5px;background:var(--sunk);padding:2px 6px;border-radius:4px;word-break:break-word}
+.pages{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:13.5px;margin:0}
+.pages dt{font-family:var(--f-mono);font-size:12px;color:var(--brand-ink);white-space:nowrap}
+.pages dd{margin:0;color:var(--ink-2)}
+footer{padding-block:24px 48px;color:var(--ink-3);font-size:13px}
+
+@media (max-width:820px){
+  .intro{grid-template-columns:1fr}
+  .journey__head{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+  .life__arrow{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="band"><div class="wrap">
+  <span class="band__mark">CX Intranet</span><span class="band__sep"></span>
+  <span class="band__sub">Workforce Overtime Management · CEE / Support Analyst</span>
+</div></div>
+
+<main>
+<div class="wrap intro">
+  <div>
+    <div class="eyebrow">Customer journey map · for the Figma file</div>
+    <h1>How a CEE finds, books, changes and tracks overtime</h1>
+    <p>Nine journeys cover the CEE side of the tool, from sign-in to pay history. Every step names the screen file in <span class="code">pages/</span> to import with html.to.design, so each card is a Figma frame. All 71 screens are placed.</p>
+  </div>
+  <aside class="persona" aria-label="Prototype persona">
+    <div class="persona__top"><div class="avatar">BK</div><div><div class="persona__name">Brian Kamau</div><div class="persona__meta">EK10234 · CEE</div></div></div>
+    <dl>
+      <dt>Skills</dt><dd>Line 100, Line 200, Social Media</dd>
+      <dt>Now</dt><dd>Fri Jan 10, 2025 · 06:10</dd>
+      <dt>Applications</dt><dd>9 (2 approved, 3 pending, 1 rejected, 3 cancelled)</dd>
+    </dl>
+  </aside>
+</div>
+
+<section class="wrap" id="lifecycle">
+  <div class="sec-head"><h2>The overtime lifecycle</h2><p>Green steps are the CEE's. The blue dashed steps are done by Workforce or by the system, and the CEE only sees the result.</p></div>
+  <div class="life" id="life"></div>
+  <p class="life__note">My Settings (J9) decides which notifications (J7) arrive by SMS and email.</p>
+  <div class="legend" aria-label="Legend">
+    <span><i class="sw sw--happy"></i>Happy path step</span>
+    <span><i class="sw sw--alt"></i>Alternate path</span>
+    <span><i class="sw sw--stop"></i>Hard stop or failure</span>
+    <span><i class="sw sw--state"></i>Loading, empty or error state</span>
+    <span><i class="sw sw--wf"></i>Workforce or system hand-off</span>
+  </div>
+</section>
+
+<section class="wrap" id="swimlane">
+  <div class="sec-head"><h2>All journeys at a glance</h2><p>Scroll sideways on small screens. The bar under each frame count splits it into happy-path, alternate, hard-stop and state frames.</p></div>
+  <div class="scroll"><table class="lanes" id="lanes"></table></div>
+</section>
+
+<section class="wrap" id="journeys">
+  <div class="sec-head"><h2>Journey flows</h2><p>One Figma page per journey. Lay the happy path out left to right and put each branch under the step it leaves from.</p></div>
+  <div id="flows"></div>
+</section>
+
+<section class="wrap" id="figma">
+  <div class="sec-head"><h2>Setting up the Figma file</h2></div>
+  <div class="two">
+    <div class="panel">
+      <h3>Figma pages</h3>
+      <dl class="pages">
+        <dt>00</dt><dd>Cover and index: this map's lifecycle strip</dd>
+        <dt>01</dt><dd>Design system: import <span class="code">design-system.html</span></dd>
+        <dt>J1–J9</dt><dd>One page per journey, with a Section for the happy path and one for each branch group</dd>
+        <dt>99</dt><dd>State library: every loading, empty and error frame side by side, for QA</dd>
+      </dl>
+      <h3 style="margin-top:16px">Frame names</h3>
+      <p style="margin:0;font-size:14px;color:var(--ink-2)"><span class="code">J&lt;journey&gt;.&lt;step&gt; &lt;Screen&gt; / &lt;State&gt;</span><br>For example <span class="code">J3.4 Apply for Self / Ineligible: 6-day rule</span></p>
+    </div>
+    <div class="panel">
+      <h3>Open points: add a sticky note to the frame</h3>
+      <ol>
+        <li>Full slots are hidden from CEEs. <span class="code">J2</span></li>
+        <li>Next-day overtime is approved 11:00–20:00 the day before. <span class="code">J3</span> <span class="code">J5</span></li>
+        <li>A pending application can be edited but not withdrawn. <span class="code">J5</span></li>
+        <li>Whoever applies for a colleague doesn't track that application. <span class="code">J4</span></li>
+        <li>No Show has no screen of its own, only a notification and a history row. <span class="code">J6</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="wrap">Sources: <span class="code">reference/customer-journey-map.docx</span> (Stages 2, 3, 6, 7, 8 and 9) and the decisions in <span class="code">README.md</span>. Workforce and Team Leader journeys are out of scope.</footer>
+
+<script>
+const J = [
+ {id:"J1",name:"Access the tool",short:"Access",stage:"Shared",goal:"Get into Overtime Management with one sign-in.",trigger:"Opens the CX Intranet",channels:["Entra ID"],pain:"One sign-in inside the intranet",next:"J2",
+  steps:[["Enters email or picks Azure","Authenticates with Entra ID","login.html"],["Picks Home or Systems on the landing","Shows the intranet landing","landing.html"],["Or clicks the header logo, then the Overtime tile","Shows the tool tiles","home.html"],["Arrives in the tool","Loads the CEE Dashboard (counted in J2)","cee-dashboard.html"]],
+  branches:[], rule:"The header logo on any page goes back to the intranet Home."},
+ {id:"J2",name:"Discover eligible overtime",short:"Discover",stage:"Stage 2",goal:"Find overtime I can actually work, without reading advertisement emails.",trigger:"Slot alert by SMS or email, or a routine check",channels:["Dashboard","SMS","Email"],pain:"Slots were sent by email, and CEEs saw slots they couldn't take",next:"J3, J4",
+  steps:[["Opens the Dashboard","Profile, stats, upcoming approved, eligible slots","cee-dashboard.html"],["Opens Available Slots","Eligible slots for the next 7 days, with remaining capacity","available-slots.html"],["Filters by queue, date or time","Filter chips, narrowed list","available-slots--filtered.html"],["Clicks Apply on a slot","Opens Apply for Self (J3)","apply-self.html"]],
+  branches:[["state","J2.1","First visit: no applications or slots","Empty Dashboard","cee-dashboard--empty.html"],["state","J2.1","Dashboard loading","Skeletons","cee-dashboard--loading.html"],["state","J2.1","Summary fails to load","Profile still shown","cee-dashboard--error.html"],["state","J2.2","No eligible slots published","Empty list","available-slots--empty.html"],["state","J2.2","Slots loading","Skeleton rows","available-slots--loading.html"],["state","J2.2","Slots fail to load","Retry","available-slots--error.html"],["alt","J2.3","Filters exclude every slot","Clear filters","available-slots--no-results.html"]],
+  rule:"Only slots the CEE is eligible for are listed. Full slots are hidden."},
+ {id:"J3",name:"Apply for self",short:"Apply (self)",stage:"Stage 3",goal:"Book a slot in a few clicks, and know at once whether it went through.",trigger:"Apply on Available Slots or the Dashboard",channels:["Modal","Toast"],pain:"Invalid applications and a slow manual process",next:"Workforce review",
+  steps:[["Reviews the slot window","Modal with the slot summary","apply-self.html"],["Picks a start time","Only active OT hours can be picked (US-03)","apply-self--start-times.html"],["Enters hours and clicks Apply","Calculates end time, checks rules and capacity","apply-self--loading.html"],["Sees the confirmation","Submitted as Pending, sent to the Workforce queue","apply-self--confirmation.html"],["Clicks Done","Toast; the row shows Applied · Pending","available-slots--apply-success.html"]],
+  branches:[["stop","J3.3","Slot filled while applying","Back to slots, and the slot drops out of the list","apply-self--slot-filled.html"],["stop","J3.3","Slot removed from the list","List after the slot filled","available-slots--slot-filled.html"],["stop","J3.3","Ineligible: 6-day rule","Back to slots","apply-self--ineligible-6-day.html"],["stop","J3.3","Ineligible: Sick Off","Back to slots","apply-self--ineligible-sick-off.html"],["stop","J3.3","Ineligible: 11-hour rest","Change hours, back to J3.3","apply-self--ineligible-11-hour.html"],["stop","J3.3","Ineligible: Annual Leave","Back to slots","apply-self--ineligible-annual-leave.html"],["state","J3.3","Submit fails","Retry","apply-self--error.html"]],
+  handoff:"Workforce approves or rejects (Stage 4). The CEE hears about it in J7.",
+  rule:"The four rules are checked again on submit, because a CEE's status can change after the list loads."},
+ {id:"J4",name:"Apply on behalf of a colleague",short:"Apply (behalf)",stage:"Stages 2–3",goal:"Book overtime for a colleague without scrolling the whole call-centre list.",trigger:"Apply on Behalf on the Dashboard, or “Someone else” in the Apply modal",channels:["Search","Toast"],pain:"Looking up a name or EK in the full list of CEEs",next:"Colleague's J5 and J7",
+  steps:[["Opens Apply on Behalf","Empty search","apply-on-behalf.html"],["Types an EK number or name","Typeahead results","apply-on-behalf--results.html"],["Selects the colleague","Checks the colleague's eligibility","apply-on-behalf--loading.html"],["Sees the colleague is eligible","Lists the colleague's eligible slots","apply-on-behalf--eligible.html"],["Filters by date (optional)","Slots for the chosen range","apply-on-behalf--date-filtered.html"],["Picks a slot, start time and hours","Calculates the end time","apply-on-behalf--form.html"],["Clicks Submit","Toast; it goes to the colleague's applications","apply-on-behalf--success.html"]],
+  branches:[["alt","J4.2","No match for the EK number","Try another search","apply-on-behalf--not-found.html"],["stop","J4.4","Colleague isn't eligible","No reason is shown, and no slots","apply-on-behalf--not-eligible.html"],["alt","J4.5","No slots in the chosen dates","Change the dates","apply-on-behalf--date-no-results.html"],["state","J4.3","Eligibility service fails","Retry","apply-on-behalf--error.html"]],
+  handoff:"The colleague gets the SMS and email and tracks the application. The applicant doesn't.",
+  rule:"Eligibility is checked before any slot is shown. The applicant sees only the outcome."},
+ {id:"J5",name:"Track and edit applications",short:"Track & edit",stage:"Stages 3, 4, 8",goal:"Know where every application stands, and change a pending one.",trigger:"A notification, or My Applications in the sidebar",channels:["Tabs","Modal","Toast"],pain:"Approvals were seen late",next:"J6",
+  steps:[["Views all applications","9 applications with status badges","my-applications.html"],["Clicks Edit on a pending row","Edit modal; saving re-applies","my-applications--edit.html"],["Chooses a different slot","Open eligible slots across queues","my-applications--edit-slots.html"],["Picks the new slot and time","Shows the changed summary","my-applications--edit-changed.html"],["Saves","Old application cancelled, new one Pending","my-applications--edit-success.html"]],
+  branches:[["alt","J5.1","Pending tab","3 applications","my-applications--pending.html"],["alt","J5.1","Approved tab","2 applications; Cancel goes to J6","my-applications--approved.html"],["alt","J5.1","Cancelled tab","3 applications","my-applications--cancelled.html"],["alt","J5.1","Rejected tab","1 application","my-applications--rejected.html"],["state","J5.1","No applications yet","Find overtime","my-applications--empty.html"],["state","J5.1","Loading","Skeleton rows","my-applications--loading.html"],["state","J5.1","Fails to load","Retry","my-applications--error.html"]],
+  rule:"Saving an edit frees the old slot and joins the first-come-first-served queue again."},
+ {id:"J6",name:"Cancel approved overtime",short:"Cancel",stage:"Stages 6–7",goal:"Pull out cleanly when I can't attend.",trigger:"Cancel on an approved row",channels:["Modal","Tooltip","SMS","Email"],pain:"Cancelling meant changing the dates",next:"J7, J8",
+  steps:[["Cancels before the start (a)","Confirm. Slot released, Workforce told, Genesys Cloud updated","cancel--before-start.html"],["Or cancels within 20 min of the start (b)","Warning. Slot moves to the next overlapping schedule","cancel--within-grace.html"],["Confirms","Toast; the row moves to Cancelled","my-applications--cancel-success.html"]],
+  branches:[["stop","J6","More than 20 min after the start (c)","Cancel disabled: “Auto-cancelled as No Show after 20 min”","cancel--after-grace.html"]],
+  handoff:"No login within 20 min of the start: the system marks a No Show, cancels and pushes the slot on. The CEE sees it in J7 and J8.",
+  rule:"Which modal appears depends on the time compared with the OT start. During an outage, the CEE raises a Help Desk ticket."},
+ {id:"J7",name:"Get notified",short:"Notified",stage:"Stages 4, 6, 7",goal:"Hear about decisions as they happen, without checking the tool.",trigger:"Approval, rejection, any cancellation, or a new eligible slot",channels:["Bell","SMS","Email"],pain:"No automatic, real-time notifications",next:"J5, J3",
+  steps:[["Sees the unread count and opens the bell","Unread notifications","cee-dashboard--bell-open.html"],["Clicks View all","Full Notifications page with filters","notifications.html"],["Opens one: View or Apply","Goes to J5, or to J3 for a slot alert","notifications.html"]],
+  branches:[["alt","J7.1","Nothing unread","All caught up","cee-dashboard--bell-empty.html"],["state","J7.2","No notifications","Empty","notifications--empty.html"],["state","J7.2","Loading","Skeleton","notifications--loading.html"],["state","J7.2","Fails to load","Retry","notifications--error.html"]],
+  rule:"Six events: approved, not approved, you cancelled, cancelled by Workforce, No Show, new eligible slot. Approvals always go by SMS and email (US-07)."},
+ {id:"J8",name:"Review history and reports",short:"History",stage:"Stages 8–9",goal:"See what I've worked and what it pays. Own records only.",trigger:"Overtime History or Reports in the sidebar",channels:["Cards","Tables"],pain:"Overtime was tracked by hand",next:"—",
+  steps:[["Views history","1.5× and 2.0× cards, table with totals","overtime-history.html"],["Filters by rate","2.0× only","overtime-history--rate-2x.html"],["Opens Reports","Summary, hours by pay rate, cancellation history","reports.html"]],
+  branches:[["state","J8.1","No records","Empty","overtime-history--empty.html"],["state","J8.1","Loading","Skeleton","overtime-history--loading.html"],["state","J8.1","Fails to load","Retry","overtime-history--error.html"],["state","J8.3","No records for the range","Empty","reports--empty.html"],["state","J8.3","Loading","Skeleton","reports--loading.html"],["state","J8.3","Fails to load","Retry","reports--error.html"]],
+  rule:"Weekday overtime pays 1.5×. Weekend and public-holiday overtime, and regular shifts on a public holiday, pay 2.0×. CEEs can't export."},
+ {id:"J9",name:"Manage notification settings",short:"Settings",stage:"Supporting",goal:"Choose how I'm told about each event.",trigger:"My Settings in the sidebar, or Settings on Notifications",channels:["Toggles","Toast"],pain:"No control over SMS and email",next:"J7",
+  steps:[["Sets SMS and email for each event","Approval is locked on; profile comes from Resource Management (read-only)","my-settings.html"],["Saves","Toast","my-settings--saved.html"]],
+  branches:[["state","J9.1","Loading","Skeleton","my-settings--loading.html"],["state","J9.1","Fails to load","Retry","my-settings--error.html"]],
+  rule:"Profile and skills are read-only. The Team Leader updates them in Resource Management."}
+];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* Count each frame once: J1's Dashboard belongs to J2, J3's last step reuses an apply-self frame only once,
+   J5's first step is counted in its tab list, J7's third step reuses notifications.html. */
+function frames(j){
+  const set = new Map();
+  j.steps.forEach(s => { if(!set.has(s[2])) set.set(s[2],"happy"); });
+  j.branches.forEach(b => { if(!set.has(b[4])) set.set(b[4], b[0]); });
+  if(j.id==="J1") set.delete("cee-dashboard.html");
+  if(j.id==="J2") set.delete("apply-self.html");
+  return set;
+}
+
+// Lifecycle strip
+const node = (id, name, wf) => `<a class="life__node${wf?" life__node--wf":""}" href="#${wf?"lifecycle":id.toLowerCase()}"><span class="life__id">${id}</span><span class="life__name">${esc(name)}</span></a>`;
+const arrow = '<span class="life__arrow" aria-hidden="true">→</span>';
+document.getElementById("life").innerHTML = [
+  node("J1","Access"), arrow, node("J2","Discover"), arrow,
+  `<div class="life__fork">${node("J3","Apply for self")}${node("J4","Apply on behalf")}</div>`, arrow,
+  node("Workforce","Approves or rejects",true), arrow, node("J7","Notified"), arrow, node("J5","Track & edit"), arrow,
+  node("J6","Cancel (optional)"), arrow, node("System","20-min attendance check",true), arrow, node("J8","History & reports")
+].join("");
+
+// Swimlane matrix
+const colors = {happy:"var(--brand)",alt:"var(--warn)",stop:"var(--stop)",state:"var(--state)"};
+let total = 0;
+const rows = [
+  ["CEE goal", j => esc(j.goal)],
+  ["Trigger", j => esc(j.trigger)],
+  ["Touchpoints", j => j.channels.map(c=>`<span class="chip chip--ch">${esc(c)}</span>`).join("")],
+  ["Key steps", j => "<ul>"+j.steps.map(s=>`<li>${esc(s[0])}</li>`).join("")+"</ul>"],
+  ["Where it can go wrong", j => { const k=j.branches.filter(b=>b[0]!=="state"); return k.length? "<ul>"+k.map(b=>`<li>${esc(b[2])}</li>`).join("")+"</ul>" : "<span style='color:var(--ink-3)'>None</span>"; }],
+  ["Pain solved", j => esc(j.pain)],
+  ["Leads to", j => j.next.split(", ").map(n=>`<span class="chip ${/J\d/.test(n)?"chip--ch":"chip--wf"}">${esc(n)}</span>`).join("")],
+  ["Figma frames", j => { const f=frames(j); total+=f.size; const c={happy:0,alt:0,stop:0,state:0}; f.forEach(v=>c[v]++);
+      return `<span class="count">${f.size}</span> frames<div class="bar" aria-hidden="true">${Object.entries(c).map(([k,v])=>v?`<i style="flex:${v};background:${colors[k]}"></i>`:"").join("")}</div>`; }]
+];
+let html = `<thead><tr><th scope="col">Journey</th>${J.map(j=>`<th scope="col"><small>${j.id} · ${esc(j.stage)}</small>${esc(j.short)}</th>`).join("")}</tr></thead><tbody>`;
+rows.forEach(([label,fn]) => { html += `<tr><th scope="row">${label}</th>${J.map(j=>`<td>${fn(j)}</td>`).join("")}</tr>`; });
+html += "</tbody>";
+document.getElementById("lanes").innerHTML = html;
+document.querySelector("#swimlane .sec-head p").insertAdjacentHTML("beforeend", ` <strong class="count">${total}</strong> frames in total.`);
+
+// Journey flows
+document.getElementById("flows").innerHTML = J.map(j => `
+<article class="journey" id="${j.id.toLowerCase()}">
+  <header class="journey__head">
+    <div><div class="journey__id">${j.id} · ${esc(j.stage)}</div><h3>${esc(j.name)}</h3><p class="journey__goal">${esc(j.goal)}</p></div>
+    <div class="journey__facts">
+      <div class="fact"><b>Trigger</b><span>${esc(j.trigger)}</span></div>
+      <div class="fact"><b>Solves</b><span>${esc(j.pain)}</span></div>
+      <div class="fact"><b>Frames</b><span class="count">${frames(j).size}</span></div>
+    </div>
+  </header>
+  <div class="journey__body">
+    <div><div class="lane-label">Happy path</div>
+      <div class="flow">${j.steps.map((s,i)=>`<div class="step"><div class="node"><span class="node__id">${j.id}.${i+1}</span><span class="node__do">${esc(s[0])}</span><span class="node__sys">${esc(s[1])}</span><span class="frame">${esc(s[2])}</span></div></div>`).join("")}</div>
+    </div>
+    ${j.branches.length?`<div><div class="lane-label">Branches and states</div><div class="branches">${j.branches.map(b=>`<div class="br br--${b[0]}"><span class="br__from">from ${esc(b[1])}</span><span class="br__what">${esc(b[2])}</span><span class="br__out">${esc(b[3])}</span><span class="frame">${esc(b[4])}</span></div>`).join("")}</div></div>`:""}
+    ${j.handoff?`<div class="handoff"><b>Hand-off</b><span>${esc(j.handoff)}</span></div>`:""}
+    <p class="rule" style="margin:0">${esc(j.rule)}</p>
+  </div>
+</article>`).join("");
+</script>
