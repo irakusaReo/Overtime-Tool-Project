@@ -270,7 +270,7 @@ To capture a mobile frame in Figma, import the same page with a 390px viewport.
 - Hidden checkboxes sit inside their buttons, so keyboard focus follows the visual order and shows a focus ring.
 - Static dropdown mocks have no fake ARIA roles. Status dots are labelled images.
 - Respects `prefers-reduced-motion`. Uses `100dvh`, so mobile browser toolbars don't hide content.
-- An axe-core 4.10 audit of every page at 1440px and 390px passes all rules except one. **White text on DIRA green `#35A839`** (primary buttons and the active nav item) has a contrast ratio of 3.08:1. WCAG AA needs 4.5:1. The colour comes from DIRA PRO, so changing it is a team decision.
+- An axe-core 4.10 audit of every page at 1440px and 390px passes all rules except one. **White text on DIRA green `#35A839`** (primary buttons and the active nav item) has a contrast ratio of 3.08:1. WCAG AA needs 4.5:1. The colour comes from DIRA PRO and is kept by team decision, to stay faithful to the design system.
 
 ## Importing into Figma (html.to.design)
 
