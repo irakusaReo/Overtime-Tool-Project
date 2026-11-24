@@ -25,7 +25,7 @@ def login():
           '<rect x="17" y="1" width="14" height="14" fill="#80BC06"/><rect x="1" y="17" width="14" height="14" fill="#05A6F0"/>'
           '<rect x="17" y="17" width="14" height="14" fill="#FEBA08"/></svg>')
     body = f"""<body>
-<div class="auth">
+<main class="auth">
 {bg}
   <div class="auth__card">
     <div class="auth__body">
@@ -43,7 +43,7 @@ def login():
     </div>
     <div class="auth__footer">By signing in you agree to our <a href="#">Terms &amp; Conditions</a> &amp; <a href="#">Privacy Policy</a></div>
   </div>
-</div>
+</main>
 </body>
 </html>
 """
@@ -98,6 +98,7 @@ def landing():
     <div class="landing__brand"><img src="../assets/safaricom-logo-white.png" alt="Safaricom" width="176" height="40"><span class="landing__brand-divider"></span><span class="landing__brand-name">Intranet</span></div>
     <div class="landing__tagline"><span>For you. For a brighter tomorrow.</span>{icon("search", "icon").replace('class="icon"', 'class="icon" style="width:32px;height:32px"')}</div>
   </header>
+  <main class="landing__main">
   <section class="landing__hero">
     <div class="landing__copy">
       <span class="landing__eyebrow">Customer Experience</span>
@@ -114,6 +115,7 @@ def landing():
     <div style="width:120px"></div>
   </section>
   <nav class="landing__cards" aria-label="Intranet sections">{card_html}</nav>
+  </main>
   <footer class="landing__footer">
     <div class="stack stack--2"><span class="landing__footer-title">Customer Experience</span><span class="landing__footer-sub">Bigger possibilities together</span></div>
     <div class="landing__footer-right"><span class="landing__footer-divider"></span><span>Safaricom<br>For a brighter tomorrow</span></div>
@@ -204,8 +206,8 @@ def slot_row(s, row_cls=""):
             f'<td class="table__td table__td--action">{action}</td></tr>')
 
 
-TABLE_HEAD = ('<thead><tr><th class="table__th">Queue</th><th class="table__th">Date</th><th class="table__th">Slot time</th>'
-              '<th class="table__th">Remaining capacity</th><th class="table__th table__th--action">Action</th></tr></thead>')
+TABLE_HEAD = ('<thead><tr><th scope="col" class="table__th">Queue</th><th scope="col" class="table__th">Date</th><th scope="col" class="table__th">Slot time</th>'
+              '<th scope="col" class="table__th">Remaining capacity</th><th scope="col" class="table__th table__th--action">Action</th></tr></thead>')
 
 
 def slots_header():
@@ -241,7 +243,9 @@ def chips(items):
 
 def slots_card(inner_top, table_body=None, footer="", empty_html=""):
     if table_body is not None:
-        tbl = f'<table class="table">{TABLE_HEAD}<tbody>{table_body}</tbody></table>'
+        from ui import label_cells
+        tbl = (f'<table class="table table--stack">{TABLE_HEAD}<tbody>'
+               f'{label_cells(["Queue", "Date", "Slot time", "Remaining capacity", "Action"], table_body)}</tbody></table>')
     else:
         tbl = empty_html
     return f'<div class="card card--table">{inner_top}{tbl}{footer}</div>'
@@ -363,7 +367,7 @@ def index():
   .gallery__note {{ font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }}
   .gallery__file {{ font-size: 12px; color: var(--color-text-muted); margin-top: 4px; }}
 </style>
-<div class="canvas canvas--padded">
+<main class="canvas canvas--padded">
   <div class="stack stack--8">
     <div class="page-header">
       <div class="page-header__titles">
@@ -375,7 +379,7 @@ def index():
     </div>
     {sections}
   </div>
-</div>
+</main>
 </body>
 </html>
 """

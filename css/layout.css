@@ -1,6 +1,7 @@
 /* ==========================================================================
-   LAYOUT: fixed 1440px canvas, header + sidebar + content.
-   Flexbox/grid only.
+   LAYOUT: full-width app shell (header + sidebar + content).
+   The shell fills the viewport at any width or zoom level; content inside the
+   main area is capped at --content-max-width and centred. Flexbox/grid only.
    ========================================================================== */
 
 .canvas {
@@ -11,9 +12,10 @@
 }
 
 /* App shell */
-.app { position: relative; display: flex; flex-direction: column; width: 100%; max-width: var(--canvas-width); min-height: 1024px; margin: 0 auto; background: var(--color-bg-page); }
-.app__body { display: flex; flex: 1; align-items: stretch; }
+.app { position: relative; display: flex; flex-direction: column; width: 100%; min-height: 100vh; min-height: 100dvh; background: var(--bg-secondary); }
+.app__body { display: flex; flex: 1; align-items: stretch; min-width: 0; }
 .app__main { flex: 1; min-width: 0; padding: var(--content-padding-y) var(--content-padding-x) 48px; display: flex; flex-direction: column; gap: var(--space-8); }
+.app__main > * { width: 100%; max-width: var(--content-max-width); margin-inline: auto; }
 
 /* Page header row: title block left, actions right */
 .page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-6); }
@@ -48,8 +50,8 @@
 /* Centered layout for login */
 .auth {
   display: flex; align-items: center; justify-content: center;
-  width: 100%; max-width: var(--canvas-width); min-height: 960px; margin: 0 auto;
-  background: var(--color-bg-page);
+  width: 100%; min-height: 100vh; min-height: 100dvh; padding: 24px 16px;
+  background: var(--bg-secondary);
   position: relative; overflow: hidden;
 }
 .auth__bg { position: absolute; inset: 0; width: 100%; height: 100%; }   /* decorative faceted background (SVG) */
@@ -78,7 +80,7 @@
 /* ==========================================================================
    LANDING (Landing sketch)
    ========================================================================== */
-.landing { position: relative; width: 100%; max-width: var(--canvas-width); height: 960px; margin: 0 auto; overflow: hidden; background: #FFFFFF; display: flex; flex-direction: column; }
+.landing { position: relative; width: 100%; min-height: max(960px, 100vh); margin: 0; overflow: hidden; background: #FFFFFF; display: flex; flex-direction: column; }
 .landing__art { position: absolute; inset: 0; width: 100%; height: 100%; }       /* decorative SVG layer: waves, office panel */
 .landing__bar { position: relative; display: flex; align-items: center; justify-content: space-between; height: 94px; padding: 0 64px; background: var(--color-brand-800); color: #FFFFFF; }
 .landing__brand { display: flex; align-items: center; gap: 28px; }
@@ -108,3 +110,9 @@
 .landing__footer-sub { font-size: 14px; line-height: 20px; letter-spacing: 4px; text-transform: uppercase; }
 .landing__footer-right { display: flex; align-items: center; gap: 28px; font-size: 13px; line-height: 18px; letter-spacing: 1.5px; text-transform: uppercase; }
 .landing__footer-divider { width: 1.5px; height: 40px; background: rgba(255,255,255,.8); }
+
+/* Landing: full-bleed backgrounds, content kept within a 1440px column on wide screens */
+.landing__bar, .landing__hero, .landing__cards, .landing__footer { padding-left: max(64px, calc((100% - 1312px) / 2)); padding-right: max(64px, calc((100% - 1312px) / 2)); }
+.landing__hero { padding-left: max(72px, calc((100% - 1296px) / 2)); }
+
+.landing__main { display: contents; }   /* landmark only; keeps the landing flex layout */

@@ -13,11 +13,11 @@ Open `index.html` for the gallery of every page.
 | `css/fonts.css` | Proxima Nova `@font-face` (weights 400–900); expects licensed woff2 files in `assets/fonts/` |
 | `css/tokens.css` | DIRA PRO design tokens (primitives plus semantic and component tokens, named after DIRA's Figma variables), with legacy aliases |
 | `css/components.css` | BEM components: header, sidebar, buttons, inputs, selects, date and search fields, tables, badges, stat cards, banners and alerts, modals, toasts, tooltip, empty, error and skeleton, tabs, checkbox, radio and toggle, profile card, tool card |
-| `css/layout.css` | Fluid canvas (max 1440px), app shell (header + sidebar + main), stacks and grids, auth layout |
+| `css/layout.css` | Full-width app shell (header + sidebar + main; content capped at 1440px and centred), stacks and grids, auth layout |
 | `css/responsive.css` | Breakpoints at 1366, 1280, 1024, 768 and 480px; loaded last on every page |
 | `design-system.html` | Every token and component on one page |
 | `index.html` | Gallery linking every page, grouped by screen |
-| `pages/*.html` | One static file per screen or state, responsive from 360px to 1440px |
+| `pages/*.html` | One static file per screen or state, responsive from 360px up to 4K / zoomed-out desktop |
 | `assets/safaricom-logo.png` / `safaricom-logo-white.png` | The supplied Safaricom logo, cropped to its edges, with a transparent background. The colour version is used in the white DIRA header. The white version (green wordmark turned white) is only used on the Landing page's dark green bar. |
 | `assets/icons/*.svg` | Outline icon set; also inlined in every page |
 | `reference/` | Sketches (PNG), Figma CSS export, journey map (`.docx` plus a `.txt` made with pandoc) |
@@ -86,6 +86,7 @@ I couldn't open the detailed component pages: the Figma connector stopped after 
 |  | Empty | `pages/cee-dashboard--empty.html` | No applications or eligible slots yet |
 |  | Loading | `pages/cee-dashboard--loading.html` | Skeletons |
 |  | Error | `pages/cee-dashboard--error.html` | Summary failed to load; profile still shown |
+|  | Sidebar collapsed | `pages/cee-dashboard--sidebar-collapsed.html` | Desktop sidebar collapsed to an 80px icon rail |
 | 2 · Available Slots | Default | `pages/available-slots.html` | Eligible slots for the next 7 days |
 |  | Filtered | `pages/available-slots--filtered.html` | Queue = Social Media, filter chips |
 |  | No results | `pages/available-slots--no-results.html` | Filters exclude every slot |
@@ -220,7 +221,7 @@ I couldn't open the detailed component pages: the Figma connector stopped after 
 | Buttons: Primary #35A839 (hover #2D8F30) and Secondary with a #D5D7DA border, skeuomorphic shadow, md 40px | Matches DIRA tokens |
 | Inputs 44px with border-primary; tables with a 44px gray header row and 72px rows; pill badges using utility 50/200/700 | Untitled UI base with DIRA tokens |
 | Type: display-xs 24/32 titles, display-sm 30/38 metrics, text-lg 18/28 card titles, text-sm 14/20 body copy and buttons, text-xs 12/18 badges and table headers | Matches DIRA |
-| Automated checks on all 71 pages plus the gallery and design system, at 1440, 1366, 1280, 1100, 1024, 768 and 390px | Fields, metrics, card titles and buttons beside inputs line up; nothing is clipped; no page-level horizontal scroll; 0 broken links |
+| Automated checks on all 72 pages plus the gallery and design system, at 1440, 1366, 1280, 1100, 1024, 768 and 390px | Fields, metrics, card titles and buttons beside inputs line up; nothing is clipped; no page-level horizontal scroll; 0 broken links |
 
 **Remaining deviations:**
 - The Landing page is the team's marketing design, rebuilt with DIRA colours; DIRA has no equivalent template. Its photo is replaced by an SVG panel (see below).
@@ -242,19 +243,34 @@ The Landing sketch is one raster image, so it was rebuilt in HTML/CSS and inline
 
 ## Responsive behaviour
 
-The 1440px desktop layout is the design of record (it matches the sketches and is what Figma imports). Narrower screens adapt as follows:
+The 1440px desktop layout is the design of record (it matches the sketches and is what Figma imports). Wider screens keep the content centred at 1440px with full-width chrome. Narrower screens adapt as follows:
 
 | Width | What changes |
 |---|---|
 | ≤1366px | Side-by-side panels (main + aside) stack. |
 | ≤1280px | Stat cards go to 2 per row; Landing cards go to 3 per row. |
 | ≤1024px | The sidebar becomes an off-canvas drawer, opened by a menu button in the header. It is CSS only (a hidden checkbox, no JavaScript) and closes from the × button or by tapping the dimmed area. Tool tiles go to 2 per row; the Landing art layer is replaced by a stacked hero on a dark green band. |
-| ≤768px | Page headers, forms and filters stack to one column. Tables scroll sideways inside their card (minimum width 720px), and tab rows scroll too. Modals and toasts span the screen with 16px margins. "CX INTRANET" is hidden next to the logo. |
+| ≤768px | Page headers, forms and filters stack to one column. Data tables turn into labelled cards (one per row, each value with its column name), and tab rows scroll sideways. Modals and toasts span the screen with 16px margins. "CX INTRANET" is hidden next to the logo. |
 | ≤480px | Stat cards and Landing cards go to one per row; modal buttons stack; the user's name and role are hidden (the avatar stays). |
 
-Wide tables scroll sideways inside their card instead of being cut off. From 1024px up this only happens in the 1025–1280px band, where the sidebar is still visible.
+On phones, data tables stack instead of scrolling sideways. Only the plain example tables in the design system still scroll inside their card; they can be focused with the keyboard.
 
 To capture a mobile frame in Figma, import the same page with a 390px viewport.
+
+## Desktop shell (sidebar, scrolling, wide screens)
+
+- **Collapsible sidebar.** On desktop (wider than 1024px), the **Collapse sidebar** button at the bottom of the sidebar shrinks it from 296px to an 80px icon rail; the button expands it again. Labels are hidden visually but kept for screen readers, and each icon has a tooltip. Like the bell and the mobile menu, it is CSS only: a checkbox inside the button, read with `:has()`. `cee-dashboard--sidebar-collapsed.html` shows the collapsed state for Figma.
+- **Fixed sidebar, scrolling content.** The header stays at the top. The sidebar stays in place at full viewport height, so Log out is always visible without scrolling. Only the content on the right scrolls. If a very short window can't fit every nav item, the sidebar scrolls on its own.
+- **No edges when zoomed out.** The header, sidebar and page background fill the whole window at any width or zoom level. Content is capped at 1440px and centred so lines don't get too long on very wide screens. Login and Landing also fill the window.
+- **Upcoming approved overtime** (dashboard) is now a list, not a table. Each row shows the line and date/time, the status, and a Manage button. It fits without sideways scrolling at any width. When the card is narrow, each item stacks with a full-width button (a CSS container query).
+
+## Accessibility and best practice
+
+- Every page has a `<main>` landmark and a **Skip to content** link. Navigation shows the current page with `aria-current`. Tables have `scope="col"` headers.
+- Hidden checkboxes sit inside their buttons, so keyboard focus follows the visual order and shows a focus ring.
+- Static dropdown mocks have no fake ARIA roles. Status dots are labelled images.
+- Respects `prefers-reduced-motion`. Uses `100dvh`, so mobile browser toolbars don't hide content.
+- An axe-core 4.10 audit of every page at 1440px and 390px passes all rules except one. **White text on DIRA green `#35A839`** (primary buttons and the active nav item) has a contrast ratio of 3.08:1. WCAG AA needs 4.5:1. The colour comes from DIRA PRO and is kept by team decision, to stay faithful to the design system.
 
 ## Importing into Figma (html.to.design)
 
