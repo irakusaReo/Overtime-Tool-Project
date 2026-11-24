@@ -32,16 +32,29 @@ def profile_card(me=ME, toggle=False):
             f'<div class="stack stack--2"><span class="text-sm text-muted">Skillsets</span><div class="pill-list">{pills}</div></div></div>{tg}</div>')
 
 
-def upcoming_rows(apps):
-    out = ""
+def upcoming_card(apps=None):
+    """Upcoming approved overtime as a responsive list: fits its card at any width, stacks on narrow cards."""
+    apps = APPROVED if apps is None else apps
+    items = ""
     for a in apps:
         st = "In progress" if a.get("phase") == "started" else "Approved"
-        out += tr([(a["queue"], "table__td--strong"),
-                   (f'{a["date"]}<span class="table__sub">{a["day"]}</span>', ""),
-                   (f'<span class="slot-time__range">{a["start"]} – {a["end"]}</span><span class="table__sub">{a["hours"]} h</span>', ""),
-                   (f'{status(st)}<span class="table__sub" style="margin-top:4px">{a["note"]}</span>', ""),
-                   (f'<a class="btn btn--link btn--sm" href="my-applications--approved.html">Manage</a>', "table__td--action")])
-    return out
+        items += (f'<li class="list-item">'
+                  f'<div class="list-item__main"><span class="list-item__title">{a["queue"]}</span>'
+                  f'<span class="list-item__meta">{a["day"]} {a["date"]} · {a["start"]} – {a["end"]} · {a["hours"]} h</span></div>'
+                  f'<div class="list-item__status">{status(st)}<span class="list-item__meta">{a["note"]}</span></div>'
+                  f'<a class="btn btn--secondary btn--sm list-item__action" href="my-applications--approved.html">Manage</a></li>')
+    return (f'<section class="card list-card" aria-labelledby="upcoming-title"><div class="card__header"><div class="card__titles">'
+            f'<h2 class="card__title" id="upcoming-title">Upcoming approved overtime</h2>'
+            f'<span class="card__subtitle">{len(PENDING)} pending · <a href="my-applications--pending.html">View</a></span></div></div>'
+            f'<ul class="list">{items}</ul></section>')
+
+
+def upcoming_skeleton(n=2):
+    rows = "".join('<li class="list-item"><div class="list-item__main">' + sk("120px", 16) + sk("220px", 14)
+                   + '</div><div class="list-item__status">' + sk("88px", 22, 9999) + sk("110px", 14) + '</div>'
+                   + sk("76px", 36, 8) + '</li>' for _ in range(n))
+    return ('<section class="card list-card"><div class="card__header">' + sk("220px", 20) + '</div>'
+            f'<ul class="list">{rows}</ul></section>')
 
 
 def eligible_mini():
@@ -69,9 +82,7 @@ def dashboard_main():
              + stat_card("Pending", str(len(PENDING)), "Awaiting Workforce")
              + stat_card("Approved this month", f"{MONTH_APPROVED} h", f"of {CAPS['monthly']} h monthly limit", pct(MONTH_APPROVED, CAPS["monthly"]))
              + '</div>')
-    upcoming = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Upcoming approved overtime</span>'
-                f'<span class="card__subtitle">{len(PENDING)} pending · <a href="my-applications--pending.html">View</a></span></div></div>'
-                + table(["Queue", "Date", "Slot time", "Status", "Action"], upcoming_rows(APPROVED), {4: "table__th--action"}) + '</div>')
+    upcoming = upcoming_card()
     return dash_header() + profile_card() + stats + f'<div class="grid-main-aside grid-main-aside--380">{upcoming}{eligible_mini()}</div>'
 
 
@@ -82,11 +93,11 @@ def dashboard():
              + stat_card("Pending", str(len(PENDING)), "Awaiting Workforce")
              + stat_card("Approved this month", f"{MONTH_APPROVED} h", f"of {CAPS['monthly']} h monthly limit", pct(MONTH_APPROVED, CAPS["monthly"]))
              + '</div>')
-    upcoming = (f'<div class="card card--table"><div class="card__header"><div class="card__titles"><span class="card__title">Upcoming approved overtime</span>'
-                f'<span class="card__subtitle">{len(PENDING)} pending · <a href="my-applications--pending.html">View</a></span></div></div>'
-                + table(["Queue", "Date", "Slot time", "Status", "Action"], upcoming_rows(APPROVED), {4: "table__th--action"}) + '</div>')
+    upcoming = upcoming_card()
     main = dash_header() + profile_card() + stats + f'<div class="grid-main-aside grid-main-aside--380">{upcoming}{eligible_mini()}</div>'
     write(G, "cee-dashboard.html", "Default", "Profile, stats, upcoming approved, eligible slots", app_page("Dashboard", "home", main))
+    write(G, "cee-dashboard--sidebar-collapsed.html", "Sidebar collapsed", "Desktop sidebar collapsed to the icon rail",
+          app_page("Dashboard", "home", main, collapsed=True))
 
     # empty: nothing applied or published yet
     stats0 = ('<div class="grid-3">' + stat_card("Eligible open slots", "0", "0 positions") + stat_card("Pending", "0", "Awaiting Workforce")
@@ -102,8 +113,7 @@ def dashboard():
     # loading
     prof_sk = ('<div class="card profile-card">' + sk("72px", 72, 9999) + '<div class="profile-card__main">' + sk("200px", 20) + sk("420px", 14)
                + '<div class="row row--2">' + sk("80px", 28, 9999) + sk("80px", 28, 9999) + sk("100px", 28, 9999) + '</div></div></div>')
-    up_sk = ('<div class="card card--table"><div class="card__header">' + sk("220px", 20) + '</div>'
-             + table(["Queue", "Date", "Slot time", "Status", "Action"], skeleton_rows([80, 80, 80, "pill", "btn"], 2), {4: "table__th--action"}) + '</div>')
+    up_sk = upcoming_skeleton()
     el_sk = '<div class="card"><div class="card__header">' + sk("160px", 20) + '</div><div class="card__body stack stack--4">' + (sk("100%", 40, 8) * 3) + '</div></div>'
     main = (dash_header() + prof_sk + '<div class="stat-grid">' + stat_skeleton() * 4 + '</div>'
             + f'<div class="grid-main-aside grid-main-aside--380">{up_sk}{el_sk}</div>')
@@ -174,7 +184,7 @@ def apply_self():
     page("apply-self.html", "Form", "Start time, hours, auto end time",
          apply_modal(S41, "08:00", 2, "10:00", hours_hint="Max 3 h"))
 
-    menu = ('<div class="menu" role="listbox" style="right:auto;width:340px">'
+    menu = ('<div class="menu" style="right:auto;width:340px">'
             f'<div class="menu__item menu__item--selected">08:00 <span class="menu__meta">up to 3 h</span>{icon("check")}</div>'
             '<div class="menu__item">09:00 <span class="menu__meta">up to 2 h</span></div>'
             '<div class="menu__item">10:00 <span class="menu__meta">up to 1 h</span></div>'
@@ -307,7 +317,7 @@ def behalf():
              "Search by EK number or name.", pad="56px 24px") + '</div>')
     page("apply-on-behalf.html", "Search", "Empty search", behalf_header() + search_card() + intro)
 
-    res = '<div class="menu" role="listbox">' + "".join(
+    res = '<div class="menu">' + "".join(
         f'<div class="menu__item{" menu__item--selected" if i == 0 else ""}"><span class="person"><span class="avatar avatar--sm">{r["name"][0]}{r["name"].split()[1][0]}</span>'
         f'<span class="person__text"><span class="person__name"><span class="mark">Wanj</span>{r["name"][4:]}</span>'
         f'<span class="person__meta">{r["ek"]}</span></span></span></div>' for i, r in enumerate(SEARCH_RESULTS)) + '</div>'

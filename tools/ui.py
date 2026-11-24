@@ -113,10 +113,24 @@ def error_state(what, pad="96px 24px"):
                        error=True, pad=pad)
 
 
+def label_cells(head, rows_html):
+    """Add data-label="<column>" to every body cell so tables can stack into labelled cards on phones."""
+    import re
+    names = [re.sub(r"<[^>]+>", "", h).strip() for h in head]
+    out = []
+    for i, part in enumerate(rows_html.split("<tr")):
+        if i == 0:
+            out.append(part); continue
+        n = iter(range(10**6))
+        part = re.sub(r"<td(?= )", lambda m: f'<td data-label="{names[next(n) % len(names)]}"', part)
+        out.append(part)
+    return "<tr".join(out)
+
+
 def table(head, rows_html, head_classes=None, foot=""):
     head_classes = head_classes or {}
-    th = "".join(f'<th class="table__th{(" " + head_classes[i]) if i in head_classes else ""}">{h}</th>' for i, h in enumerate(head))
-    return f'<table class="table"><thead><tr>{th}</tr></thead><tbody>{rows_html}</tbody>{foot}</table>'
+    th = "".join(f'<th scope="col" class="table__th{(" " + head_classes[i]) if i in head_classes else ""}">{h}</th>' for i, h in enumerate(head))
+    return f'<table class="table table--stack"><thead><tr>{th}</tr></thead><tbody>{label_cells(head, rows_html)}</tbody>{foot}</table>'
 
 
 def tr(cells, cls=""):

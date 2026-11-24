@@ -52,7 +52,7 @@ def bell_menu(unread_count=3, static=False, href_prefix=""):
                       f'<span class="notif__icon notif__icon--{n["type"]} bell-item__icon">{icon(NICON[n["type"]], "icon icon--sm")}</span>'
                       f'<span class="bell-item__body"><span class="bell-item__title">{n["title"]} · {n["queue"]}</span>'
                       f'<span class="bell-item__meta">{meta}</span></span>'
-                      f'<span class="bell-item__time"><span class="unread-dot"></span>{n["when"]}</span></a>')
+                      f'<span class="bell-item__time"><span class="unread-dot" role="img" aria-label="Unread"></span>{n["when"]}</span></a>')
         sub = f'<span class="bell-menu__count">{len(unread)} unread</span>'
         mark = '<button class="btn btn--link btn--sm" type="button">Mark all as read</button>'
     else:
@@ -64,17 +64,17 @@ def bell_menu(unread_count=3, static=False, href_prefix=""):
             f'<div class="bell-menu__foot"><a class="btn btn--secondary btn--block" href="{href_prefix}notifications.html">View all</a></div></div>')
 
 
-def header(root="..", user=USER, home_href="home.html", unread_count=3, href_prefix=""):
+def header(root="..", user=USER, home_href="home.html", unread_count=3, href_prefix="", bell_open=False):
     badge_html = f'<span class="app-header__bell-count">{unread_count}</span>' if unread_count else ""
     return f"""<header class="app-header">
-  <label class="app-header__menu" for="nav-toggle" aria-label="Open menu">{icon("menu")}</label>
+  <label class="app-header__menu"><input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Main menu">{icon("menu")}</label>
   <a class="app-header__brand" href="{home_href}" aria-label="CX Intranet home">
     <img class="app-header__logo" src="{root}/assets/safaricom-logo.png" alt="Safaricom" width="141" height="32">
     <span class="app-header__divider"></span>
     <span class="app-header__product">CX INTRANET</span>
   </a>
   <div class="app-header__user">
-    <label class="app-header__bell" for="bell-toggle" aria-label="Notifications, {unread_count} unread">{icon("bell")}{badge_html}</label>
+    <label class="app-header__bell"><input type="checkbox" id="bell-toggle" class="bell-toggle" aria-label="Notifications, {unread_count} unread"{" checked" if bell_open else ""}>{icon("bell")}{badge_html}</label>
     <span class="avatar">{user["initials"]}</span>
     <div class="app-header__user-text">
       <span class="app-header__user-name">{user["name"]}</span>
@@ -87,31 +87,36 @@ def header(root="..", user=USER, home_href="home.html", unread_count=3, href_pre
 """
 
 
-def sidebar(active, notif_count=3, href_prefix="", logo_root=".."):
+def sidebar(active, notif_count=3, href_prefix="", logo_root="..", collapsed=False):
     items = []
     for key, label, ico, href in CEE_NAV:
         cls = "sidenav__link" + (" sidenav__link--active" if key == active else "")
         cur = ' aria-current="page"' if key == active else ""
         count = (f'<span class="sidenav__count">{notif_count}</span>'
                  if key == "notifications" and notif_count else "")
-        items.append(f'    <li class="sidenav__item"><a class="{cls}" href="{href_prefix}{href}"{cur}>'
+        items.append(f'    <li class="sidenav__item"><a class="{cls}" href="{href_prefix}{href}"{cur} title="{label}">'
                      f'{icon(ico)}<span class="sidenav__label">{label}</span>{count}</a></li>')
-    return ('<nav class="sidenav" aria-label="Main">\n'
+    return ('<nav class="sidenav" aria-label="Main"><div class="sidenav__inner">\n'
             f'  <div class="sidenav__mobile-head"><img src="{logo_root}/assets/safaricom-logo.png" alt="Safaricom" width="132" height="30">'
             f'<label class="btn btn--ghost btn--icon-only btn--sm" for="nav-toggle" aria-label="Close menu">{icon("x")}</label></div>\n'
             '  <ul class="sidenav__list">\n'
             + "\n".join(items) +
-            f'\n  </ul>\n  <div class="sidenav__footer"><a class="sidenav__footer-inner" href="{href_prefix}login.html">'
-            f'<span>Log out</span>{icon("logout")}</a></div>\n</nav>\n')
+            f'\n  </ul>\n  <div class="sidenav__footer">'
+            f'<label class="sidenav__collapse" title="Collapse or expand the sidebar">'
+            f'<input type="checkbox" id="sidebar-collapse" class="sidebar-toggle" aria-label="Collapse sidebar"{" checked" if collapsed else ""}>'
+            f'<span class="sidenav__collapse-icon sidenav__collapse-icon--open">{icon("panel-left")}</span>'
+            f'<span class="sidenav__collapse-icon sidenav__collapse-icon--closed">{icon("panel-right")}</span>'
+            f'<span class="sidenav__label">Collapse sidebar</span></label>'
+            f'<a class="sidenav__footer-inner" href="{href_prefix}login.html" title="Log out">'
+            f'<span class="sidenav__label">Log out</span>{icon("logout")}</a></div>\n</div></nav>\n')
 
 
-def app_page(title, active, main_html, root="..", overlay_html="", notif_count=3, bell_open=False):
+def app_page(title, active, main_html, root="..", overlay_html="", notif_count=3, bell_open=False, collapsed=False):
     """overlay_html (toasts, modals) is placed inside .app so it is positioned against the full canvas.
     notif_count = unread notifications on the header bell; bell_open renders the dropdown already open."""
-    checked = " checked" if bell_open else ""
-    return (head(title, root) + '<body>\n<div class="app">\n'
-            '<input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">\n'
-            f'<input type="checkbox" id="bell-toggle" class="bell-toggle" aria-label="Show notifications"{checked}>\n'
-            '<label class="bell-scrim" for="bell-toggle" aria-label="Close notifications"></label>\n' + header(root, unread_count=notif_count) +
-            '<div class="app__body">\n<label class="nav-scrim" for="nav-toggle" aria-label="Close menu"></label>\n' + sidebar(active, notif_count) +
-            f'<main class="app__main">\n{main_html}\n</main>\n</div>\n{overlay_html}</div>\n</body>\n</html>\n')
+    return (head(title, root) + '<body>\n<a class="skip-link" href="#main">Skip to content</a>\n<div class="app">\n'
+            '<label class="bell-scrim" for="bell-toggle" aria-hidden="true"></label>\n'
+            + header(root, unread_count=notif_count, bell_open=bell_open) +
+            '<div class="app__body">\n<label class="nav-scrim" for="nav-toggle" aria-hidden="true"></label>\n'
+            + sidebar(active, notif_count, collapsed=collapsed) +
+            f'<main class="app__main" id="main" tabindex="-1">\n{main_html}\n</main>\n</div>\n{overlay_html}</div>\n</body>\n</html>\n')

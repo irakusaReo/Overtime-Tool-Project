@@ -162,7 +162,8 @@
                0 3px 3px -1.5px rgba(10, 13, 18, 0.04);
 
   /* ---------- Layout ----------------------------------------------------- */
-  --canvas-width:  1440px;
+  --canvas-width:  1440px;      /* design frame width for Figma imports */
+  --content-max-width: 1440px;  /* cap for content inside the main area on very wide screens */
   --header-height: 72px;       /* DIRA header navigation */
   --sidebar-width: 296px;      /* DIRA sidebar navigation */
   --content-padding-x: var(--container-padding-desktop);

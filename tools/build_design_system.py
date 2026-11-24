@@ -198,10 +198,10 @@ def build():
             ("Line 100", "Jan 11, 2025", "18:00 – 20:00", "1 of 8 left", badge("success", "Open", "check"), '<button class="btn btn--primary btn--sm">Apply</button>'),
             ("Mpesa Corporate", "Jan 12, 2025", "06:00 – 12:00", "0 of 6 left", badge("success", "Full", "check"), '<button class="btn btn--primary btn--sm" disabled>Full</button>')]
     tr = "".join(f'<tr class="table__row"><td class="table__td table__td--strong">{a}</td><td class="table__td">{b}</td><td class="table__td">{c}</td><td class="table__td">{d}</td><td class="table__td">{e}</td><td class="table__td table__td--action">{f}</td></tr>' for a, b, c, d, e, f in rows)
-    table = (f'<div class="table-wrap"><table class="table"><thead><tr><th class="table__th">Queue</th><th class="table__th">Date</th><th class="table__th">Slot time</th>'
+    table = (f'<div class="table-wrap" tabindex="0" role="region" aria-label="Example table"><table class="table"><thead><tr><th class="table__th">Queue</th><th class="table__th">Date</th><th class="table__th">Slot time</th>'
              f'<th class="table__th">Remaining capacity</th><th class="table__th">Status</th><th class="table__th table__th--action">Action</th></tr></thead><tbody>{tr}</tbody></table>'
              f'<div class="pagination"><span>Page 1 of 3</span><div class="row row--3"><button class="btn btn--secondary btn--sm">Previous</button><button class="btn btn--secondary btn--sm">Next</button></div></div></div>')
-    muted = ('<div class="table-wrap"><table class="table table--muted-head"><thead><tr><th class="table__th">Queue</th><th class="table__th">Slot Time</th><th class="table__th">No of Agents</th><th class="table__th table__th--action">Action</th></tr></thead><tbody>'
+    muted = ('<div class="table-wrap" tabindex="0" role="region" aria-label="Example table, muted header"><table class="table table--muted-head"><thead><tr><th class="table__th">Queue</th><th class="table__th">Slot Time</th><th class="table__th">No of Agents</th><th class="table__th table__th--action">Action</th></tr></thead><tbody>'
              + "".join(f'<tr class="table__row"><td class="table__td">Social Media</td><td class="table__td">07:00 – 08:00</td><td class="table__td">{n}</td><td class="table__td table__td--action"><span style="color:var(--color-error-brand);display:inline-flex">{icon("trash")}</span></td></tr>' for n in (5, 10))
              + '</tbody></table></div>')
     toolbar = (f'<div class="table-toolbar"><div class="input search table-toolbar__search">{icon("search")}<span class="input__placeholder">Search</span></div>'
@@ -270,7 +270,7 @@ def build():
     import screens_a, screens_b
     menu = ('<div style="height:300px"><div class="field field--menu" style="width:340px"><label class="field__label">Preferred start time<span class="field__required">*</span></label>'
             f'<div class="input select input--focus">{icon("clock")}<span class="input__value">08:00</span>{icon("chevron-down", "icon select__chevron")}</div>'
-            '<div class="menu" role="listbox">'
+            '<div class="menu">'
             f'<div class="menu__item menu__item--selected">08:00 <span class="menu__meta">up to 3 h</span>{icon("check")}</div>'
             '<div class="menu__item">09:00 <span class="menu__meta">up to 2 h</span></div><div class="menu__item">10:00 <span class="menu__meta">up to 1 h</span></div>'
             f'<div class="menu__note">{icon("info", "icon icon--sm")}<span>07:00 hidden: overlaps your approved overtime.</span></div></div></div></div>')
@@ -336,14 +336,14 @@ def build():
     .ds-shell__content {{ padding: 24px 16px; }}
   }}
 </style>
-<div class="ds">
+<main class="ds">
   <div class="ds__intro">
     <img src="assets/safaricom-logo.png" alt="Safaricom" width="212" height="48" style="width:212px;height:48px">
     <h1 class="page-title">DIRA PRO · CX Intranet Overtime (CEE)</h1>
     <p class="page-subtitle">Every token and component here follows DIRA PRO, Safaricom's design system. Tokens: <code>css/tokens.css</code>. Components: <code>css/components.css</code>.</p>
   </div>
 {''.join(out)}
-</div>
+</main>
 </body>
 </html>
 """

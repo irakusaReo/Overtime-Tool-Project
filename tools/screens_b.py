@@ -125,7 +125,7 @@ def edit_pending():
                 meta = "Current" if is_cur else f'{o["left"]} left'
                 items += (f'<div class="menu__item{" menu__item--selected" if is_cur else ""}">{edit_slot_label(o)}'
                           f'<span class="menu__meta">{meta}</span>{icon("check") if is_cur else ""}</div>')
-            ctl = (f'<div class="field__control">{ctl}<div class="menu" role="listbox">{items}'
+            ctl = (f'<div class="field__control">{ctl}<div class="menu">{items}'
                    f'<div class="menu__note">{icon("info", "icon icon--sm")}<span>Only open slots you\'re eligible for. Full slots aren\'t listed.</span></div></div></div>')
         return field("Slot", ctl, True, "Any open slot or queue you're eligible for")
 
@@ -329,7 +329,7 @@ def notif_item(n):
     facts += f'<span>Slot time <strong>{n["slot"]}</strong></span>'
     extra = f'<span class="notif__extra">{n["extra"]}</span>' if n.get("extra") else ""
     ch = "".join(f'<span class="badge badge--neutral">{icon(CH_ICON[c], "icon icon--xs")}{c}</span>' for c in n["channels"])
-    dot = '<span class="unread-dot" aria-label="Unread"></span>' if n["unread"] else ""
+    dot = '<span class="unread-dot" role="img" aria-label="Unread"></span>' if n["unread"] else ""
     cta = ('<a class="btn btn--secondary btn--sm" href="apply-self.html">Apply</a>' if n["type"] == "slot" else
            ('<a class="btn btn--link btn--sm" href="my-applications--approved.html">View</a>' if n["type"] == "approved" else ""))
     return (f'<div class="notif{" notif--unread" if n["unread"] else ""}"><span class="notif__icon notif__icon--{n["type"]}">{icon(NICON[n["type"]])}</span>'
