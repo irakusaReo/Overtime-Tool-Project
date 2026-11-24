@@ -24,7 +24,7 @@
   .app-header { padding: 8px 16px; gap: 12px; }
   .app-header__menu {
     display: inline-flex; align-items: center; justify-content: center; flex: none;
-    width: 40px; height: 40px; border-radius: var(--radius-md); color: var(--color-text-on-brand); cursor: pointer;
+    width: 40px; height: 40px; border-radius: var(--radius-md); color: var(--fg-secondary); cursor: pointer;
   }
   .app-header__brand { flex: 1; min-width: 0; }
   .bell-menu { right: 16px; }
@@ -43,7 +43,7 @@
   .nav-scrim { position: fixed; inset: 0; z-index: 60; background: var(--color-overlay); cursor: pointer; }
   .nav-toggle:checked ~ .app__body .sidenav { transform: none; }
   .nav-toggle:checked ~ .app__body .nav-scrim { display: block; }
-  .nav-toggle:focus-visible ~ .app-header .app-header__menu { box-shadow: 0 0 0 3px rgba(255,255,255,.6); }
+  .nav-toggle:focus-visible ~ .app-header .app-header__menu { box-shadow: var(--focus-ring); }
 
   .tool-grid { grid-template-columns: repeat(2, 1fr); }
   .tool-grid__wide { grid-column: span 2; }
