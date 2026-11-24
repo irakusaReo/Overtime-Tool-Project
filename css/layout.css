@@ -55,7 +55,7 @@
 .auth__bg { position: absolute; inset: 0; width: 100%; height: 100%; }   /* decorative faceted background (SVG) */
 .auth__card {
   position: relative; display: flex; flex-direction: column; width: 516px;
-  background: var(--color-bg-card); border-radius: var(--radius-md); box-shadow: var(--shadow-xs);
+  background: var(--bg-primary); border: 1px solid var(--border-secondary); border-radius: var(--radius-xl); box-shadow: var(--shadow-xs);
 }
 .auth__body { display: flex; flex-direction: column; gap: var(--space-8); padding: 48px 48px 32px; }
 .auth__footer { padding: 24px 24px; border-top: 1px solid var(--color-border-subtle); text-align: center; font-size: var(--text-sm-size); line-height: var(--text-sm-lh); color: var(--color-text-body); }
@@ -66,7 +66,7 @@
    INTRANET HOME (Home sketch)
    ========================================================================== */
 .home-hero { display: flex; flex-direction: column; gap: 20px; padding: 0 0 44px 14px; }
-.home-hero__title { font-size: var(--text-xl-size); line-height: var(--text-xl-lh); font-weight: var(--font-weight-semibold); color: var(--color-brand-500); }
+.home-hero__title { font-size: var(--display-xs-size); line-height: var(--display-xs-lh); font-weight: var(--font-weight-semibold); color: var(--text-brand-secondary); }
 .home-hero__lead { font-size: var(--text-md-size); line-height: var(--text-md-lh); font-weight: var(--font-weight-semibold); color: var(--color-text-heading); }
 .home-hero__banner { position: relative; display: block; width: 100%; height: 150px; border-radius: 0; }
 .home-section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }

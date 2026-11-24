@@ -1,6 +1,6 @@
 # CX Intranet · Workforce Overtime Management: CEE screens
 
-High-fidelity static HTML/CSS for the **CEE / Support Analyst** experience, styled to match the existing Workforce Analyst Figma sketches. Built for import into Figma with **html.to.design**.
+High-fidelity static HTML/CSS for the **CEE / Support Analyst** experience, built on **DIRA PRO**, Safaricom's design system. Built for import into Figma with **html.to.design**.
 
 > **Status:** all screens are built and awaiting final review: the design system, the shared layout, and CEE screens 1–10 with every state.
 
@@ -11,41 +11,66 @@ Open `index.html` for the gallery of every page.
 | Path | Purpose |
 |---|---|
 | `css/fonts.css` | Proxima Nova `@font-face` (weights 400–900); expects licensed woff2 files in `assets/fonts/` |
-| `css/tokens.css` | Design tokens (CSS custom properties) extracted from the Figma export |
+| `css/tokens.css` | DIRA PRO design tokens (primitives plus semantic and component tokens, named after DIRA's Figma variables), with legacy aliases |
 | `css/components.css` | BEM components: header, sidebar, buttons, inputs, selects, date and search fields, tables, badges, stat cards, banners and alerts, modals, toasts, tooltip, empty, error and skeleton, tabs, checkbox, radio and toggle, profile card, tool card |
 | `css/layout.css` | Fluid canvas (max 1440px), app shell (header + sidebar + main), stacks and grids, auth layout |
 | `css/responsive.css` | Breakpoints at 1366, 1280, 1024, 768 and 480px; loaded last on every page |
 | `design-system.html` | Every token and component on one page |
 | `index.html` | Gallery linking every page, grouped by screen |
 | `pages/*.html` | One static file per screen or state, responsive from 360px to 1440px |
-| `assets/safaricom-logo.png` / `safaricom-logo-white.png` | The supplied Safaricom logo, cropped to its edges, with a transparent background. The white version keeps the red swoosh and turns the green wordmark white, for the green header and the Landing bar (as in the sketches). |
+| `assets/safaricom-logo.png` / `safaricom-logo-white.png` | The supplied Safaricom logo, cropped to its edges, with a transparent background. The colour version is used in the white DIRA header. The white version (green wordmark turned white) is only used on the Landing page's dark green bar. |
 | `assets/icons/*.svg` | Outline icon set; also inlined in every page |
 | `reference/` | Sketches (PNG), Figma CSS export, journey map (`.docx` plus a `.txt` made with pandoc) |
 | `tools/` | Optional Python authoring helpers that write the HTML: `build_pages.py` writes all pages and the gallery (screens live in `screens_a.py` and `screens_b.py`); `build_design_system.py` writes the design-system page. Shared helpers are in `ui.py`, `shell.py` and `icons.py`; sample data is in `data.py`. The committed HTML is the deliverable and needs no build step. |
 
-## Design tokens: decisions
+## DIRA PRO compliance
 
-Everything comes from `reference/figma-export.css` unless it is marked **[addition]**.
+Every screen follows **DIRA PRO** ([Figma](https://www.figma.com/design/kLbpBe3UA8fYnJZn93fa72/DIRA-PRO)).
 
-- **Brand:** `#35A839` (primary), `#2D8F30` (required asterisk and hover, from the export), `#EBF6EB` / `#A8DAAA` (Green 50/200 in the export), `#1BA93A` / `#2CB34A` (landing shapes).
-- **Text:** `#181D27` / `#414651` / `#535862` / `#717680`, plus `#A4A7AE` for disabled.
-- **Borders and surfaces:** `#D5D7DA` / `#E9EAEB`; `#FAFAFA` page, `#FFFFFF` card, `#FDFDFD` table cell, `#F5F5F5` muted.
-- **Success badge:** `#ECFDF3` / `#ABEFC6` / `#067647`, with icon `#17B26A`.
-- **Error:** these values were found in the export: badge `#FEF3F2` / `#B42318`, icon `#F04438`; destructive `#D92D20`; trash `#E62634`. The border `#FECDCA` is an [addition].
-- **Attention banner:** these values were found in the export: `#FEF7C3` bg and `#B93815` text ("3 items require your attention").
-- **Avatar:** these values were found in the export: `#DCFAE6` bg and `#079455` initials.
-- **Pending / warning badge [addition]:** `#FFFAEB` / `#FEDF89` / `#B54708`, icon `#F79009`.
-- **Type:** **Proxima Nova on every page and every element**. `css/fonts.css` declares weights 400–900, loaded from an installed copy or from licensed files in `assets/fonts/` (see that folder's README). The font is licensed, so it isn't committed; until the files are added, text falls back to Inter, then system-ui. Sizes are 12/18, 14/20, 16/24, 18/28, 24/32 and 72/90 (landing).
-- **Radius:** 6 (nav item), 8 (inputs, buttons, cards), 12 (modals), 9999 (badges). **Shadows:** `shadow-xs` and `shadow-xs-skeuomorphic` from the export; `shadow-lg` and `shadow-xl` are [additions] for toasts and modals.
-- **Layout:** header 64px, sidebar 296px, inputs and buttons 44px, table rows 72px (cell padding 16px 24px). All of these come from the export.
+### Read directly from the DIRA PRO Figma file
+
+- **Colour variables.** The Primary Green ramp 25–950 (500 = Main_Green #35A839), Primary Red (#E4002B), the gray scale, Success, Warning and Error.
+- **Semantic tokens.** `text-*`, `fg-*`, `bg-*` (e.g. `bg-active` #35A839, `bg-brand-solid` #2D8F30), `border-*`, `utility-*`, and the button and avatar component colours.
+- **Type scale.** Proxima Nova for body and display: text-xs 12/18 to text-xl 20/30, display-xs 24/32, display-sm 30/38, display-xl 60/72. DIRA's "Medium" styles use weight 600.
+- **Spacing, radius and shadows.** Spacing xxs 2 to 10xl 128, and container padding 32. Radius xs 4 to 3xl 20 and full. Shadows xs, xs-skeuomorphic and lg.
+- **Application navigation.** The white header navigation (colour logo, icon buttons, avatar). The sidebar nav item, where the current item has a solid `bg-active` fill with white text and icon, and hover uses `bg-primary_hover`.
+- **Dashboard example.** Page header (24/32 title plus a tertiary subtitle, Secondary and Primary actions); left-aligned metric cards with a 30/38 value; 12px card radius; green-filled tabs and button-group items.
+
+### Applied from DIRA's Untitled UI base, with DIRA tokens
+
+I couldn't open the detailed component pages: the Figma connector stopped after its per-seat call limit. DIRA PRO is built on Untitled UI (its component token names match exactly), so these follow the standard Untitled UI specs, filled with DIRA's tokens:
+
+- **Buttons:** sm 36, md 40 (default), lg 44, xl 48. Primary, Secondary, Tertiary, Link and Destructive.
+- **Inputs:** 44px, with a border-brand plus green-100 focus ring.
+- **Pill badges:** utility 50 background, 200 border, 700 text.
+- **Tables:** 44px header on bg-secondary, 12px semibold labels.
+- **Modals:** 16px radius with a featured icon.
+- **Alerts and toasts:** 12px radius.
+
+**Please check these against the DIRA PRO component pages:** Buttons, Inputs, Badges, Tables, Modals, Alerts & notifications, Toasts, Empty states.
+
+### Changes from the earlier, sketch-based design
+
+1. **Header:** the green top bar is replaced by DIRA's white header navigation, with the colour logo, the bell as an icon button, and the avatar with name and role. DIRA has no green header bar component.
+2. **Sidebar:** the current item is now a solid green fill (`bg-active`) instead of green text.
+3. **Buttons:** the default size is now DIRA md (40px, 14px text). Buttons sitting next to a 44px input use lg. The green "outline" button isn't a DIRA variant, so those buttons are now Secondary.
+4. **Links:** brand text now uses `text-brand-secondary` (#267728) rather than #35A839.
+5. **Stat cards:** now DIRA Metrics: left-aligned, with 30px values, a border and shadow-xs. The centred style came from the Workforce sketch.
+6. **Tables:** DIRA headers (12px semibold, gray header row). Cells use text-tertiary and the primary column uses text-primary.
+7. **Tabs and the "Applying for" toggle:** DIRA button tabs and button group, with the active item in solid green.
+8. **Cards, alerts, toasts and summaries:** radius 12, plus shadow-xs on cards. Modals use radius 16.
+9. **Avatars:** DIRA's neutral initials avatar (gray-100 with a contrast border) replaces the green-tinted one.
+10. **Palette:** off-palette colours (#24732A, #E62634, #1BA93A, and greens and grays sampled from the sketch images) are replaced by DIRA tokens. That includes the decorative SVGs on Home, Landing and Login.
+
+**Accessibility note:** DIRA's primary button and active states put white text on #35A839, which is about 2.9:1 contrast, below WCAG AA for 14–16px text. This follows the design system as specified; raise it with the DIRA owners if AA is required.
 
 ## Deviations & additions
 
-1. **Page title size.** The export says **24px/32px Semibold**. The prompt said "~32px as in sketches", but the sketch PNGs are 2000px wide for a 1440px frame (1.39×), so 24px looks like about 33px in them. The design uses 24px. To change it, edit `--text-xl-size`.
-2. **Purple "Filters" button.** The Status Overview sketch uses `#6941C6` / `#D6BBFB`, which looks like a leftover from the Untitled UI kit. It is replaced with the secondary (grey) or green outline button.
+1. **Page title size.** 24/32 semibold (DIRA display-xs). The sketch PNGs were drawn at 1.39×, which is why titles looked about 32px in them.
+2. **Purple "Filters" button.** The Status Overview sketch's purple button isn't a DIRA colour; filters use DIRA Secondary buttons.
 3. **Badge font.** The export uses "Futura Bk BT" for badge text, which looks accidental. It is replaced with Proxima Nova Medium 12px.
 4. **Cancelled** uses a neutral grey badge, not red, so it doesn't read as an error. **No Show** and **Rejected** use red.
-5. **Focus ring**, **pressed green** `#24732A`, and the **error border** `#FECDCA` are additions.
+5. **Focus ring:** DIRA brand ring (2px white, then 4px #35A839) on buttons; inputs use border-brand plus a green-100 ring.
 6. **Tooltips and modals** are rendered statically (open) so html.to.design captures them. A modal preview uses `.modal-overlay--static`.
 7. **Skeletons** are flat `#F5F5F5` blocks with no animation.
 8. **Overlays** (toasts, modals) are positioned `absolute` against the full `.app` canvas, not `fixed` to the viewport, so a full-page capture places them correctly.
@@ -185,22 +210,20 @@ Everything comes from `reference/figma-export.css` unless it is marked **[additi
 - **Editing a pending application:** first come, first served still applies. Saving cancels the old application, which frees its slot, and submits a new one. The slot list shows only slots that aren't full.
 - **Pay rates:** weekday overtime pays 1.5×. Weekend and public-holiday overtime pays 2.0×, as do regular allocated shifts worked on a public holiday.
 
-## Self-check against the sketches
+## Self-check against DIRA PRO
 
 | Check | Result |
 |---|---|
-| Header: 64px, #35A839, logo, divider, CX INTRANET, avatar + name + role + chevron | Same component on every app page |
-| Sidebar: 296px, white, 40px items, 6px radius, 16px semibold, green active text and icon, Log out pinned to the bottom | Same on every app page |
-| Page background #FAFAFA, cards #FFFFFF with #E9EAEB border, 8px radius | Matches |
-| Inputs 44px with #D5D7DA border; primary buttons #35A839 with skeuomorphic shadow | Matches the export |
-| Table rows 72px, cells #FDFDFD with 16px 24px padding, success badges #ECFDF3 / #ABEFC6 / #067647 | Matches the export |
-| Type: 24/32 titles, 18/28 card titles, 16/24 body, 14/20 tables, 12/18 badges | Matches the export |
-| Automated checks on all 65 pages plus the gallery and design system at 1440, 1024, 768 and 390px | No console errors, no page-level horizontal scroll, and nothing extends past the viewport except inside deliberate scroll areas (tables, tabs) |
+| Header: 72px white bar, border-secondary, colour logo, bell icon button, avatar + name (text-secondary) + role (text-tertiary) | Same on every app page |
+| Sidebar: 296px, white, border-secondary. Items 40px, 6px radius, 16px semibold text-secondary, fg-quaternary icons. Current item bg-active with white text | Same on every app page |
+| Page bg-secondary #FAFAFA; cards bg-primary with border-secondary, 12px radius, shadow-xs | Matches DIRA |
+| Buttons: Primary #35A839 (hover #2D8F30) and Secondary with a #D5D7DA border, skeuomorphic shadow, md 40px | Matches DIRA tokens |
+| Inputs 44px with border-primary; tables with a 44px gray header row and 72px rows; pill badges using utility 50/200/700 | Untitled UI base with DIRA tokens |
+| Type: display-xs 24/32 titles, display-sm 30/38 metrics, text-lg 18/28 card titles, text-sm 14/20 body copy and buttons, text-xs 12/18 badges and table headers | Matches DIRA |
+| Automated checks on all 71 pages plus the gallery and design system, at 1440, 1366, 1280, 1100, 1024, 768 and 390px | Fields, metrics, card titles and buttons beside inputs line up; nothing is clipped; no page-level horizontal scroll; 0 broken links |
 
 **Remaining deviations:**
-- The page title is 24px, which is the export value (see deviation 1 above).
-- On the Create Slot sketch the table header is grey #E9EAEB. That style is kept as a `table--muted-head` variant, and CEE tables use a white header like the Status Overview sketch.
-- The Landing photo is replaced by an SVG panel (see below).
+- The Landing page is the team's marketing design, rebuilt with DIRA colours; DIRA has no equivalent template. Its photo is replaced by an SVG panel (see below).
 - Proxima Nova shows only once licensed files are in `assets/fonts/` or the font is installed. Until then the fallback is Inter.
 
 ## Landing page rebuild notes

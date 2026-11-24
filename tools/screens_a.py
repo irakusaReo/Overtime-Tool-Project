@@ -58,7 +58,7 @@ def eligible_mini():
 
 def dash_header():
     return page_header("Good morning, Brian", "Fri Jan 10, 2025",
-                       f'<a class="btn btn--outline" href="apply-on-behalf.html">{icon("users-plus")}Apply on Behalf</a>'
+                       f'<a class="btn btn--secondary" href="apply-on-behalf.html">{icon("users-plus")}Apply on Behalf</a>'
                        f'<a class="btn btn--primary" href="available-slots.html">{icon("search")}Find overtime</a>')
 
 
@@ -251,7 +251,7 @@ def search_card(value="", placeholder=True, focus=False, menu="", error=False, h
            f'<div class="{cls}">{icon("search")}{v}</div><span class="field__hint">{hint}</span>{menu}</div>')
     return (f'<div class="card"><div class="card__header"><div class="card__titles"><span class="card__title">Find a colleague</span></div></div>'
             f'<div class="card__body"><div class="form-row" style="align-items:flex-start">{fld}'
-            f'<a class="btn btn--primary search-btn" href="apply-on-behalf--eligible.html">Search</a></div></div></div>')
+            f'<a class="btn btn--primary btn--lg search-btn" href="apply-on-behalf--eligible.html">Search</a></div></div></div>')
 
 
 def colleague_card(c, step="2. Colleague"):

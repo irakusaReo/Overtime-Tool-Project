@@ -69,7 +69,7 @@ def header(root="..", user=USER, home_href="home.html", unread_count=3, href_pre
     return f"""<header class="app-header">
   <label class="app-header__menu" for="nav-toggle" aria-label="Open menu">{icon("menu")}</label>
   <a class="app-header__brand" href="{home_href}" aria-label="CX Intranet home">
-    <img class="app-header__logo" src="{root}/assets/safaricom-logo-white.png" alt="Safaricom" width="159" height="36">
+    <img class="app-header__logo" src="{root}/assets/safaricom-logo.png" alt="Safaricom" width="141" height="32">
     <span class="app-header__divider"></span>
     <span class="app-header__product">CX INTRANET</span>
   </a>

@@ -14,12 +14,12 @@ def login():
     bg = ('<svg class="auth__bg" viewBox="0 0 1440 960" preserveAspectRatio="none" aria-hidden="true">'
           '<rect width="1440" height="960" fill="#FAFAFA"/>'
           '<polygon points="0,0 520,0 210,390" fill="#F5F5F5"/>'
-          '<polygon points="0,560 210,390 470,520 0,960" fill="#F3F3F3"/>'
-          '<polygon points="210,390 520,0 760,0 470,520" fill="#FCFCFC"/>'
-          '<polygon points="960,0 1440,0 1440,280 1180,330" fill="#F4F4F4"/>'
-          '<polygon points="1180,330 1440,280 1440,700" fill="#FBFBFB"/>'
-          '<polygon points="980,620 1440,700 1440,960 900,960" fill="#F2F2F2"/>'
-          '<polygon points="470,520 980,620 900,960 260,960" fill="#F7F7F7"/>'
+          '<polygon points="0,560 210,390 470,520 0,960" fill="#F5F5F5"/>'
+          '<polygon points="210,390 520,0 760,0 470,520" fill="#FDFDFD"/>'
+          '<polygon points="960,0 1440,0 1440,280 1180,330" fill="#F5F5F5"/>'
+          '<polygon points="1180,330 1440,280 1440,700" fill="#FAFAFA"/>'
+          '<polygon points="980,620 1440,700 1440,960 900,960" fill="#F5F5F5"/>'
+          '<polygon points="470,520 980,620 900,960 260,960" fill="#FAFAFA"/>'
           '</svg>')
     ms = ('<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="#F25325"/>'
           '<rect x="17" y="1" width="14" height="14" fill="#80BC06"/><rect x="1" y="17" width="14" height="14" fill="#05A6F0"/>'
@@ -39,7 +39,7 @@ def login():
         <a class="btn btn--primary btn--lg btn--block" href="landing.html">Proceed</a>
       </form>
       <div class="auth__divider"><span class="auth__divider-line"></span><span>or continue with</span><span class="auth__divider-line"></span></div>
-      <a class="btn btn--secondary btn--lg btn--block" href="landing.html" style="border-color:var(--color-text-body);box-shadow:none;gap:16px;font-size:18px">{ms}Azure</a>
+      <a class="btn btn--secondary btn--lg btn--block" href="landing.html" style="gap:12px">{ms}Azure</a>
     </div>
     <div class="auth__footer">By signing in you agree to our <a href="#">Terms &amp; Conditions</a> &amp; <a href="#">Privacy Policy</a></div>
   </div>
@@ -56,32 +56,32 @@ def login():
 def landing():
     art = """<svg class="landing__art" viewBox="0 0 1440 960" preserveAspectRatio="none" aria-hidden="true">
   <defs>
-    <linearGradient id="office" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1FAF4"/><stop offset="1" stop-color="#BFE3CB"/></linearGradient>
-    <linearGradient id="deep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07743D"/><stop offset="1" stop-color="#025C29"/></linearGradient>
+    <linearGradient id="office" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6FEF9"/><stop offset="1" stop-color="#CFEACF"/></linearGradient>
+    <linearGradient id="deep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#267728"/><stop offset="1" stop-color="#1E6020"/></linearGradient>
     <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#FFFFFF" stop-opacity=".85"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
   </defs>
   <!-- office panel (stands in for the photo in the sketch) -->
   <rect x="760" y="94" width="680" height="520" fill="url(#office)"/>
-  <rect x="1230" y="130" width="150" height="230" rx="4" fill="#E6F4EA"/>
-  <circle cx="1400" cy="300" r="46" fill="#5DB37A" opacity=".55"/><circle cx="1360" cy="330" r="34" fill="#3E9A5E" opacity=".5"/>
+  <rect x="1230" y="130" width="150" height="230" rx="4" fill="#EBF6EB"/>
+  <circle cx="1400" cy="300" r="46" fill="#59B85D" opacity=".55"/><circle cx="1360" cy="330" r="34" fill="#2D8F30" opacity=".5"/>
   <rect x="760" y="94" width="520" height="520" fill="url(#fade)"/>
   <!-- translucent brand blocks over the bar -->
-  <rect x="636" y="0" width="175" height="183" rx="72" fill="#1BA93A" opacity=".85"/>
-  <rect x="835" y="12" width="176" height="160" rx="10" fill="#1BA93A" opacity=".85"/>
+  <rect x="636" y="0" width="175" height="183" rx="72" fill="#35A839" opacity=".85"/>
+  <rect x="835" y="12" width="176" height="160" rx="10" fill="#35A839" opacity=".85"/>
   <!-- bottom waves -->
-  <path d="M0 470 C 260 560, 520 560, 760 470 S 1220 360, 1440 420 L1440 960 L0 960 Z" fill="#E9F6EE"/>
-  <path d="M0 640 C 300 560, 640 600, 900 520 S 1300 430, 1440 450 L1440 960 L0 960 Z" fill="#C7E8D2" opacity=".7"/>
+  <path d="M0 470 C 260 560, 520 560, 760 470 S 1220 360, 1440 420 L1440 960 L0 960 Z" fill="#EBF6EB"/>
+  <path d="M0 640 C 300 560, 640 600, 900 520 S 1300 430, 1440 450 L1440 960 L0 960 Z" fill="#CFEACF" opacity=".7"/>
   <path d="M0 800 C 320 740, 700 760, 1000 700 S 1320 640, 1440 650 L1440 960 L0 960 Z" fill="url(#deep)"/>
-  <path d="M0 790 C 320 730, 700 750, 1000 690 S 1320 630, 1440 640" stroke="#7DD66E" stroke-width="3" fill="none"/>
-  <rect x="1365" y="600" width="75" height="360" fill="#1BA93A" opacity=".8"/>
+  <path d="M0 790 C 320 730, 700 750, 1000 690 S 1320 630, 1440 640" stroke="#80C882" stroke-width="3" fill="none"/>
+  <rect x="1365" y="600" width="75" height="360" fill="#35A839" opacity=".8"/>
 </svg>"""
     headset = """<svg width="300" height="300" viewBox="0 0 300 300" aria-hidden="true">
-  <path d="M40 170 A110 110 0 0 1 260 170" stroke="#07743D" stroke-width="22" fill="none" stroke-linecap="round"/>
-  <rect x="18" y="150" width="54" height="96" rx="24" fill="#07743D"/>
-  <rect x="228" y="150" width="54" height="96" rx="24" fill="#07743D"/>
-  <path d="M255 244 C 250 276, 210 288, 170 288" stroke="#07743D" stroke-width="14" fill="none" stroke-linecap="round"/>
-  <rect x="112" y="272" width="62" height="28" rx="14" fill="#025C29"/>
-  <path d="M150 238 C 60 180, 70 100, 120 100 C 140 100, 150 116, 150 126 C 150 116, 160 100, 180 100 C 230 100, 240 180, 150 238 Z" fill="#1BEA4F" stroke="#07743D" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M40 170 A110 110 0 0 1 260 170" stroke="#267728" stroke-width="22" fill="none" stroke-linecap="round"/>
+  <rect x="18" y="150" width="54" height="96" rx="24" fill="#267728"/>
+  <rect x="228" y="150" width="54" height="96" rx="24" fill="#267728"/>
+  <path d="M255 244 C 250 276, 210 288, 170 288" stroke="#267728" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <rect x="112" y="272" width="62" height="28" rx="14" fill="#1E6020"/>
+  <path d="M150 238 C 60 180, 70 100, 120 100 C 140 100, 150 116, 150 126 C 150 116, 160 100, 180 100 C 230 100, 240 180, 150 238 Z" fill="#59B85D" stroke="#267728" stroke-width="16" stroke-linejoin="round"/>
   <path d="M150 210 C 95 170, 100 122, 124 122 C 138 122, 146 134, 150 142 C 154 134, 162 122, 176 122 C 200 122, 205 170, 150 210 Z" fill="#FFFFFF"/>
 </svg>"""
     cards = [("home", "Home", "Your CX hub"), ("grid", "Section", "Find your team &amp; resources"),
@@ -131,17 +131,17 @@ def landing():
 def home():
     banner = """<svg class="home-hero__banner" viewBox="0 0 960 150" preserveAspectRatio="none" aria-hidden="true">
   <defs>
-    <linearGradient id="hb1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7ED957"/><stop offset=".5" stop-color="#C5F0A4"/><stop offset="1" stop-color="#2CB34A"/></linearGradient>
-    <linearGradient id="hb2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#078627"/><stop offset=".5" stop-color="#35A839"/><stop offset="1" stop-color="#078627"/></linearGradient>
-    <radialGradient id="ball" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#9BF07A"/><stop offset="1" stop-color="#1BA93A"/></radialGradient>
+    <linearGradient id="hb1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#80C882"/><stop offset=".5" stop-color="#CFEACF"/><stop offset="1" stop-color="#59B85D"/></linearGradient>
+    <linearGradient id="hb2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#267728"/><stop offset=".5" stop-color="#35A839"/><stop offset="1" stop-color="#267728"/></linearGradient>
+    <radialGradient id="ball" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#A8DAAA"/><stop offset="1" stop-color="#35A839"/></radialGradient>
   </defs>
   <rect width="960" height="150" fill="#FAFAFA"/>
   <path d="M0 20 C 180 120, 420 150, 620 115 S 880 40, 960 10 L960 150 L0 150 Z" fill="url(#hb2)"/>
   <path d="M0 28 C 200 110, 440 132, 640 100 S 880 30, 960 8" stroke="url(#hb1)" stroke-width="16" fill="none"/>
-  <path d="M0 60 C 220 140, 470 150, 700 120" stroke="#E8FAD9" stroke-width="4" fill="none" opacity=".9"/>
+  <path d="M0 60 C 220 140, 470 150, 700 120" stroke="#EBF6EB" stroke-width="4" fill="none" opacity=".9"/>
   <circle cx="62" cy="40" r="14" fill="url(#ball)"/>
   <circle cx="912" cy="22" r="26" fill="url(#ball)"/><circle cx="868" cy="18" r="14" fill="url(#ball)"/>
-  <g fill="#1BA93A"><circle cx="88" cy="42" r="3"/><circle cx="102" cy="46" r="3"/><circle cx="116" cy="52" r="2.6"/><circle cx="128" cy="58" r="2.2"/><circle cx="138" cy="65" r="1.8"/><circle cx="146" cy="72" r="1.4"/>
+  <g fill="#35A839"><circle cx="88" cy="42" r="3"/><circle cx="102" cy="46" r="3"/><circle cx="116" cy="52" r="2.6"/><circle cx="128" cy="58" r="2.2"/><circle cx="138" cy="65" r="1.8"/><circle cx="146" cy="72" r="1.4"/>
   <circle cx="838" cy="22" r="3"/><circle cx="824" cy="25" r="2.6"/><circle cx="810" cy="29" r="2.2"/><circle cx="798" cy="34" r="1.8"/></g>
 </svg>"""
     tools = [("Overtime Management", "Manage overtime opportunities, application, approvals and attendance.", "slots", "cee-dashboard.html"),
@@ -214,7 +214,7 @@ def slots_header():
     <h1 class="page-title">Available Slots</h1>
     <p class="page-subtitle">Overtime for the next 7 days.</p>
   </div>
-  <div class="page-header__actions"><a class="btn btn--outline" href="apply-on-behalf.html">{icon("users-plus")}Apply on Behalf</a></div>
+  <div class="page-header__actions"><a class="btn btn--secondary" href="apply-on-behalf.html">{icon("users-plus")}Apply on Behalf</a></div>
 </div>"""
 
 

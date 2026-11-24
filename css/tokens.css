@@ -1,141 +1,226 @@
 /* ==========================================================================
    Safaricom CX Intranet · Workforce Overtime Management Tool
-   DESIGN TOKENS
-   Source: reference/figma-export.css (Figma "Copy as CSS"), cross-checked
-   against reference/sketches/*.png.
-   Values marked [ADDITION] are not in the export: they were added to cover
-   states the sketches don't show. See README "Deviations & additions".
+   DESIGN TOKENS — DIRA PRO (Safaricom's design system)
+
+   Source of truth: DIRA PRO Figma library (Foundations → Colors, Typography,
+   Effect styles, Spacing/radius; Application navigation; Dashboards examples).
+   Token names below mirror DIRA's variable names, e.g.
+     Colors/Text/text-secondary (700)  →  --text-secondary
+     Colors/Background/bg-brand-solid  →  --bg-brand-solid
+   The "legacy aliases" block at the end maps the names used by the earlier
+   components onto DIRA tokens, so every component now renders DIRA values.
    ========================================================================== */
 
 :root {
-  /* ---------- Brand green ------------------------------------------------ */
-  --color-brand-50:  #EBF6EB;   /* "Main Primary Green/50": tinted surfaces, active nav bg */
-  --color-brand-200: #A8DAAA;   /* "Main Primary Green/200": tinted borders */
-  --color-brand-500: #35A839;   /* primary: header, primary buttons, active nav, links */
-  --color-brand-600: #2D8F30;   /* required asterisk; primary hover */
-  --color-brand-700: #24732A;   /* [ADDITION] primary pressed */
-  --color-brand-800: #07743D;   /* [ADDITION] sampled from Landing sketch image: top bar */
-  --color-brand-900: #025C29;   /* [ADDITION] sampled from Landing sketch image: hero text, icon discs, footer */
-  --color-brand-alt-1: #1BA93A; /* landing-page shapes */
-  --color-brand-alt-2: #2CB34A; /* landing-page shapes */
+  /* ---------- Primitive palette: Primary Green (DIRA) -------------------- */
+  --green-25:  #F6FEF9;
+  --green-50:  #EBF6EB;
+  --green-100: #CFEACF;
+  --green-200: #A8DAAA;
+  --green-300: #80C882;
+  --green-400: #59B85D;
+  --green-500: #35A839;   /* Main_Green */
+  --green-600: #2D8F30;
+  --green-700: #267728;
+  --green-800: #1E6020;
+  --green-900: #184C1A;
+  --green-950: #053321;
 
-  /* ---------- Neutrals / text ------------------------------------------ */
-  --color-text-heading:   #181D27;
-  --color-text-body:      #414651;
-  --color-text-secondary: #535862;
-  --color-text-muted:     #717680;   /* placeholders, subtitles, captions */
-  --color-text-disabled:  #A4A7AE;
-  --color-text-on-brand:  #FFFFFF;
+  /* Primary Red (DIRA) */
+  --red-50:  #FFF0F3;
+  --red-100: #FFDDE3;
+  --red-500: #E4002B;     /* Main_Red */
+  --red-600: #FC0634;
+  --red-800: #AF0525;
 
-  /* ---------- Borders --------------------------------------------------- */
-  --color-border:          #D5D7DA;  /* inputs, secondary buttons */
-  --color-border-subtle:   #E9EAEB;  /* cards, dividers, table lines */
-  --color-border-strong:   #A4A7AE;  /* checkbox / radio outline */
+  /* Gray (light mode) */
+  --gray-25:  #FDFDFD;
+  --gray-50:  #FAFAFA;
+  --gray-100: #F5F5F5;
+  --gray-200: #E9EAEB;
+  --gray-300: #D5D7DA;
+  --gray-400: #A4A7AE;
+  --gray-500: #717680;
+  --gray-600: #535862;
+  --gray-700: #414651;
+  --gray-800: #252B37;
+  --gray-900: #181D27;
+  --gray-950: #0A0D12;
 
-  /* ---------- Surfaces -------------------------------------------------- */
-  --color-bg-page:     #FAFAFA;
-  --color-bg-card:     #FFFFFF;
-  --color-bg-cell:     #FDFDFD;      /* table body cells */
-  --color-bg-muted:    #F5F5F5;      /* dividers, skeletons, disabled fields */
-  --color-bg-table-head: #E9EAEB;    /* allocations table header (Create Slot sketch) */
-  --color-overlay:     rgba(0, 0, 0, 0.5);
+  /* Error / Warning / Success */
+  --error-25:  #FFFBFA; --error-50:  #FEF3F2; --error-100: #FEE4E2; --error-200: #FECDCA; --error-300: #FDA29B;
+  --error-500: #F04438; --error-600: #D92D20; --error-700: #B42318;
+  --warning-25: #FFFCF5; --warning-50: #FFFAEB; --warning-100: #FEF0C7; --warning-200: #FEDF89;
+  --warning-500: #F79009; --warning-600: #DC6803; --warning-700: #B54708;
+  --success-25: #F6FEF9; --success-50: #ECFDF3; --success-100: #DCFAE6; --success-200: #ABEFC6;
+  --success-500: #17B26A; --success-600: #079455; --success-700: #067647;
 
-  /* ---------- Avatar ---------------------------------------------------- */
-  --color-avatar-bg:   #DCFAE6;
-  --color-avatar-text: #079455;
+  /* ---------- Semantic: text ------------------------------------------- */
+  --text-primary:          var(--gray-900);   /* text-primary (900) */
+  --text-secondary:        var(--gray-700);   /* text-secondary (700) */
+  --text-tertiary:         var(--gray-600);   /* text-tertiary (600) */
+  --text-quaternary:       var(--gray-500);   /* text-quaternary (500) */
+  --text-placeholder:      var(--gray-500);
+  --text-disabled:         var(--gray-400);
+  --text-white:            #FFFFFF;
+  --text-primary_on-brand: #FFFFFF;
+  --text-brand-secondary:  var(--green-700);  /* text-brand-secondary (700): links, brand text */
+  --text-brand-tertiary:   var(--green-600);
+  --text-error-primary:    var(--error-600);
 
-  /* ---------- Status: success (Open / Approved / Completed) ------------- */
-  --color-success-bg:     #ECFDF3;
-  --color-success-border: #ABEFC6;
-  --color-success-text:   #067647;
-  --color-success-icon:   #17B26A;
+  /* ---------- Semantic: foreground (icons) ------------------------------ */
+  --fg-primary:          var(--gray-900);
+  --fg-secondary:        var(--gray-700);
+  --fg-quaternary:       var(--gray-500);     /* nav-item-icon-fg */
+  --fg-quinary:          var(--gray-400);
+  --fg-white:            #FFFFFF;
+  --fg-brand-primary:    var(--green-600);
+  --fg-success-secondary: var(--success-500);
+  --fg-warning-secondary: var(--warning-500);
+  --fg-error-secondary:  var(--error-500);
 
-  /* ---------- Status: error (Rejected / No Show / destructive) ---------- */
-  --color-error-bg:     #FEF3F2;
-  --color-error-border: #FECDCA;
-  --color-error-text:   #B42318;
-  --color-error-icon:   #F04438;
-  --color-error-solid:  #D92D20;     /* destructive button fill, delete icon */
-  --color-error-brand:  #E62634;     /* trash icon in allocations table */
+  /* ---------- Semantic: background ------------------------------------- */
+  --bg-primary:          #FFFFFF;
+  --bg-primary_hover:    var(--gray-50);
+  --bg-secondary:        var(--gray-50);
+  --bg-secondary_subtle: var(--gray-25);
+  --bg-tertiary:         var(--gray-100);
+  --bg-active:           var(--green-500);    /* bg-active: current nav item, active tab / button-group item */
+  --bg-brand-primary:    var(--green-50);
+  --bg-brand-solid:      var(--green-600);    /* bg-brand-solid: checkbox, toggle, brand fills */
+  --bg-brand-solid_hover: var(--green-700);
+  --bg-error-solid:      var(--error-600);
+  --bg-overlay:          rgba(10, 13, 18, 0.7);
 
-  /* ---------- Status: pending / warning badge  [ADDITION] -------------- */
-  --color-warning-bg:     #FFFAEB;
-  --color-warning-border: #FEDF89;
-  --color-warning-text:   #B54708;
-  --color-warning-icon:   #F79009;
+  /* ---------- Semantic: border ----------------------------------------- */
+  --border-primary:   var(--gray-300);        /* inputs, secondary buttons */
+  --border-secondary: var(--gray-200);        /* cards, dividers, table lines */
+  --border-tertiary:  var(--gray-100);
+  --border-brand:     var(--green-300);
+  --border-error:     var(--error-300);
 
-  /* ---------- Attention banner (from export: "3 items require your attention") */
-  --color-attention-bg:   #FEF7C3;
-  --color-attention-text: #B93815;
+  /* ---------- Component colours (DIRA "Component colors") --------------- */
+  --button-primary-bg:        var(--green-500);
+  --button-primary-bg_hover:  var(--green-600);
+  --button-primary-fg:        #FFFFFF;
+  --button-secondary-bg:      #FFFFFF;
+  --button-secondary-bg_hover: var(--gray-50);
+  --button-secondary-fg:      var(--gray-700);
+  --button-secondary-border:  var(--gray-300);
+  --button-tertiary-fg:       var(--gray-600);
+  --button-tertiary-bg_hover: var(--gray-50);
+  --avatar-bg:                var(--gray-100);
+  --avatar-contrast-border:   rgba(0, 0, 0, 0.08);
 
-  /* ---------- Info / neutral badge  [ADDITION] ------------------------- */
-  --color-info-bg:     #F5F5F5;
-  --color-info-border: #E9EAEB;
-  --color-info-text:   #414651;
+  /* Utility (badges): bg 50 · border 200 · text 700 */
+  --utility-gray-50: var(--gray-50);       --utility-gray-200: var(--gray-200);       --utility-gray-700: var(--gray-700);
+  --utility-brand-50: var(--green-50);     --utility-brand-200: var(--green-200);     --utility-brand-700: var(--green-700);
+  --utility-success-50: var(--success-50); --utility-success-200: var(--success-200); --utility-success-700: var(--success-700);
+  --utility-warning-50: var(--warning-50); --utility-warning-200: var(--warning-200); --utility-warning-700: var(--warning-700);
+  --utility-error-50: var(--error-50);     --utility-error-200: var(--error-200);     --utility-error-700: var(--error-700);
 
-  /* ---------- Focus ring  [ADDITION] ----------------------------------- */
-  --focus-ring: 0 0 0 4px rgba(53, 168, 57, 0.24);
-  --focus-ring-error: 0 0 0 4px rgba(240, 68, 56, 0.24);
+  /* ---------- Focus rings ---------------------------------------------- */
+  --focus-ring:       0 0 0 2px #FFFFFF, 0 0 0 4px var(--green-500);
+  --focus-ring-error: 0 0 0 2px #FFFFFF, 0 0 0 4px var(--error-500);
 
-  /* ---------- Typography ------------------------------------------------ */
+  /* ---------- Typography (DIRA: Proxima Nova for body and display) ------- */
   --font-family: 'Proxima Nova', 'proxima-nova', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-
   --font-weight-regular:  400;
-  --font-weight-medium:   500;
+  --font-weight-medium:   600;   /* DIRA maps its "Medium" text styles to weight 600 for Proxima Nova */
   --font-weight-semibold: 600;
   --font-weight-bold:     700;
 
-  /* size / line-height pairs, as used in the export */
-  --text-xs-size: 12px;  --text-xs-lh: 18px;   /* badges, helper text */
-  --text-sm-size: 14px;  --text-sm-lh: 20px;   /* labels, table cells, user name */
-  --text-md-size: 16px;  --text-md-lh: 24px;   /* body, nav items, buttons */
-  --text-lg-size: 18px;  --text-lg-lh: 28px;   /* card titles, "View all slots" */
-  --text-xl-size: 24px;  --text-xl-lh: 32px;   /* page titles, "Welcome back!" */
-  --text-display-size: 72px; --text-display-lh: 90px; /* landing hero only */
+  --text-xs-size: 12px;  --text-xs-lh: 18px;     /* text-xs */
+  --text-sm-size: 14px;  --text-sm-lh: 20px;     /* text-sm */
+  --text-md-size: 16px;  --text-md-lh: 24px;     /* text-md */
+  --text-lg-size: 18px;  --text-lg-lh: 28px;     /* text-lg */
+  --text-xl-size: 20px;  --text-xl-lh: 30px;     /* text-xl */
+  --display-xs-size: 24px; --display-xs-lh: 32px; /* page titles */
+  --display-sm-size: 30px; --display-sm-lh: 38px; /* metric values */
+  --display-xl-size: 60px; --display-xl-lh: 72px; /* landing hero; letter-spacing -2% */
 
-  /* ---------- Spacing (4px base, matches export gaps/paddings) ---------- */
-  --space-0-5: 2px;
-  --space-1:   4px;
-  --space-1-5: 6px;
-  --space-2:   8px;
-  --space-2-5: 10px;
-  --space-3:   12px;
-  --space-3-5: 14px;
-  --space-4:   16px;
-  --space-5:   20px;
-  --space-6:   24px;
-  --space-8:   32px;
-  --space-10:  40px;
-  --space-12:  48px;
-  --space-16:  64px;
+  /* ---------- Spacing (DIRA names) --------------------------------------- */
+  --spacing-xxs: 2px;  --spacing-xs: 4px;  --spacing-sm: 6px;  --spacing-md: 8px;
+  --spacing-lg: 12px;  --spacing-xl: 16px; --spacing-2xl: 20px; --spacing-3xl: 24px;
+  --spacing-4xl: 32px; --spacing-5xl: 40px; --spacing-6xl: 48px; --spacing-7xl: 64px;
+  --spacing-8xl: 80px; --spacing-10xl: 128px;
+  --container-padding-desktop: 32px;
 
-  /* ---------- Radii ----------------------------------------------------- */
-  --radius-xs:   4px;   /* checkbox */
-  --radius-sm:   6px;   /* nav item */
-  --radius-md:   8px;   /* inputs, buttons, cards */
-  --radius-lg:   12px;  /* modals, login card, large cards */
-  --radius-full: 9999px;/* badges, pills, avatar */
+  /* ---------- Radius (DIRA) --------------------------------------------- */
+  --radius-xs: 4px;  --radius-sm: 6px;  --radius-md: 8px;  --radius-lg: 10px;
+  --radius-xl: 12px; --radius-2xl: 16px; --radius-3xl: 20px; --radius-full: 9999px;
 
-  /* ---------- Shadows (export: Shadows/shadow-xs, shadow-xs-skeuomorphic) */
-  --shadow-xs: 0px 1px 2px rgba(10, 13, 18, 0.05);
-  --shadow-xs-skeuomorphic: 0px 1px 2px rgba(10, 13, 18, 0.05),
-                            inset 0px 0px 0px 1px rgba(10, 13, 18, 0.18),
-                            inset 0px -2px 0px rgba(10, 13, 18, 0.05);
-  --shadow-lg:  0px 12px 16px -4px rgba(10, 13, 18, 0.08),
-                0px 4px 6px -2px rgba(10, 13, 18, 0.03);   /* [ADDITION] toasts, menus */
-  --shadow-xl:  0px 20px 24px -4px rgba(10, 13, 18, 0.08),
-                0px 8px 8px -4px rgba(10, 13, 18, 0.03);   /* [ADDITION] modals */
+  /* ---------- Shadows (DIRA effect styles) ------------------------------- */
+  --shadow-xs: 0 1px 2px rgba(10, 13, 18, 0.05);
+  --shadow-xs-skeuomorphic: 0 1px 2px rgba(10, 13, 18, 0.05),
+                            inset 0 -2px 0 rgba(10, 13, 18, 0.05),
+                            inset 0 0 0 1px rgba(10, 13, 18, 0.18);
+  --shadow-sm: 0 1px 3px rgba(10, 13, 18, 0.10), 0 1px 2px -1px rgba(10, 13, 18, 0.10);
+  --shadow-lg: 0 12px 16px -4px rgba(10, 13, 18, 0.08), 0 4px 6px -2px rgba(10, 13, 18, 0.03),
+               0 2px 2px -1px rgba(10, 13, 18, 0.04);
+  --shadow-xl: 0 20px 24px -4px rgba(10, 13, 18, 0.08), 0 8px 8px -4px rgba(10, 13, 18, 0.03),
+               0 3px 3px -1.5px rgba(10, 13, 18, 0.04);
 
-  /* ---------- Layout ---------------------------------------------------- */
+  /* ---------- Layout ----------------------------------------------------- */
   --canvas-width:  1440px;
-  --header-height: 64px;
-  --sidebar-width: 296px;
-  --content-padding-x: 40px;
-  --content-padding-y: 32px;
-  --control-height-sm: 36px;
-  --control-height-md: 44px;   /* inputs, buttons (export: 44px) */
-  --control-height-lg: 48px;
-  --table-row-height: 72px;    /* export table cell: 72px, padding 16px 24px */
+  --header-height: 72px;       /* DIRA header navigation */
+  --sidebar-width: 296px;      /* DIRA sidebar navigation */
+  --content-padding-x: var(--container-padding-desktop);
+  --content-padding-y: var(--spacing-4xl);
+  --control-height-sm: 36px;   /* button sm */
+  --control-height-md: 40px;   /* button md (DIRA default in app examples) */
+  --control-height-lg: 44px;   /* button lg · input md */
+  --input-height: 44px;
+  --table-row-height: 72px;
   --icon-size: 20px;
-  --icon-stroke: 1.5;
+
+  /* ======================================================================
+     Legacy aliases → DIRA tokens (keeps existing component CSS working)
+     ====================================================================== */
+  --color-brand-50:  var(--green-50);
+  --color-brand-200: var(--green-200);
+  --color-brand-500: var(--green-500);
+  --color-brand-600: var(--green-600);
+  --color-brand-700: var(--green-700);
+  --color-brand-800: var(--green-800);
+  --color-brand-900: var(--green-900);
+  --color-brand-alt-1: var(--green-500);
+  --color-brand-alt-2: var(--green-400);
+
+  --color-text-heading:   var(--text-primary);
+  --color-text-body:      var(--text-secondary);
+  --color-text-secondary: var(--text-tertiary);
+  --color-text-muted:     var(--text-quaternary);
+  --color-text-disabled:  var(--text-disabled);
+  --color-text-on-brand:  var(--text-white);
+
+  --color-border:        var(--border-primary);
+  --color-border-subtle: var(--border-secondary);
+  --color-border-strong: var(--gray-400);
+
+  --color-bg-page:       var(--bg-secondary);
+  --color-bg-card:       var(--bg-primary);
+  --color-bg-cell:       var(--bg-primary);
+  --color-bg-muted:      var(--bg-tertiary);
+  --color-bg-table-head: var(--bg-secondary);
+  --color-overlay:       var(--bg-overlay);
+
+  --color-avatar-bg:   var(--avatar-bg);
+  --color-avatar-text: var(--text-tertiary);
+
+  --color-success-bg: var(--utility-success-50); --color-success-border: var(--utility-success-200);
+  --color-success-text: var(--utility-success-700); --color-success-icon: var(--success-500);
+  --color-error-bg: var(--utility-error-50); --color-error-border: var(--utility-error-200);
+  --color-error-text: var(--utility-error-700); --color-error-icon: var(--error-500);
+  --color-error-solid: var(--error-600); --color-error-brand: var(--red-500);
+  --color-warning-bg: var(--utility-warning-50); --color-warning-border: var(--utility-warning-200);
+  --color-warning-text: var(--utility-warning-700); --color-warning-icon: var(--warning-500);
+  --color-info-bg: var(--utility-gray-50); --color-info-border: var(--utility-gray-200); --color-info-text: var(--utility-gray-700);
+  --color-attention-bg: var(--warning-50); --color-attention-text: var(--warning-700);
+
+  --display-size-legacy: var(--display-xs-size);
+  --space-0-5: var(--spacing-xxs); --space-1: var(--spacing-xs); --space-1-5: var(--spacing-sm);
+  --space-2: var(--spacing-md); --space-2-5: 10px; --space-3: var(--spacing-lg); --space-3-5: 14px;
+  --space-4: var(--spacing-xl); --space-5: var(--spacing-2xl); --space-6: var(--spacing-3xl);
+  --space-8: var(--spacing-4xl); --space-10: var(--spacing-5xl); --space-12: var(--spacing-6xl); --space-16: var(--spacing-7xl);
 }
